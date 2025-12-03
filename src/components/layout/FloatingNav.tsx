@@ -59,6 +59,7 @@ export const FloatingNav: React.FC = () => {
               <div key={item.label} className="px-1 -mt-12 relative z-10">
                 <Link
                   href={item.href}
+                  aria-label="Ritual"
                   className="w-16 h-16 rounded-full flex items-center justify-center text-white shadow-lg hover:scale-105 active:scale-95 transition-all relative overflow-hidden group"
                   style={{
                     background:

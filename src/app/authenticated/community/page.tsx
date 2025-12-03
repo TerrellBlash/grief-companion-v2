@@ -1,12 +1,19 @@
 'use client'
 
+import { useRouter } from 'next/navigation'
 import { Header } from '@/components/ui'
 import { FloatingNav } from '@/components/layout/FloatingNav'
 
 export default function CommunityPage() {
+  const router = useRouter()
+
+  const handleBack = () => {
+    router.back()
+  }
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-white to-sand/30 safe-all pb-40">
-      <Header title="Community" onBack={() => window.history.back()} />
+      <Header title="Community" onBack={handleBack} />
 
       <div className="px-6 py-8 max-w-2xl mx-auto">
         <div className="glass-regular rounded-2xl p-6 mb-4">

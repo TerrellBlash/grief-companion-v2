@@ -1,15 +1,17 @@
 'use client'
 
+import { useRouter } from 'next/navigation'
 import { Header } from '@/components/ui'
 import { CandleFlame } from '@/components/ritual/CandleFlame'
 
 export default function CandlePage() {
+  const router = useRouter()
+
   return (
     <div className="min-h-screen bg-howl text-white safe-all">
       <Header
         title="Light a Candle"
-        transparent
-        onBack={() => window.history.back()}
+        onBack={() => router.back()}
       />
 
       <div className="flex flex-col items-center justify-center h-96 py-8">

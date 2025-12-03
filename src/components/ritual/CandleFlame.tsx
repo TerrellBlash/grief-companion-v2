@@ -15,7 +15,11 @@ export const CandleFlame: React.FC<CandleFlameProps> = ({ isLit = true }) => {
     )
 
   return (
-    <div className="relative w-[120px] h-[180px] flex justify-center items-end -translate-y-6 pointer-events-none">
+    <div
+      className="relative w-[120px] h-[180px] flex justify-center items-end -translate-y-6 pointer-events-none"
+      aria-hidden="true"
+      role="presentation"
+    >
       {/* 1. Ambient Bloom/Glow (Static + Pulse) */}
       <motion.div
         initial={{ opacity: 0 }}
@@ -23,7 +27,12 @@ export const CandleFlame: React.FC<CandleFlameProps> = ({ isLit = true }) => {
           opacity: [0.3, 0.45, 0.3],
           scale: [1, 1.05, 1],
         }}
-        transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut' }}
+        transition={{
+          duration: 3,
+          repeat: Infinity,
+          ease: 'easeInOut',
+          paused: typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches,
+        }}
         className="absolute bottom-10 w-40 h-40 bg-orange-300/20 rounded-full blur-[60px] z-0 mix-blend-screen"
       />
 
@@ -36,7 +45,12 @@ export const CandleFlame: React.FC<CandleFlameProps> = ({ isLit = true }) => {
             skewX: [0, 1, -1, 0],
             height: [80, 85, 82, 84, 80],
           }}
-          transition={{ duration: 0.1, repeat: Infinity, ease: 'linear' }}
+          transition={{
+            duration: 0.1,
+            repeat: Infinity,
+            ease: 'linear',
+            paused: typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches,
+          }}
           className="absolute bottom-0 w-12 h-20 bg-gradient-to-t from-orange-400/40 via-yellow-200/30 to-transparent rounded-[50%] blur-[8px]"
           style={{ transformOrigin: 'bottom center' }}
         />
@@ -62,7 +76,6 @@ export const CandleFlame: React.FC<CandleFlameProps> = ({ isLit = true }) => {
 
           {/* Core Flame Shape */}
           <motion.path
-            d="M50 180 C20 180 20 130 50 10 C80 130 80 180 50 180 Z"
             fill="url(#flameGradient)"
             initial={{ d: 'M50 180 C25 180 25 130 50 20 C75 130 75 180 50 180 Z' }}
             animate={{
@@ -78,6 +91,7 @@ export const CandleFlame: React.FC<CandleFlameProps> = ({ isLit = true }) => {
               duration: 2.5, // Slower, more organic base movement
               repeat: Infinity,
               ease: 'easeInOut',
+              paused: typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches,
             }}
             style={{ filter: 'url(#blurFilter)', opacity: 0.9 }}
           />
@@ -99,7 +113,11 @@ export const CandleFlame: React.FC<CandleFlameProps> = ({ isLit = true }) => {
             y: [0, -4, -1, -5, 0],
             opacity: [0.6, 0.8, 0.5, 0.9, 0.6],
           }}
-          transition={{ duration: 0.2, repeat: Infinity }} // 60fps feel
+          transition={{
+            duration: 0.2,
+            repeat: Infinity,
+            paused: typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches,
+          }} // 60fps feel
           className="absolute bottom-[90px] w-2 h-4 bg-white rounded-full blur-[4px]"
         />
       </div>

@@ -7,7 +7,6 @@ interface HeaderProps {
   title: string
   subtitle?: string
   onBack?: () => void
-  transparent?: boolean
   action?: React.ReactNode
 }
 
@@ -15,19 +14,17 @@ export const Header: React.FC<HeaderProps> = ({
   title,
   subtitle,
   onBack,
-  transparent = false,
   action,
 }) => (
   <div
-    className={`pt-12 pb-6 px-6 relative flex items-center justify-between z-20 ${
-      transparent ? '' : ''
-    }`}
+    className="pt-12 pb-6 px-6 relative flex items-center justify-between z-20"
   >
     <div className="flex items-center gap-4">
       {onBack && (
         <button
           onClick={onBack}
-          className="w-11 h-11 rounded-full glass-thin text-martinique flex items-center justify-center hover:bg-white/60 hover:scale-105 transition-all active:scale-95 border-white/50"
+          aria-label="Back"
+          className="w-11 h-11 rounded-full glass-thin text-martinique flex items-center justify-center hover:bg-white/60 hover:scale-105 transition-all active:scale-95 border border-white/50"
         >
           <ChevronLeft size={22} strokeWidth={1.5} />
         </button>
