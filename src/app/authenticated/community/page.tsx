@@ -1,28 +1,17 @@
-'use client'
-
-import { useRouter } from 'next/navigation'
 import { Header } from '@/components/ui'
 import { FloatingNav } from '@/components/layout/FloatingNav'
+import { CirclesList } from '@/components/circles/CirclesList'
+import { getCircles } from '@/lib/services/circles'
 
-export default function CommunityPage() {
-  const router = useRouter()
+export const dynamic = 'force-dynamic'
 
-  const handleBack = () => {
-    router.back()
-  }
+export default async function CommunityPage() {
+  const circles = await getCircles()
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-white to-sand/30 safe-all pb-40">
-      <Header title="Community" onBack={handleBack} />
-
-      <div className="px-6 py-8 max-w-2xl mx-auto">
-        <div className="glass-regular rounded-2xl p-6 mb-4">
-          <p className="text-body text-martinique">
-            Circles community feature coming soon.
-          </p>
-        </div>
-      </div>
-
+    <div className="relative">
+      <Header title="Community Circles" subtitle="Find your space to heal together" />
+      <CirclesList circles={circles} />
       <FloatingNav />
     </div>
   )
