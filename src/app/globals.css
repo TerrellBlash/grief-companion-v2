@@ -1,0 +1,265 @@
+@import "tailwindcss";
+
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=DM+Sans:wght@300;400;500;600;700&display=swap');
+
+:root {
+  /* ========== GEMINI COLOR PALETTE ========== */
+  --color-lynx: #F7F7F7;                    /* Light surface */
+  --color-sand: #D5C6B4;                    /* Warm mid-tone */
+  --color-honey: #DE9C52;                   /* Warm accent / golden orange */
+  --color-spice: #A85846;                   /* Rich warm / rust */
+  --color-martinique: #3C3748;              /* Dark primary */
+  --color-howl: #202030;                    /* Very dark background */
+
+  /* ========== SEMANTIC COLORS ========== */
+  --color-success: #4A7C59;                 /* Forest Green */
+  --color-warning: #C4A77D;                 /* Muted Gold */
+  --color-error: #B85450;                   /* Muted Red */
+  --color-info: #5B7A8C;                    /* Slate Blue */
+
+  /* ========== SHADOWS ========== */
+  --shadow-glass: 0 8px 32px rgba(60, 55, 72, 0.08);
+  --shadow-glass-hover: 0 12px 40px rgba(60, 55, 72, 0.12);
+  --shadow-glass-deep: 0 20px 60px rgba(60, 55, 72, 0.25);
+
+  /* ========== LIGHT MODE ========== */
+  --background: #E8E4E0;
+  --foreground: #1A1A1A;
+}
+
+@theme inline {
+  --color-lynx: #F7F7F7;
+  --color-sand: #D5C6B4;
+  --color-honey: #DE9C52;
+  --color-spice: #A85846;
+  --color-martinique: #3C3748;
+  --color-howl: #202030;
+  --color-success: #4A7C59;
+  --color-warning: #C4A77D;
+  --color-error: #B85450;
+  --color-info: #5B7A8C;
+
+  --font-sans: 'DM Sans', system-ui, sans-serif;
+  --font-serif: 'Playfair Display', Georgia, serif;
+  --font-mono: 'Monaco', 'Courier New', monospace;
+
+  --shadow-glass: 0 8px 32px rgba(60, 55, 72, 0.08);
+  --shadow-glass-hover: 0 12px 40px rgba(60, 55, 72, 0.12);
+  --shadow-glass-deep: 0 20px 60px rgba(60, 55, 72, 0.25);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #1A1612;
+    --foreground: #F5F0E8;
+  }
+}
+
+* {
+  @apply antialiased;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: 'DM Sans', system-ui, sans-serif;
+  line-height: 1.5;
+}
+
+/* ========== GLASS MORPHISM ========== */
+
+.glass-thin {
+  background: rgba(255, 255, 255, 0.4);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+}
+
+.glass-regular {
+  background: rgba(255, 255, 255, 0.65);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.8);
+}
+
+.glass-thick {
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(40px);
+  -webkit-backdrop-filter: blur(40px);
+  border: 1px solid rgba(255, 255, 255, 0.7);
+  box-shadow: var(--shadow-glass-deep);
+}
+
+/* ========== TYPOGRAPHY ========== */
+
+.text-headline {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-weight: 600;
+  color: var(--color-martinique);
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+}
+
+.text-body {
+  font-family: 'DM Sans', system-ui, sans-serif;
+  font-size: 1rem;
+  font-weight: 400;
+  color: var(--foreground);
+  line-height: 1.5;
+}
+
+.text-caption {
+  font-size: 0.75rem;
+  color: rgba(26, 26, 26, 0.6);
+  line-height: 1.2;
+}
+
+.text-secondary {
+  color: rgba(26, 26, 26, 0.7);
+}
+
+.text-muted {
+  color: rgba(26, 26, 26, 0.5);
+}
+
+/* ========== FOCUS STYLES ========== */
+
+:focus-visible {
+  outline: 2px solid var(--color-honey);
+  outline-offset: 2px;
+}
+
+/* ========== ANIMATIONS ========== */
+
+@keyframes flameFlicker {
+  0%, 100% {
+    transform: translateY(0) scale(1);
+    opacity: 0.95;
+    filter: drop-shadow(0 0 15px rgba(232, 168, 85, 0.4));
+  }
+  33% {
+    transform: translateY(-2px) scale(1.05);
+    opacity: 1;
+    filter: drop-shadow(0 0 25px rgba(232, 168, 85, 0.6));
+  }
+  66% {
+    transform: translateY(-1px) scale(1.02);
+    opacity: 0.97;
+    filter: drop-shadow(0 0 20px rgba(232, 168, 85, 0.5));
+  }
+}
+
+@keyframes glowPulse {
+  0%, 100% {
+    opacity: 0.6;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.9;
+    transform: scale(1.1);
+  }
+}
+
+@keyframes fadeSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+.animate-flame-flicker {
+  animation: flameFlicker 3s ease-in-out infinite;
+}
+
+.animate-glow-pulse {
+  animation: glowPulse 4s ease-in-out infinite;
+}
+
+.animate-fade-in-slide {
+  animation: fadeSlideIn 0.5s ease-out;
+}
+
+.animate-slide-up {
+  animation: slideUp 0.4s ease-out;
+}
+
+.animate-pulse-slow {
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+/* ========== SAFE AREA PADDING FOR MOBILE ========== */
+
+.safe-all {
+  padding-top: max(1rem, env(safe-area-inset-top));
+  padding-bottom: max(1rem, env(safe-area-inset-bottom));
+  padding-left: max(1rem, env(safe-area-inset-left));
+  padding-right: max(1rem, env(safe-area-inset-right));
+}
+
+.safe-x {
+  padding-left: max(1rem, env(safe-area-inset-left));
+  padding-right: max(1rem, env(safe-area-inset-right));
+}
+
+.safe-y {
+  padding-top: max(1rem, env(safe-area-inset-top));
+  padding-bottom: max(1rem, env(safe-area-inset-bottom));
+}
+
+/* ========== ACCESSIBILITY ========== */
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+.min-touch-target {
+  min-width: 44px;
+  min-height: 44px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
