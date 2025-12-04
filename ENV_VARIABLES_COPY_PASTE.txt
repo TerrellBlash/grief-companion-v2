@@ -1,0 +1,179 @@
+================================================================================
+ENVIRONMENT VARIABLES - COPY & PASTE FOR VERCEL
+================================================================================
+
+Instructions:
+1. Go to https://vercel.com/dashboard
+2. Select your grief-companion-v2 project
+3. Click "Settings" → "Environment Variables"
+4. Add each variable below
+
+For each variable:
+- Copy the NAME (left side)
+- Copy the VALUE (right side - everything after the =)
+- Paste into Vercel
+- Set Environment to: Production, Preview, Development
+- For SERVICE_ROLE_KEY and DATABASE_URL: Check "Sensitive"
+- Click "Save"
+
+================================================================================
+VARIABLE 1 - PUBLIC (Visible in Browser)
+================================================================================
+
+NAME:
+NEXT_PUBLIC_SUPABASE_URL
+
+VALUE:
+https://rfqbxfduvvfwhjocxeqf.supabase.co
+
+================================================================================
+VARIABLE 2 - PUBLIC (Visible in Browser)
+================================================================================
+
+NAME:
+NEXT_PUBLIC_SUPABASE_ANON_KEY
+
+VALUE:
+eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJmcWJ4ZmR1dnZmd2hqb2N4ZXFmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTgzNzU4NDUsImV4cCI6MjA3Mzk1MTg0NX0.BfjZda_4IeWGk5niItfaeqOZYDSVqz5EjMxaDITcsuA
+
+================================================================================
+VARIABLE 3 - PRIVATE ⚠️ (Server Only - Mark as SENSITIVE)
+================================================================================
+
+NAME:
+SUPABASE_SERVICE_ROLE_KEY
+
+VALUE:
+eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJmcWJ4ZmR1dnZmd2hqb2N4ZXFmIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc1ODM3NTg0NSwiZXhwIjoyMDczOTUxODQ1fQ.Wkj2_doi4XwwrZOfWAMISMBahn0VkRB3hz7Vkzdd21g
+
+⚠️ IMPORTANT: Check the "Sensitive" checkbox for this variable!
+
+================================================================================
+VARIABLE 4 - PRIVATE ⚠️ (Server Only - Mark as SENSITIVE)
+================================================================================
+
+NAME:
+DATABASE_URL
+
+VALUE:
+postgresql://postgres:DemonMonster.2036@db.rfqbxfduvvfwhjocxeqf.supabase.co:5432/postgres
+
+⚠️ IMPORTANT: Check the "Sensitive" checkbox for this variable!
+
+================================================================================
+VARIABLE 5 - PUBLIC (Optional)
+================================================================================
+
+NAME:
+NEXT_PUBLIC_ENABLE_DEBUG
+
+VALUE:
+false
+
+(Set to true only for debugging. Keep false for production)
+
+================================================================================
+OPTIONAL VARIABLES (Only if you enable features)
+================================================================================
+
+When you add Perplexity API for better AI responses:
+
+NAME:
+PERPLEXITY_API_KEY
+
+VALUE:
+(Will receive from Perplexity when you sign up)
+
+================================================================================
+STEP-BY-STEP VERCEL SETUP
+================================================================================
+
+1. After importing your GitHub repo to Vercel, you'll see:
+   "Configuring Project"
+
+2. Click "Continue" (default settings are fine)
+
+3. Wait for it to ask for Environment Variables
+   (Or go to Settings → Environment Variables)
+
+4. Click "Add Environment Variable"
+
+5. For each variable above:
+   a) Paste the NAME from this file
+   b) Paste the VALUE from this file
+   c) Select environments: Production, Preview, Development
+   d) If PRIVATE variable: Check "Sensitive" box
+   e) Click "Save"
+
+6. After adding all 5 variables, click "Deploy"
+
+7. Wait 2-5 minutes for deployment to complete
+
+================================================================================
+VERIFICATION CHECKLIST
+================================================================================
+
+After adding variables in Vercel:
+
+☐ NEXT_PUBLIC_SUPABASE_URL is set (public)
+☐ NEXT_PUBLIC_SUPABASE_ANON_KEY is set (public)
+☐ SUPABASE_SERVICE_ROLE_KEY is set (sensitive/private)
+☐ DATABASE_URL is set (sensitive/private)
+☐ NEXT_PUBLIC_ENABLE_DEBUG is set to false
+
+If any are missing:
+- The build will fail
+- Check Vercel logs for "undefined environment variable" error
+- Add the missing variables and redeploy
+
+================================================================================
+AFTER DEPLOYMENT
+================================================================================
+
+1. Copy your Vercel URL (e.g., https://grief-companion-v2.vercel.app)
+
+2. Go to Supabase dashboard:
+   https://supabase.com/dashboard/project/rfqbxfduvvfwhjocxeqf
+
+3. Navigate to: Authentication → URL Configuration
+
+4. Update the "Redirect URLs" field to include:
+   https://YOUR_VERCEL_DOMAIN/auth/callback
+
+   Example:
+   https://grief-companion-v2.vercel.app/auth/callback
+
+5. Click "Save"
+
+Then you're ready to test!
+
+================================================================================
+SECURITY NOTES
+================================================================================
+
+🔒 SENSITIVE VARIABLES:
+   - SUPABASE_SERVICE_ROLE_KEY
+   - DATABASE_URL
+
+   These should ONLY run on the server, never in the browser.
+   Always mark as "Sensitive" in Vercel.
+
+🔒 NEVER:
+   - Share these values in emails or messages
+   - Commit .env.local to GitHub
+   - Use production keys in development
+   - Store keys in browser localStorage
+
+✅ DO:
+   - Keep SERVICE_ROLE_KEY safe (server-only)
+   - Mark sensitive variables in Vercel
+   - Rotate keys periodically
+   - Use environment variable overrides per environment
+
+================================================================================
+
+Ready? Follow the steps above and deploy to Vercel!
+
+Questions? Check DEPLOYMENT.md or QUICK_START.md
+
+Last Updated: December 3, 2024
