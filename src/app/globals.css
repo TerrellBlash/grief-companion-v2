@@ -240,6 +240,56 @@ body {
   animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 }
 
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
+.animate-float {
+  animation: float 3s ease-in-out infinite;
+}
+
+/* ========== ADDITIONAL GEMINI UTILITIES ========== */
+
+.hide-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.shadow-glow {
+  box-shadow: 0 0 30px rgba(196, 167, 125, 0.4), 0 0 60px rgba(196, 167, 125, 0.2);
+}
+
+.shadow-glass-deep {
+  box-shadow: 0 20px 60px rgba(60, 55, 72, 0.25);
+}
+
+.bg-glass-shine {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.4) 0%, rgba(255, 255, 255, 0) 50%);
+}
+
+/* ========== WELLNESS TEXT COLORS ========== */
+
+.text-wellness-text {
+  color: var(--color-martinique);
+}
+
+.text-wellness-primary {
+  color: var(--color-martinique);
+}
+
+.text-wellness-accent {
+  color: var(--color-warning);
+}
+
 /* ========== SAFE AREA PADDING FOR MOBILE ========== */
 
 .safe-all {

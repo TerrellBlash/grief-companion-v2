@@ -2,8 +2,7 @@
 
 import { useState, useEffect, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Send, Sparkles, HeartHandshake, Smile } from 'lucide-react'
-import { Button } from '@/components/ui/Button'
+import { Mic, Sparkles, HeartHandshake, Smile, ArrowUp } from 'lucide-react'
 
 interface Message {
   id: string
@@ -12,26 +11,22 @@ interface Message {
 }
 
 const SUGGESTIONS = [
-  {
-    icon: HeartHandshake,
-    text: 'How do I cope with loss?',
-  },
-  {
-    icon: Sparkles,
-    text: 'Tell me about grief rituals',
-  },
-  {
-    icon: Smile,
-    text: 'Share your favorite memory',
-  },
+  { label: "Can't sleep", icon: HeartHandshake },
+  { label: 'Remembering...', icon: Sparkles },
+  { label: 'Feeling lonely', icon: Smile },
 ]
 
 export function ChatInterface() {
-  const [messages, setMessages] = useState<Message[]>([])
+  const [messages, setMessages] = useState<Message[]>([
+    {
+      id: '1',
+      role: 'assistant',
+      content: "How are you feeling this morning? I'm here to listen.",
+    },
+  ])
   const [input, setInput] = useState('')
   const [isLoading, setIsLoading] = useState(false)
   const messagesEndRef = useRef<HTMLDivElement>(null)
-  const [showSuggestions, setShowSuggestions] = useState(true)
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
@@ -42,7 +37,7 @@ export function ChatInterface() {
   }, [messages])
 
   const handleSendMessage = async (text: string) => {
-    if (!text.trim()) return
+    if (!text.trim() || isLoading) return
 
     const userMessage: Message = {
       id: Date.now().toString(),
@@ -52,7 +47,6 @@ export function ChatInterface() {
 
     setMessages((prev) => [...prev, userMessage])
     setInput('')
-    setShowSuggestions(false)
     setIsLoading(true)
 
     try {
@@ -123,140 +117,91 @@ export function ChatInterface() {
   }
 
   return (
-    <div className="h-screen w-full flex flex-col relative bg-gradient-to-b from-white to-sand/30">
+    <div className="flex flex-col h-full relative overflow-hidden">
       {/* Messages Area */}
-      <div className="flex-1 overflow-y-auto px-6 pt-8 pb-40">
-        <AnimatePresence initial={false}>
-          {messages.length === 0 && showSuggestions && (
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.5 }}
-              className="flex flex-col items-center justify-center h-full gap-8"
-            >
-              <div className="text-center">
-                <h1 className="font-serif text-3xl font-medium text-martinique mb-2">
-                  Grief Companion
-                </h1>
-                <p className="text-martinique/60 text-sm">
-                  A space to share, reflect, and heal
-                </p>
-              </div>
-
-              <div className="grid grid-cols-1 gap-3 max-w-sm">
-                {SUGGESTIONS.map((suggestion, idx) => {
-                  const Icon = suggestion.icon
-                  return (
-                    <motion.button
-                      key={idx}
-                      initial={{ opacity: 0, y: 10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ duration: 0.3, delay: idx * 0.1 }}
-                      onClick={() => handleSendMessage(suggestion.text)}
-                      className="flex items-center gap-3 p-4 rounded-2xl bg-white/40 border border-white/60 text-left hover:bg-white/60 transition-colors"
-                    >
-                      <Icon size={20} className="text-honey flex-shrink-0" />
-                      <span className="text-martinique font-medium text-sm">
-                        {suggestion.text}
-                      </span>
-                    </motion.button>
-                  )
-                })}
-              </div>
-            </motion.div>
-          )}
-
-          {messages.map((msg, idx) => (
+      <div className="flex-1 overflow-y-auto px-6 py-4 space-y-6 hide-scrollbar relative z-10 pb-40">
+        {messages.map((msg) => {
+          const isUser = msg.role === 'user'
+          return (
             <motion.div
               key={msg.id}
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.3 }}
-              className={`flex gap-4 mb-6 ${
-                msg.role === 'user' ? 'flex-row-reverse' : ''
-              }`}
+              className={`flex gap-3 ${isUser ? 'flex-row-reverse' : 'flex-row'} animate-slide-up`}
             >
+              {!isUser && (
+                <div className="w-10 h-10 rounded-[14px] glass-thin flex items-center justify-center shrink-0 text-warning mt-auto mb-1 shadow-sm">
+                  <Sparkles size={16} className="text-warning" fill="currentColor" fillOpacity={0.2} />
+                </div>
+              )}
+
               <div
-                className={`flex-1 flex ${
-                  msg.role === 'user' ? 'justify-end' : 'justify-start'
+                className={`max-w-[85%] px-6 py-4 text-[15px] leading-relaxed shadow-sm transition-all backdrop-blur-md ${
+                  isUser
+                    ? 'bg-martinique/90 text-white rounded-[26px] rounded-br-[4px] shadow-lg border border-white/10'
+                    : 'glass-regular text-martinique rounded-[26px] rounded-bl-[4px]'
                 }`}
               >
-                <div
-                  className={`max-w-xs lg:max-w-md rounded-2xl px-4 py-3 ${
-                    msg.role === 'user'
-                      ? 'bg-honey/30 border border-honey/50'
-                      : 'bg-white/40 border border-white/60 backdrop-blur-md'
-                  }`}
-                >
-                  <p className="text-martinique text-sm leading-relaxed">
-                    {msg.content}
-                  </p>
-                </div>
+                {msg.content}
               </div>
             </motion.div>
-          ))}
+          )
+        })}
 
-          {isLoading && (
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              className="flex gap-4 mb-6"
-            >
-              <div className="flex-1">
-                <div className="max-w-xs lg:max-w-md rounded-2xl px-4 py-3 bg-white/40 border border-white/60 backdrop-blur-md">
-                  <div className="flex gap-1">
-                    {[0, 1, 2].map((dot) => (
-                      <motion.div
-                        key={dot}
-                        animate={{ y: [0, -4, 0] }}
-                        transition={{
-                          duration: 0.6,
-                          repeat: Infinity,
-                          delay: dot * 0.1,
-                        }}
-                        className="w-2 h-2 rounded-full bg-martinique/40"
-                      />
-                    ))}
-                  </div>
-                </div>
-              </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
+        {isLoading && (
+          <div className="flex gap-3 animate-pulse">
+            <div className="w-10 h-10 rounded-[14px] glass-thin flex items-center justify-center shrink-0 mt-auto mb-1">
+              <Sparkles size={16} className="text-martinique/60" />
+            </div>
+            <div className="glass-regular px-6 py-5 rounded-[26px] rounded-bl-[4px] flex items-center gap-2">
+              <div className="w-1.5 h-1.5 bg-martinique/50 rounded-full animate-bounce" />
+              <div className="w-1.5 h-1.5 bg-martinique/50 rounded-full animate-bounce [animation-delay:100ms]" />
+              <div className="w-1.5 h-1.5 bg-martinique/50 rounded-full animate-bounce [animation-delay:200ms]" />
+            </div>
+          </div>
+        )}
 
         <div ref={messagesEndRef} />
       </div>
 
       {/* Input Area - Floating Glass Panel */}
-      <div className="fixed bottom-0 left-0 right-0 px-6 pb-safe bg-gradient-to-t from-gradient-to-b from-sand/50 to-transparent pt-6">
-        <div className="max-w-2xl mx-auto">
-          <div className="bg-white/40 backdrop-blur-md border border-white/60 rounded-2xl p-4 shadow-lg">
-            <form
-              onSubmit={(e) => {
-                e.preventDefault()
-                handleSendMessage(input)
-              }}
-              className="flex gap-3"
+      <div className="absolute bottom-6 left-0 right-0 px-4 z-20">
+        <div className="glass-thick rounded-[40px] p-2 shadow-glass-deep border border-white/50">
+          {/* Suggestions */}
+          {messages.length < 3 && (
+            <div className="flex gap-2.5 overflow-x-auto hide-scrollbar mb-3 px-2 pt-2">
+              {SUGGESTIONS.map((s, i) => (
+                <button
+                  key={i}
+                  onClick={() => setInput(s.label)}
+                  className="flex items-center gap-2 px-4 py-2 bg-white/40 border border-white/30 rounded-full text-martinique text-[13px] font-medium whitespace-nowrap hover:bg-white/60 transition-all active:scale-95"
+                >
+                  <s.icon size={14} className="text-martinique/60" />
+                  {s.label}
+                </button>
+              ))}
+            </div>
+          )}
+
+          <div className="relative flex items-center gap-2">
+            <button className="p-3 rounded-full text-martinique/60 hover:text-martinique transition-colors hover:bg-black/5">
+              <Mic size={22} />
+            </button>
+            <input
+              value={input}
+              onChange={(e) => setInput(e.target.value)}
+              placeholder="Type a message..."
+              onKeyDown={(e) => e.key === 'Enter' && handleSendMessage(input)}
+              className="flex-1 bg-transparent border-none focus:outline-none text-martinique placeholder:text-martinique/40 text-[16px] font-sans h-full py-3"
+            />
+            <button
+              onClick={() => handleSendMessage(input)}
+              disabled={!input.trim() || isLoading}
+              className="w-10 h-10 bg-martinique text-white rounded-full flex items-center justify-center shadow-lg hover:shadow-xl hover:scale-105 disabled:opacity-50 disabled:shadow-none transition-all active:scale-95"
             >
-              <input
-                type="text"
-                value={input}
-                onChange={(e) => setInput(e.target.value)}
-                placeholder="Share what's on your mind..."
-                disabled={isLoading}
-                className="flex-1 bg-transparent text-martinique placeholder:text-martinique/40 focus:outline-none disabled:opacity-50"
-              />
-              <Button
-                type="submit"
-                variant="primary"
-                disabled={isLoading || !input.trim()}
-                className="!p-3 flex-shrink-0"
-                aria-label="Send message"
-              >
-                <Send size={18} strokeWidth={1.5} />
-              </Button>
-            </form>
+              <ArrowUp size={20} strokeWidth={2.5} />
+            </button>
           </div>
         </div>
       </div>
