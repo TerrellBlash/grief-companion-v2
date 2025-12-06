@@ -4,213 +4,217 @@ import { useRouter } from 'next/navigation'
 import { motion } from 'framer-motion'
 import {
   Flame,
+  Sun,
+  Moon,
   Sparkles,
   BookHeart,
   Users,
-  ChevronRight,
-  Check,
+  ArrowRight,
 } from 'lucide-react'
 import type { DashboardData } from '@/lib/services/dashboard'
 
 interface HomeContentProps {
   data: DashboardData
+  isDark?: boolean
+  toggleTheme?: () => void
 }
 
-export function HomeContent({ data }: HomeContentProps) {
+export function HomeContent({ data, isDark = false, toggleTheme }: HomeContentProps) {
   const router = useRouter()
 
   return (
-    <div className="px-6 py-8 max-w-2xl mx-auto">
-      {/* HEADER SECTION */}
-      <motion.header
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.3 }}
-        className="mb-8"
-      >
-        {/* Day/Time with orange dot */}
-        <div className="flex items-center gap-2 mb-4">
-          <span className="w-2 h-2 rounded-full bg-honey" />
-          <p className="text-sm font-semibold text-martinique/60 uppercase tracking-widest">
-            {data.greetingTime}
-          </p>
-        </div>
+    <div className="pb-40 min-h-screen transition-colors duration-500">
 
-        {/* Greeting text */}
-        <div className="flex items-start justify-between gap-4">
-          <div className="flex-1">
-            <p className="text-body text-martinique mb-1">{data.greetingMessage},</p>
-            <h1 className="text-4xl font-serif font-medium mb-1">
-              <span className="text-honey">{data.displayName}</span>
-            </h1>
-          </div>
-
-          {/* Time-based icon top right */}
-          <div className="text-3xl flex-shrink-0">
-            {getTimeEmoji()}
-          </div>
-        </div>
-      </motion.header>
-
-      {/* HERO RITUAL CARD */}
+      {/* 1. Header - Gemini Style */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.3, delay: 0.1 }}
-        className="mb-6"
+        transition={{ duration: 0.4 }}
+        className="pt-16 px-8 mb-8 flex justify-between items-end"
       >
+        <div>
+          <div className="flex items-center gap-2 mb-3">
+            <div className="w-1.5 h-1.5 rounded-full bg-honey animate-pulse" />
+            <p className="text-wellness-textSecondary font-bold text-[11px] uppercase tracking-[0.2em]">
+              {data.greetingTime}
+            </p>
+          </div>
+          <h1 className="font-serif font-medium text-[36px] leading-[1.1] text-martinique tracking-tight drop-shadow-sm dark:text-lynx">
+            {data.greetingMessage},<br/>
+            <span className="font-semibold text-transparent bg-clip-text bg-gradient-to-r from-honey to-spice">
+              {data.displayName}
+            </span>
+          </h1>
+        </div>
         <button
-          onClick={() => router.push('/rituals/candle')}
-          className="w-full rounded-3xl overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300 active:scale-95"
+          onClick={toggleTheme}
+          className="w-12 h-12 rounded-full glass-thin flex items-center justify-center text-martinique hover:text-honey hover:bg-white/60 transition-all hover:scale-105 active:scale-95 shadow-glass"
         >
-          <div className="bg-gradient-to-br from-sand via-honey to-spice p-8 text-left relative">
-            {/* Badge - Shows completion status */}
-            <div className="flex items-center justify-between mb-6">
-              <div className="inline-flex items-center gap-2">
-                <span className="w-1.5 h-1.5 rounded-full bg-white/80" />
-                <span className="text-xs font-bold text-white/90 uppercase tracking-widest">
-                  Daily Ritual
-                </span>
-              </div>
+          {isDark ? (
+            <Sun className="text-honey" size={20} strokeWidth={2} />
+          ) : (
+            <Moon className="text-martinique" size={20} strokeWidth={2} />
+          )}
+        </button>
+      </motion.div>
 
-              {/* Completion indicator */}
-              {data.hasCompletedTodayRitual && (
-                <div className="flex items-center gap-1.5 bg-white/20 backdrop-blur-md px-3 py-1.5 rounded-full">
-                  <Check size={14} className="text-white" />
-                  <span className="text-xs font-bold text-white">Complete</span>
-                </div>
-              )}
+      {/* 2. Dashboard Layout - Grid */}
+      <div className="px-6 grid grid-cols-2 gap-5">
+
+        {/* Ritual Card (Span 2) - Enhanced Rich Gradient & Glass */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.4, delay: 0.1 }}
+          onClick={() => router.push('/rituals/candle')}
+          className="col-span-2 aspect-[16/10] rounded-[40px] relative overflow-hidden cursor-pointer group transition-all duration-500 hover:-translate-y-2 border border-white/40 shadow-diffused-honey"
+        >
+          {/* Base Gradient Layer */}
+          <div className="absolute inset-0 bg-gradient-to-br from-[#E8D4C4] via-[#DE9C52] to-[#A85846] opacity-95 transition-transform duration-700 group-hover:scale-105" />
+
+          {/* Ambient Lighting (Top Left Highlight) */}
+          <div className="absolute -top-24 -left-24 w-64 h-64 bg-white/40 rounded-full blur-[60px] pointer-events-none mix-blend-soft-light" />
+
+          {/* Ambient Shadow (Bottom Right Depth) */}
+          <div className="absolute -bottom-24 -right-24 w-80 h-80 bg-[#3C3748]/20 rounded-full blur-[60px] pointer-events-none mix-blend-multiply" />
+
+          {/* Specular Noise/Texture Overlay */}
+          <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none" />
+
+          {/* Content Layer */}
+          <div className="relative z-10 p-8 h-full flex flex-col justify-between">
+
+            {/* Header Badge */}
+            <div className="flex justify-between items-start">
+              <div className="bg-black/10 backdrop-blur-md px-3.5 py-1.5 rounded-full flex items-center gap-2 border border-white/20 shadow-sm ring-1 ring-white/10 transition-colors group-hover:bg-black/15">
+                <div className="w-1.5 h-1.5 rounded-full bg-[#FFD700] animate-pulse shadow-[0_0_8px_#FFD700]" />
+                <span className="text-[10px] font-bold tracking-[0.2em] text-white/95 font-sans">DAILY RITUAL</span>
+              </div>
             </div>
 
-            {/* Content */}
-            <div className="flex items-start justify-between gap-6">
-              <div className="flex-1 text-white">
-                <h2 className="text-4xl font-serif font-medium mb-2">
-                  {data.hasCompletedTodayRitual ? 'Candle Lit' : 'Light a Candle'}
+            {/* Bottom Section */}
+            <div className="flex justify-between items-end">
+              <div>
+                <h2 className="font-serif font-medium text-[32px] mb-2 text-white drop-shadow-md leading-[1.1] tracking-tight">
+                  Light a<br/>Candle
                 </h2>
-                <p className="text-white/90 text-base leading-relaxed">
-                  {data.hasCompletedTodayRitual
-                    ? 'Your light shines bright today'
-                    : 'Honor your memory with a moment of peace'}
+                <p className="text-white/80 text-[15px] font-medium tracking-wide leading-snug max-w-[160px]">
+                  Honor your memory with a moment of peace.
                 </p>
               </div>
 
-              {/* Circular button with flame */}
-              <div
-                className={`flex-shrink-0 w-16 h-16 rounded-full flex items-center justify-center ${
-                  data.hasCompletedTodayRitual
-                    ? 'bg-white/30 backdrop-blur-md border border-white/50'
-                    : 'bg-white/20 backdrop-blur-md border border-white/40'
-                }`}
-              >
-                <Flame
-                  size={28}
-                  className={`${data.hasCompletedTodayRitual ? 'text-white fill-white' : 'text-white'}`}
-                  fill={data.hasCompletedTodayRitual ? 'currentColor' : 'none'}
-                />
+              {/* Glowing Action Button */}
+              <div className="relative group/btn">
+                {/* Soft Glow Behind Icon */}
+                <div className="absolute inset-0 bg-white/40 rounded-[28px] blur-xl opacity-40 group-hover:opacity-70 transition-opacity duration-500 scale-110" />
+
+                {/* Icon Container */}
+                <div className="w-[4.5rem] h-[4.5rem] rounded-[28px] bg-white/20 text-white flex items-center justify-center group-hover:bg-white/25 group-hover:scale-105 transition-all duration-300 shadow-glass border border-white/40 backdrop-blur-xl relative z-10">
+                  <Flame size={32} fill="currentColor" className="text-white drop-shadow-lg opacity-90 group-hover:opacity-100" />
+                </div>
               </div>
             </div>
           </div>
-        </button>
-      </motion.div>
+        </motion.div>
 
-      {/* 2-COLUMN GRID */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.3, delay: 0.2 }}
-        className="grid grid-cols-2 gap-4 mb-6"
-      >
-        {/* Streak Card - Shows real data */}
-        <button
+        {/* Streak Card (Square) */}
+        <motion.button
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.4, delay: 0.2 }}
           onClick={() => router.push('/dashboard/progress')}
-          className="glass-regular rounded-2xl p-6 text-center hover:bg-white/50 transition-colors duration-300 active:scale-95"
+          className="aspect-square flex flex-col justify-between p-6 glass-regular rounded-[28px] group shadow-glass hover:shadow-glass-hover transition-all duration-300 active:scale-95"
         >
-          <div className="mb-4">
-            <Flame size={32} className="text-honey mx-auto" />
+          <div className="flex justify-between items-start">
+            <div className="w-12 h-12 rounded-[18px] bg-sand/20 flex items-center justify-center text-honey group-hover:bg-honey/20 transition-colors shadow-inner">
+              <Flame size={22} className="text-honey" fill="currentColor" fillOpacity={0.3} />
+            </div>
           </div>
-          <p className="text-4xl font-serif font-medium text-martinique mb-2">
-            {data.currentStreak}
-          </p>
-          <p className="text-xs font-bold text-martinique/60 uppercase tracking-widest">
-            {data.currentStreak === 1 ? 'Day' : 'Days'}
-          </p>
-        </button>
+          <div className="text-left">
+            <span className="font-serif font-medium text-[48px] text-martinique block mb-[-4px] leading-none tracking-tighter">
+              {data.currentStreak}
+            </span>
+            <p className="text-wellness-textSecondary text-[11px] font-bold uppercase tracking-wider pl-1">
+              {data.currentStreak === 1 ? 'Day' : 'Days'}
+            </p>
+          </div>
+        </motion.button>
 
-        {/* Companion Card */}
-        <button
+        {/* Companion Card (Square) */}
+        <motion.button
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.4, delay: 0.25 }}
+          onClick={() => router.push('/dashboard/companion')}
+          className="aspect-square flex flex-col justify-between p-6 glass-regular rounded-[28px] group shadow-glass hover:shadow-glass-hover transition-all duration-300 active:scale-95"
+        >
+          <div className="flex justify-between items-start">
+            <div className="w-12 h-12 rounded-[18px] bg-sand/20 flex items-center justify-center text-martinique group-hover:bg-martinique/10 transition-colors shadow-inner">
+              <Sparkles size={20} strokeWidth={1.5} />
+            </div>
+          </div>
+          <div className="text-left">
+            <h3 className="font-serif font-semibold text-[20px] text-martinique mb-1 tracking-tight">Companion</h3>
+            <p className="text-wellness-textSecondary text-xs font-medium">Always here</p>
+          </div>
+        </motion.button>
+
+        {/* Memory Jar Card (Wide) */}
+        <motion.button
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.4, delay: 0.3 }}
           onClick={() => router.push('/dashboard/memories')}
-          className="glass-regular rounded-2xl p-6 flex flex-col items-center justify-center hover:bg-white/50 transition-colors duration-300 active:scale-95"
+          className="col-span-2 flex items-center justify-between p-6 glass-regular rounded-[28px] group shadow-glass hover:shadow-glass-hover transition-all duration-300 active:scale-95"
         >
-          <div className="mb-3">
-            <Sparkles size={32} className="text-martinique" />
+          <div className="flex items-center gap-6">
+            <div className="w-16 h-16 rounded-[22px] bg-gradient-to-br from-lynx to-sand/40 flex items-center justify-center text-martinique border border-white/60 shadow-glass group-hover:rotate-3 transition-transform duration-300">
+              <BookHeart size={28} strokeWidth={1.2} />
+            </div>
+            <div className="text-left">
+              <h3 className="font-serif font-semibold text-[20px] text-martinique">Memory Jar</h3>
+              <p className="text-wellness-textSecondary text-sm mt-0.5">Save a thought for today</p>
+            </div>
           </div>
-          <h3 className="font-serif text-base font-medium text-martinique mb-1">
-            Memories
-          </h3>
-          <p className="text-xs text-martinique/60">Save today</p>
-        </button>
-      </motion.div>
+          <div className="w-12 h-12 rounded-full glass-thin flex items-center justify-center text-wellness-textTertiary group-hover:text-martinique group-hover:bg-white/60 transition-all border border-white/50">
+            <ArrowRight size={20} />
+          </div>
+        </motion.button>
 
-      {/* MEMORY JAR CARD */}
-      <motion.button
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.3, delay: 0.3 }}
-        onClick={() => router.push('/dashboard/memories')}
-        className="w-full glass-regular rounded-2xl p-6 mb-4 flex items-center justify-between hover:bg-white/50 transition-colors duration-300 active:scale-95"
-      >
-        <div className="flex items-center gap-4">
-          <div className="w-12 h-12 rounded-full bg-honey/20 flex items-center justify-center flex-shrink-0">
-            <BookHeart size={24} className="text-honey" />
+        {/* Community Circles Card (Wide) */}
+        <motion.button
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.4, delay: 0.35 }}
+          onClick={() => router.push('/dashboard/community')}
+          className="col-span-2 flex items-center justify-between p-6 glass-regular rounded-[28px] group shadow-glass hover:shadow-glass-hover transition-all duration-300 active:scale-95"
+        >
+          <div className="flex items-center gap-6">
+            <div className="flex -space-x-4 pl-2">
+              {[1, 2, 3].map(i => (
+                <div
+                  key={i}
+                  className="w-12 h-12 rounded-full border-[3px] border-lynx bg-sand overflow-hidden shadow-sm relative z-0 group-hover:z-10 transition-all hover:scale-110"
+                >
+                  <img
+                    src={`https://picsum.photos/seed/${i + 45}/100/100`}
+                    className="w-full h-full object-cover opacity-90"
+                    alt="community member"
+                  />
+                </div>
+              ))}
+            </div>
+            <div className="pl-2 text-left">
+              <h3 className="font-serif font-semibold text-[20px] text-martinique">Circles</h3>
+              <p className="text-wellness-textSecondary text-sm mt-0.5">Finding healing together</p>
+            </div>
           </div>
-          <div className="text-left">
-            <h3 className="font-serif text-lg font-medium text-martinique">
-              Memory Jar
-            </h3>
-            <p className="text-sm text-martinique/60">Save a thought for today</p>
+          <div className="w-12 h-12 rounded-full glass-thin flex items-center justify-center text-martinique group-hover:bg-white/60 transition-colors border border-white/50">
+            <Users size={20} />
           </div>
-        </div>
-        <ChevronRight size={20} className="text-martinique/40 flex-shrink-0" />
-      </motion.button>
+        </motion.button>
 
-      {/* CIRCLES CARD */}
-      <motion.button
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.3, delay: 0.4 }}
-        onClick={() => router.push('/authenticated/community')}
-        className="w-full glass-regular rounded-2xl p-6 flex items-center justify-between hover:bg-white/50 transition-colors duration-300 active:scale-95"
-      >
-        <div className="flex items-center gap-4">
-          <div className="flex -space-x-3">
-            <div className="w-10 h-10 rounded-full bg-gradient-to-br from-honey to-spice border-2 border-white/80 flex items-center justify-center text-white text-xs font-bold">
-              A
-            </div>
-            <div className="w-10 h-10 rounded-full bg-gradient-to-br from-martinique to-honey border-2 border-white/80 flex items-center justify-center text-white text-xs font-bold">
-              M
-            </div>
-            <div className="w-10 h-10 rounded-full bg-gradient-to-br from-spice to-martinique border-2 border-white/80 flex items-center justify-center text-white text-xs font-bold">
-              J
-            </div>
-          </div>
-          <div className="text-left">
-            <h3 className="font-serif text-lg font-medium text-martinique">
-              Circles
-            </h3>
-            <p className="text-sm text-martinique/60">Finding healing together</p>
-          </div>
-        </div>
-        <ChevronRight size={20} className="text-martinique/40 flex-shrink-0" />
-      </motion.button>
+      </div>
     </div>
   )
-}
-
-function getTimeEmoji() {
-  const hour = new Date().getHours()
-  if (hour >= 5 && hour < 12) return '☀️'
-  if (hour >= 12 && hour < 17) return '🌤️'
-  if (hour >= 17 && hour < 21) return '🌅'
-  return '🌙'
 }
