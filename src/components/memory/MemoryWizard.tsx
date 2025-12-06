@@ -10,9 +10,13 @@ import {
   Star,
   Calendar,
   MapPin,
-  UserPlus,
   Upload,
   Check,
+  Quote,
+  Heart,
+  Music,
+  Utensils,
+  Palette,
 } from 'lucide-react'
 import { Button } from '@/components/ui/Button'
 import { Input } from '@/components/ui/Input'
@@ -28,6 +32,9 @@ interface MemoryData {
   people?: string[]
   tags?: string[]
   loved_one_id?: string
+  quote_author?: string
+  favorite_category?: string
+  caption?: string
 }
 
 type Step = 1 | 2 | 3 | 4
@@ -62,6 +69,14 @@ const MEMORY_TYPES: Array<{
     label: 'Favorite Thing',
     sub: 'Something they loved',
   },
+]
+
+const FAVORITE_CATEGORIES = [
+  { id: 'food', label: 'Food', icon: Utensils },
+  { id: 'music', label: 'Music', icon: Music },
+  { id: 'hobby', label: 'Hobby', icon: Palette },
+  { id: 'place', label: 'Place', icon: MapPin },
+  { id: 'other', label: 'Other', icon: Heart },
 ]
 
 interface MemoryWizardProps {
@@ -192,7 +207,7 @@ export function MemoryWizard({ onClose }: MemoryWizardProps) {
     )
   }
 
-  // Step 2: Details
+  // Step 2: Details (Type-specific UI)
   if (step === 2) {
     return (
       <div className="pb-40 min-h-screen flex flex-col px-6 pt-8">
@@ -203,77 +218,273 @@ export function MemoryWizard({ onClose }: MemoryWizardProps) {
           transition={{ duration: 0.4 }}
           className="flex-1 space-y-8"
         >
-          <div>
-            <label className="block text-martinique font-serif font-medium text-xl mb-3 pl-1">
-              Share your memory
-            </label>
-            <textarea
-              rows={8}
-              placeholder="Start writing here..."
-              value={data.text || ''}
-              onChange={(e) => setData({ ...data, text: e.target.value })}
-              className="w-full text-lg leading-relaxed bg-white/40 border border-white/60 rounded-3xl px-4 py-3 text-martinique placeholder:text-martinique/40 focus:outline-none focus:bg-white/60 focus:ring-2 focus:ring-honey/30 resize-none"
-            />
-            <p className="text-right text-xs font-medium text-martinique/60 mt-2 pr-2">
-              {data.text?.length || 0} / 500
-            </p>
-          </div>
+          {/* STORY TYPE */}
+          {data.type === 'story' && (
+            <>
+              <div>
+                <label className="block text-martinique font-serif font-medium text-xl mb-3 pl-1">
+                  Share your story
+                </label>
+                <textarea
+                  rows={10}
+                  placeholder="What moment do you want to remember? Describe the setting, the feelings, what made it special..."
+                  value={data.text || ''}
+                  onChange={(e) => setData({ ...data, text: e.target.value })}
+                  className="w-full text-lg leading-relaxed bg-white/40 border border-white/60 rounded-3xl px-5 py-4 text-martinique placeholder:text-martinique/40 focus:outline-none focus:bg-white/60 focus:ring-2 focus:ring-honey/30 resize-none"
+                />
+                <p className="text-right text-xs font-medium text-martinique/60 mt-2 pr-2">
+                  {data.text?.length || 0} / 1000
+                </p>
+              </div>
 
-          <div
-            onClick={() => {
-              const input = document.getElementById('photo-upload') as HTMLInputElement
-              input?.click()
-            }}
-            className="border-2 border-dashed border-black/10 hover:border-honey/30 rounded-3xl p-8 flex flex-col items-center justify-center bg-white/30 hover:bg-white/60 transition-all group cursor-pointer"
-          >
-            <input
-              id="photo-upload"
-              type="file"
-              accept="image/*"
-              onChange={(e) => {
-                const file = e.target.files?.[0]
-                if (file) handlePhotoUpload(file)
-              }}
-              className="hidden"
-            />
-            {photoPreview ? (
-              <div className="relative w-full">
-                <img
-                  src={photoPreview}
-                  alt="Preview"
-                  className="w-full h-48 object-cover rounded-2xl"
+              <div>
+                <label className="block text-martinique font-serif font-medium text-xl mb-3 pl-1">
+                  When did this happen?
+                </label>
+                <div className="relative">
+                  <Input
+                    placeholder="Select date"
+                    type="date"
+                    value={data.date || ''}
+                    onChange={(e) => setData({ ...data, date: e.target.value })}
+                    className="pl-5 bg-white/40 border border-white/60"
+                  />
+                  <Calendar
+                    className="absolute right-6 top-4 text-martinique/60 pointer-events-none"
+                    size={20}
+                  />
+                </div>
+              </div>
+            </>
+          )}
+
+          {/* PHOTO TYPE */}
+          {data.type === 'photo' && (
+            <>
+              <div
+                onClick={() => {
+                  const input = document.getElementById('photo-upload') as HTMLInputElement
+                  input?.click()
+                }}
+                className={`border-2 border-dashed rounded-3xl flex flex-col items-center justify-center transition-all group cursor-pointer ${
+                  photoPreview
+                    ? 'border-honey/50 bg-white/40 p-4'
+                    : 'border-black/10 hover:border-honey/30 bg-white/30 hover:bg-white/60 p-12'
+                }`}
+              >
+                <input
+                  id="photo-upload"
+                  type="file"
+                  accept="image/*"
+                  onChange={(e) => {
+                    const file = e.target.files?.[0]
+                    if (file) handlePhotoUpload(file)
+                  }}
+                  className="hidden"
+                />
+                {photoPreview ? (
+                  <div className="relative w-full">
+                    <img
+                      src={photoPreview}
+                      alt="Preview"
+                      className="w-full aspect-[4/3] object-cover rounded-2xl"
+                    />
+                    <p className="text-center text-sm text-martinique/60 mt-3">
+                      Tap to change photo
+                    </p>
+                  </div>
+                ) : (
+                  <>
+                    <div className="w-20 h-20 bg-white/60 rounded-full flex items-center justify-center text-martinique/60 mb-4 shadow-sm border border-white/40 group-hover:scale-110 transition-transform">
+                      <Upload size={32} strokeWidth={1.5} />
+                    </div>
+                    <p className="font-serif font-medium text-martinique text-xl mb-2">
+                      Upload a photo
+                    </p>
+                    <p className="text-martinique/60 text-sm text-center">
+                      Drag and drop or tap to select
+                    </p>
+                  </>
+                )}
+              </div>
+
+              <div>
+                <label className="block text-martinique font-serif font-medium text-xl mb-3 pl-1">
+                  Add a caption{' '}
+                  <span className="text-martinique/40 font-sans font-normal text-sm">
+                    (optional)
+                  </span>
+                </label>
+                <textarea
+                  rows={3}
+                  placeholder="What's the story behind this photo?"
+                  value={data.caption || ''}
+                  onChange={(e) => setData({ ...data, caption: e.target.value })}
+                  className="w-full text-base leading-relaxed bg-white/40 border border-white/60 rounded-2xl px-4 py-3 text-martinique placeholder:text-martinique/40 focus:outline-none focus:bg-white/60 focus:ring-2 focus:ring-honey/30 resize-none"
                 />
               </div>
-            ) : (
-              <>
-                <div className="w-14 h-14 bg-white/60 rounded-full flex items-center justify-center text-martinique/60 mb-3 shadow-sm border border-white/40 group-hover:scale-110 transition-transform">
-                  <Upload size={22} strokeWidth={1.5} />
-                </div>
-                <p className="font-medium text-martinique text-sm">
-                  Add photo (optional)
-                </p>
-              </>
-            )}
-          </div>
 
-          <div>
-            <label className="block text-martinique font-serif font-medium text-xl mb-3 pl-1">
-              When did this happen?
-            </label>
-            <div className="relative">
-              <Input
-                placeholder="Select date"
-                type="date"
-                value={data.date || ''}
-                onChange={(e) => setData({ ...data, date: e.target.value })}
-                className="pl-5 bg-white/40 border border-white/60"
-              />
-              <Calendar
-                className="absolute right-6 top-4 text-martinique/60 pointer-events-none"
-                size={20}
-              />
-            </div>
-          </div>
+              <div>
+                <label className="block text-martinique font-serif font-medium text-xl mb-3 pl-1">
+                  When was this taken?
+                </label>
+                <div className="relative">
+                  <Input
+                    placeholder="Select date"
+                    type="date"
+                    value={data.date || ''}
+                    onChange={(e) => setData({ ...data, date: e.target.value })}
+                    className="pl-5 bg-white/40 border border-white/60"
+                  />
+                  <Calendar
+                    className="absolute right-6 top-4 text-martinique/60 pointer-events-none"
+                    size={20}
+                  />
+                </div>
+              </div>
+            </>
+          )}
+
+          {/* QUOTE TYPE */}
+          {data.type === 'quote' && (
+            <>
+              <div className="relative">
+                <Quote
+                  size={48}
+                  className="absolute -top-2 -left-2 text-honey/20"
+                  fill="currentColor"
+                />
+                <label className="block text-martinique font-serif font-medium text-xl mb-3 pl-1">
+                  What did they say?
+                </label>
+                <textarea
+                  rows={6}
+                  placeholder="Enter the quote or words you remember..."
+                  value={data.text || ''}
+                  onChange={(e) => setData({ ...data, text: e.target.value })}
+                  className="w-full text-xl leading-relaxed bg-white/40 border border-white/60 rounded-3xl px-5 py-4 text-martinique placeholder:text-martinique/40 focus:outline-none focus:bg-white/60 focus:ring-2 focus:ring-honey/30 resize-none font-serif italic"
+                />
+              </div>
+
+              <div>
+                <label className="block text-martinique font-serif font-medium text-xl mb-3 pl-1">
+                  Who said this?
+                </label>
+                <Input
+                  placeholder="Their name or relationship (e.g., 'Grandma Rose')"
+                  value={data.quote_author || ''}
+                  onChange={(e) => setData({ ...data, quote_author: e.target.value })}
+                  className="bg-white/40 border border-white/60"
+                />
+              </div>
+
+              <div>
+                <label className="block text-martinique font-serif font-medium text-xl mb-3 pl-1">
+                  Context{' '}
+                  <span className="text-martinique/40 font-sans font-normal text-sm">
+                    (optional)
+                  </span>
+                </label>
+                <textarea
+                  rows={3}
+                  placeholder="When or why did they say this?"
+                  value={data.caption || ''}
+                  onChange={(e) => setData({ ...data, caption: e.target.value })}
+                  className="w-full text-base leading-relaxed bg-white/40 border border-white/60 rounded-2xl px-4 py-3 text-martinique placeholder:text-martinique/40 focus:outline-none focus:bg-white/60 focus:ring-2 focus:ring-honey/30 resize-none"
+                />
+              </div>
+            </>
+          )}
+
+          {/* FAVORITE THING TYPE */}
+          {data.type === 'favorite' && (
+            <>
+              <div>
+                <label className="block text-martinique font-serif font-medium text-xl mb-4 pl-1">
+                  What category?
+                </label>
+                <div className="grid grid-cols-3 gap-3">
+                  {FAVORITE_CATEGORIES.map((cat) => {
+                    const Icon = cat.icon
+                    const isSelected = data.favorite_category === cat.id
+                    return (
+                      <button
+                        key={cat.id}
+                        onClick={() => setData({ ...data, favorite_category: cat.id })}
+                        className={`flex flex-col items-center gap-2 p-4 rounded-2xl border transition-all ${
+                          isSelected
+                            ? 'bg-honey/20 border-honey text-honey'
+                            : 'bg-white/40 border-white/60 text-martinique/60 hover:bg-white/60'
+                        }`}
+                      >
+                        <Icon size={24} strokeWidth={1.5} />
+                        <span className="text-sm font-medium">{cat.label}</span>
+                      </button>
+                    )
+                  })}
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-martinique font-serif font-medium text-xl mb-3 pl-1">
+                  What was it?
+                </label>
+                <Input
+                  placeholder="e.g., 'Chocolate chip cookies', 'Jazz music'"
+                  value={data.text || ''}
+                  onChange={(e) => setData({ ...data, text: e.target.value })}
+                  className="bg-white/40 border border-white/60 text-lg"
+                />
+              </div>
+
+              <div>
+                <label className="block text-martinique font-serif font-medium text-xl mb-3 pl-1">
+                  Tell us more
+                </label>
+                <textarea
+                  rows={5}
+                  placeholder="Why was this special to them? Any memories connected to it?"
+                  value={data.caption || ''}
+                  onChange={(e) => setData({ ...data, caption: e.target.value })}
+                  className="w-full text-base leading-relaxed bg-white/40 border border-white/60 rounded-2xl px-4 py-3 text-martinique placeholder:text-martinique/40 focus:outline-none focus:bg-white/60 focus:ring-2 focus:ring-honey/30 resize-none"
+                />
+              </div>
+
+              {/* Optional photo for favorite thing */}
+              <div
+                onClick={() => {
+                  const input = document.getElementById('photo-upload') as HTMLInputElement
+                  input?.click()
+                }}
+                className="border-2 border-dashed border-black/10 hover:border-honey/30 rounded-2xl p-6 flex flex-col items-center justify-center bg-white/30 hover:bg-white/60 transition-all group cursor-pointer"
+              >
+                <input
+                  id="photo-upload"
+                  type="file"
+                  accept="image/*"
+                  onChange={(e) => {
+                    const file = e.target.files?.[0]
+                    if (file) handlePhotoUpload(file)
+                  }}
+                  className="hidden"
+                />
+                {photoPreview ? (
+                  <img
+                    src={photoPreview}
+                    alt="Preview"
+                    className="w-full h-32 object-cover rounded-xl"
+                  />
+                ) : (
+                  <>
+                    <Upload size={20} className="text-martinique/40 mb-2" />
+                    <p className="text-sm text-martinique/60">
+                      Add a photo (optional)
+                    </p>
+                  </>
+                )}
+              </div>
+            </>
+          )}
         </motion.div>
 
         <div className="p-6 space-y-3">
@@ -394,6 +605,9 @@ export function MemoryWizard({ onClose }: MemoryWizardProps) {
 
   // Step 4: Review
   if (step === 4) {
+    const typeLabel = MEMORY_TYPES.find((t) => t.id === data.type)?.label
+    const categoryLabel = FAVORITE_CATEGORIES.find((c) => c.id === data.favorite_category)?.label
+
     return (
       <div className="pb-40 min-h-screen flex flex-col px-6 pt-8">
         {renderStepIndicator()}
@@ -403,72 +617,78 @@ export function MemoryWizard({ onClose }: MemoryWizardProps) {
           transition={{ duration: 0.4 }}
           className="flex-1"
         >
-          <div className="rounded-3xl bg-white/40 border border-white/60 p-8 space-y-8 relative overflow-hidden">
+          <div className="rounded-3xl bg-white/40 border border-white/60 p-8 space-y-6 relative overflow-hidden">
             <div className="absolute -top-20 -right-20 w-64 h-64 bg-honey/10 rounded-full blur-3xl pointer-events-none" />
 
             <div className="relative z-10">
-              <h3 className="font-serif text-xl font-medium text-martinique mb-3">
-                Memory Type
-              </h3>
-              <p className="text-martinique/80">
-                {MEMORY_TYPES.find((t) => t.id === data.type)?.label}
+              <p className="text-[10px] font-bold text-martinique/40 tracking-[0.2em] uppercase mb-2">
+                {typeLabel} {categoryLabel && `• ${categoryLabel}`}
               </p>
             </div>
 
-            {data.text && (
+            {/* Quote display */}
+            {data.type === 'quote' && data.text && (
               <div className="relative z-10">
-                <div className="flex items-center justify-between mb-3">
-                  <h3 className="font-serif text-xl font-medium text-martinique">
-                    The Memory
-                  </h3>
-                </div>
-                <p className="text-martinique text-[16px] leading-relaxed opacity-90 font-serif italic">
+                <Quote size={32} className="text-honey/30 mb-2" fill="currentColor" />
+                <p className="text-martinique text-xl leading-relaxed font-serif italic mb-2">
                   "{data.text}"
                 </p>
+                {data.quote_author && (
+                  <p className="text-martinique/60 text-sm">— {data.quote_author}</p>
+                )}
               </div>
             )}
 
+            {/* Story/Favorite display */}
+            {(data.type === 'story' || data.type === 'favorite') && data.text && (
+              <div className="relative z-10">
+                <h3 className="font-serif text-lg font-medium text-martinique mb-2">
+                  {data.type === 'favorite' ? 'Favorite' : 'Story'}
+                </h3>
+                <p className="text-martinique text-[16px] leading-relaxed opacity-90">
+                  {data.type === 'favorite' ? data.text : `"${data.text}"`}
+                </p>
+                {data.caption && (
+                  <p className="text-martinique/70 text-sm mt-2 italic">{data.caption}</p>
+                )}
+              </div>
+            )}
+
+            {/* Photo display */}
             {photoPreview && (
               <div className="relative z-10">
-                <div className="flex items-center justify-between mb-3">
-                  <h3 className="font-serif text-xl font-medium text-martinique">
-                    Photo
-                  </h3>
-                </div>
-                <div className="rounded-3xl overflow-hidden aspect-[4/3] w-full bg-white/30 shadow-inner border border-white/30">
+                <div className="rounded-2xl overflow-hidden aspect-[4/3] w-full bg-white/30 shadow-inner border border-white/30">
                   <img
                     src={photoPreview}
                     alt="Memory"
                     className="w-full h-full object-cover opacity-90"
                   />
                 </div>
+                {data.type === 'photo' && data.caption && (
+                  <p className="text-martinique/70 text-sm mt-3 italic text-center">
+                    {data.caption}
+                  </p>
+                )}
               </div>
             )}
 
             {data.location && (
-              <div className="relative z-10">
-                <h3 className="font-serif text-lg font-medium text-martinique mb-2">
-                  Location
-                </h3>
-                <p className="text-martinique/80">{data.location}</p>
+              <div className="relative z-10 flex items-center gap-2 text-martinique/60">
+                <MapPin size={14} />
+                <span className="text-sm">{data.location}</span>
               </div>
             )}
 
             {data.tags && data.tags.length > 0 && (
-              <div className="relative z-10">
-                <h3 className="font-serif text-lg font-medium text-martinique mb-3">
-                  Tags
-                </h3>
-                <div className="flex gap-2 flex-wrap">
-                  {data.tags.map((tag) => (
-                    <span
-                      key={tag}
-                      className="px-4 py-2 bg-honey/30 border border-honey/50 rounded-full text-sm text-martinique"
-                    >
-                      {tag}
-                    </span>
-                  ))}
-                </div>
+              <div className="relative z-10 flex gap-2 flex-wrap">
+                {data.tags.map((tag) => (
+                  <span
+                    key={tag}
+                    className="px-3 py-1.5 bg-honey/20 border border-honey/30 rounded-full text-xs text-martinique"
+                  >
+                    {tag}
+                  </span>
+                ))}
               </div>
             )}
           </div>

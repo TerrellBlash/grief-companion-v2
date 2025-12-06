@@ -9,8 +9,8 @@ export default async function ProgressPage() {
   const data = await getStreakData()
 
   return (
-    <div className="relative">
-      <Header title="Ritual Streak" />
+    <div className="min-h-screen bg-gradient-to-b from-[#F5F0E8] via-[#E8E4E0] to-[#D5C6B4]/30 safe-all">
+      <Header title="Ritual Streak" onBack="/dashboard/home" />
       <StreakContent data={data} />
       <FloatingNav />
     </div>
