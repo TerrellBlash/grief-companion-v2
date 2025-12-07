@@ -186,7 +186,7 @@ export function HomeContent({ data, isDark = false, toggleTheme }: HomeContentPr
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.4, delay: 0.35 }}
-          onClick={() => router.push('/dashboard/community')}
+          onClick={() => router.push('/authenticated/community')}
           className="col-span-2 flex items-center justify-between p-6 glass-regular rounded-[28px] group shadow-glass hover:shadow-glass-hover transition-all duration-300 active:scale-95"
         >
           <div className="flex items-center gap-6">

@@ -17,20 +17,56 @@ Guidelines:
 
 Respond with warmth and genuine care.`
 
+// Fallback responses when API is unavailable
+const FALLBACK_RESPONSES = [
+  "I hear you, and I want you to know that whatever you're feeling right now is completely valid. Grief doesn't follow a timeline, and there's no right or wrong way to process loss. Take all the time you need.",
+  "Thank you for sharing that with me. It takes courage to open up about these feelings. Remember, you don't have to go through this alone. I'm here to listen whenever you need.",
+  "That sounds really difficult. Grief can feel overwhelming at times, and it's okay to take things one moment at a time. What would feel most supportive for you right now?",
+  "I'm so sorry you're going through this. Your feelings are a testament to the love you shared. Would it help to talk about a favorite memory, or would you rather just sit with these feelings for a bit?",
+  "It's natural to have days that feel harder than others. Be gentle with yourself today. Is there something small that might bring you a moment of comfort?",
+]
+
+function getMockResponse(message: string): string {
+  // Simple keyword matching for more contextual responses
+  const lowerMessage = message.toLowerCase()
+
+  if (lowerMessage.includes('sleep') || lowerMessage.includes('night')) {
+    return "Sleep can be so difficult during grief. The quiet of night often amplifies our feelings. Some find it helpful to create a gentle bedtime ritual - perhaps lighting a candle, writing in a journal, or listening to calming music. What usually helps you feel more at peace?"
+  }
+  if (lowerMessage.includes('lonely') || lowerMessage.includes('alone')) {
+    return "Loneliness in grief can feel especially heavy. Even when surrounded by others, we can feel isolated in our pain. Know that this community is here for you. Have you considered connecting with others who understand this journey?"
+  }
+  if (lowerMessage.includes('remember') || lowerMessage.includes('memory')) {
+    return "Memories are such precious gifts. They can bring both joy and tears, sometimes at the same time. Would you like to share a memory? Sometimes speaking them aloud helps keep our loved ones close to our hearts."
+  }
+  if (lowerMessage.includes('angry') || lowerMessage.includes('mad') || lowerMessage.includes('unfair')) {
+    return "Anger is a natural part of grief, even when it surprises us. It's okay to feel angry - at the situation, at life, even at your loved one for leaving. These feelings don't diminish your love. What's bringing up these feelings today?"
+  }
+
+  // Return a random fallback response
+  return FALLBACK_RESPONSES[Math.floor(Math.random() * FALLBACK_RESPONSES.length)]
+}
+
+function createMockStream(message: string): ReadableStream {
+  const encoder = new TextEncoder()
+  const response = getMockResponse(message)
+  const words = response.split(' ')
+
+  return new ReadableStream({
+    async start(controller) {
+      for (let i = 0; i < words.length; i++) {
+        const chunk = (i === 0 ? '' : ' ') + words[i]
+        controller.enqueue(encoder.encode(`data: ${JSON.stringify({ content: chunk })}\n\n`))
+        await new Promise(resolve => setTimeout(resolve, 50)) // Simulate streaming delay
+      }
+      controller.enqueue(encoder.encode('data: [DONE]\n\n'))
+      controller.close()
+    }
+  })
+}
+
 export async function POST(request: NextRequest) {
   try {
-    const supabase = await createClient()
-
-    // Get current user
-    const {
-      data: { user },
-      error: authError,
-    } = await supabase.auth.getUser()
-
-    if (authError || !user) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
-    }
-
     const { message } = await request.json()
 
     if (!message || typeof message !== 'string') {
@@ -40,11 +76,20 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    if (!PERPLEXITY_API_KEY) {
-      return NextResponse.json(
-        { error: 'API key not configured' },
-        { status: 500 }
-      )
+    // Check if we can use the real API
+    const supabase = await createClient()
+    const { data: { user } } = await supabase.auth.getUser()
+
+    // If no API key or no user, use mock responses
+    if (!PERPLEXITY_API_KEY || !user) {
+      console.log('Using mock companion response (no API key or unauthenticated)')
+      return new NextResponse(createMockStream(message), {
+        headers: {
+          'Content-Type': 'text/event-stream',
+          'Cache-Control': 'no-cache',
+          'Connection': 'keep-alive',
+        },
+      })
     }
 
     // Save user message to database
