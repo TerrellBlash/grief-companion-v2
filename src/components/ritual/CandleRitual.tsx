@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { motion } from 'framer-motion'
-import { X } from 'lucide-react'
+import { X, Wind } from 'lucide-react'
 import { CandleFlame } from './CandleFlame'
 import { Button } from '@/components/ui/Button'
 import { Input } from '@/components/ui/Input'
@@ -22,6 +22,7 @@ export function CandleRitual({ durationSeconds = 120 }: CandleRitualProps) {
   const [dedication, setDedication] = useState('')
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const [breathingActive, setBreathingActive] = useState(false)
 
   // Timer effect
   useEffect(() => {
@@ -71,7 +72,6 @@ export function CandleRitual({ durationSeconds = 120 }: CandleRitualProps) {
       }
 
       setState('completing')
-      // Show completion for a moment before redirecting
       setTimeout(() => {
         router.push('/dashboard/home')
       }, 1500)
@@ -83,12 +83,15 @@ export function CandleRitual({ durationSeconds = 120 }: CandleRitualProps) {
 
   return (
     <div className="h-screen w-full flex flex-col relative overflow-hidden bg-howl transition-colors duration-700">
+      {/* Noise Texture Overlay */}
+      <div className="absolute inset-0 noise-texture opacity-20 pointer-events-none" />
+
       {/* Header Area */}
-      <div className="relative z-50 flex items-center justify-center pt-8 pb-4 px-6">
+      <div className="relative z-50 flex items-center justify-between pt-8 pb-4 px-6">
         {/* Close Button */}
         <button
           onClick={() => router.back()}
-          className="absolute left-6 w-11 h-11 rounded-full bg-white/10 flex items-center justify-center text-white/80 hover:bg-white/20 transition-all border border-white/5 active:scale-95 backdrop-blur-md"
+          className="w-11 h-11 rounded-full bg-white/10 flex items-center justify-center text-white/80 hover:bg-white/20 transition-all border border-white/5 active:scale-95 backdrop-blur-md"
           aria-label="Close ritual"
         >
           <X size={20} strokeWidth={1.5} />
@@ -98,6 +101,19 @@ export function CandleRitual({ durationSeconds = 120 }: CandleRitualProps) {
         <span className="font-serif text-lynx text-lg font-medium tracking-wide">
           Daily Ritual
         </span>
+
+        {/* Breathing Toggle */}
+        <button
+          onClick={() => setBreathingActive(!breathingActive)}
+          className={`w-11 h-11 rounded-full flex items-center justify-center transition-all border active:scale-95 backdrop-blur-md ${
+            breathingActive
+              ? 'bg-honey/20 border-honey/40 text-honey'
+              : 'bg-white/10 border-white/5 text-white/80 hover:bg-white/20'
+          }`}
+          aria-label="Toggle breathing guide"
+        >
+          <Wind size={20} strokeWidth={1.5} />
+        </button>
       </div>
 
       {/* Main Content Area */}
@@ -109,12 +125,31 @@ export function CandleRitual({ durationSeconds = 120 }: CandleRitualProps) {
           transition={{ duration: 0.5 }}
           className="relative mb-12 scale-110"
         >
-          {/* Glow Behind */}
+          {/* Breathing Circle - Expands/contracts when active */}
+          {breathingActive && isLit && (
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-72 h-72 rounded-full border-2 border-honey/30 animate-breathe pointer-events-none" />
+          )}
+
+          {/* Dynamic Ambient Glow */}
           <div
-            className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-honey/20 rounded-full blur-[80px] transition-opacity duration-1000 ${
+            className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 rounded-full blur-[80px] transition-all duration-1000 ${
               isLit ? 'opacity-100' : 'opacity-30'
-            }`}
+            } ${breathingActive ? 'animate-breathe' : ''}`}
+            style={{
+              background: isLit
+                ? 'radial-gradient(circle, rgba(222,156,82,0.4) 0%, rgba(168,88,70,0.2) 50%, transparent 70%)'
+                : 'rgba(222,156,82,0.2)',
+            }}
           />
+
+          {/* Secondary Glow Layer */}
+          {isLit && (
+            <div
+              className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-48 h-48 bg-honey/30 rounded-full blur-[60px] ${
+                breathingActive ? 'animate-breathe' : 'animate-glow-pulse'
+              }`}
+            />
+          )}
 
           {/* Candle Body */}
           <div className="relative flex flex-col items-center">
@@ -124,7 +159,9 @@ export function CandleRitual({ durationSeconds = 120 }: CandleRitualProps) {
                 isLit ? 'opacity-100' : 'opacity-0'
               }`}
             >
-              <CandleFlame isLit={true} />
+              <div className="flame-core">
+                <CandleFlame isLit={true} />
+              </div>
             </div>
 
             {/* Wick */}
@@ -149,6 +186,19 @@ export function CandleRitual({ durationSeconds = 120 }: CandleRitualProps) {
           </div>
         </motion.div>
 
+        {/* Breathing Guide Text */}
+        {breathingActive && isLit && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            className="text-center mb-6"
+          >
+            <p className="text-honey/80 font-serif text-lg animate-pulse-slow">
+              Breathe in... and out...
+            </p>
+          </motion.div>
+        )}
+
         {/* Typography */}
         <motion.div
           initial={{ opacity: 0 }}
@@ -160,7 +210,8 @@ export function CandleRitual({ durationSeconds = 120 }: CandleRitualProps) {
             Light a candle for those you hold dear
           </h1>
           <p className="font-serif italic text-lynx/60 text-[17px] leading-relaxed">
-            Take a moment to pause, breathe, and honor their memory in your heart.
+            Take a moment to pause, breathe, and honor their memory in your
+            heart.
           </p>
         </motion.div>
 
@@ -238,14 +289,14 @@ export function CandleRitual({ durationSeconds = 120 }: CandleRitualProps) {
             animate={{ opacity: 1 }}
             transition={{ duration: 0.5, delay: 0.4 }}
             onClick={handleBeginRitual}
-            className="w-full max-w-sm bg-gradient-to-r from-sand to-[#E0C8AA] text-martinique rounded-2xl py-4 font-sans font-bold text-[16px] flex items-center justify-center gap-2 transition-all active:scale-[0.98] shadow-lg shadow-black/20 hover:shadow-honey/20"
+            className="w-full max-w-sm bg-gradient-to-r from-spice to-honey text-white rounded-2xl py-4 font-sans font-bold text-[16px] flex items-center justify-center gap-2 transition-all active:scale-[0.98] shadow-lg shadow-spice/30 hover:shadow-honey/30"
           >
             <svg
               width="16"
               height="16"
               viewBox="0 0 24 24"
               fill="currentColor"
-              className="opacity-80"
+              className="opacity-90"
             >
               <path d="M12 2C10.5 5.5 8 8 8 11.5C8 14.5 10 17 12 17C14 17 16 14.5 16 11.5C16 8 13.5 5.5 12 2Z" />
             </svg>
