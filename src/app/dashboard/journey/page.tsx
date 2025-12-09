@@ -16,44 +16,44 @@ export default function JourneyPage() {
   }
 
   return (
-    <div className="min-h-screen bg-lynx flex flex-col pt-12 relative overflow-hidden">
+    <div className="min-h-screen aurora-bg flex flex-col pt-12 relative overflow-hidden transition-colors duration-500">
       {/* Noise Texture Overlay */}
-      <div className="absolute inset-0 noise-texture opacity-30 pointer-events-none" />
+      <div className="absolute inset-0 noise-texture pointer-events-none z-0 mix-blend-overlay" />
 
       {/* Header */}
       <div className="px-6 flex items-center justify-between mb-6 relative z-10">
         <button
           onClick={() => router.back()}
-          className="w-10 h-10 rounded-full bg-white/60 flex items-center justify-center hover:bg-white/80 transition-all active:scale-95"
+          className="w-10 h-10 rounded-full glass-thin flex items-center justify-center hover:bg-white/80 transition-all active:scale-95"
         >
-          <ArrowLeft className="w-5 h-5 text-howl" />
+          <ArrowLeft className="w-5 h-5 text-[var(--text-main)]" />
         </button>
-        <h2 className="font-serif text-2xl text-howl">Your Journey</h2>
+        <h2 className="font-serif text-2xl text-[var(--text-main)]">Your Journey</h2>
         <div className="w-10" />
       </div>
 
       {/* Stats Card */}
       <div className="px-6 mb-8 relative z-10 animate-enter">
         <div className="glass-regular rounded-[32px] p-6 text-center">
-          <p className="font-serif text-lg text-howl mb-6">
+          <p className="font-serif text-lg text-[var(--text-main)] mb-6">
             "You've saved {stats.memoriesSaved} memories of {stats.lovedOneName}"
           </p>
-          <div className="flex justify-between divide-x divide-sand/50">
+          <div className="flex justify-between divide-x divide-[#D5C6B4]/50">
             <div className="flex-1 px-2">
-              <p className="font-serif text-2xl text-honey">{stats.candlesLit}</p>
-              <p className="text-[10px] uppercase font-bold text-howl/50 tracking-wider">
+              <p className="font-serif text-2xl text-[#DE9C52]">{stats.candlesLit}</p>
+              <p className="text-[10px] uppercase font-bold text-[var(--text-muted)] tracking-wider">
                 Candles
               </p>
             </div>
             <div className="flex-1 px-2">
-              <p className="font-serif text-2xl text-honey">{stats.memoriesSaved}</p>
-              <p className="text-[10px] uppercase font-bold text-howl/50 tracking-wider">
+              <p className="font-serif text-2xl text-[#DE9C52]">{stats.memoriesSaved}</p>
+              <p className="text-[10px] uppercase font-bold text-[var(--text-muted)] tracking-wider">
                 Memories
               </p>
             </div>
             <div className="flex-1 px-2">
-              <p className="font-serif text-2xl text-honey">{stats.daysOnJourney}</p>
-              <p className="text-[10px] uppercase font-bold text-howl/50 tracking-wider">
+              <p className="font-serif text-2xl text-[#DE9C52]">{stats.daysOnJourney}</p>
+              <p className="text-[10px] uppercase font-bold text-[var(--text-muted)] tracking-wider">
                 Days
               </p>
             </div>
@@ -84,13 +84,13 @@ export default function JourneyPage() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
           >
-            <div className="w-10 h-10 rounded-full bg-white border-2 border-sand flex items-center justify-center text-honey z-10 shadow-sm relative">
+            <div className="w-10 h-10 rounded-full bg-[var(--bg-main)] border-2 border-[#D5C6B4] flex items-center justify-center text-[#DE9C52] z-10 shadow-sm relative">
               <Sparkles className="w-[18px] h-[18px]" />
-              <div className="absolute inset-0 rounded-full border-2 border-honey/20 animate-ping" />
+              <div className="absolute inset-0 rounded-full border-2 border-[#DE9C52]/20 animate-ping" />
             </div>
             <div className="glass-thin px-3 py-2 rounded-xl">
-              <p className="text-xs font-bold text-howl">Today</p>
-              <p className="text-[10px] text-howl/60">You're here now</p>
+              <p className="text-xs font-bold text-[var(--text-main)]">Today</p>
+              <p className="text-[10px] text-[var(--text-muted)]">You're here now</p>
             </div>
           </motion.div>
 
@@ -102,12 +102,12 @@ export default function JourneyPage() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2 }}
           >
-            <div className="w-8 h-8 rounded-full bg-lynx border border-sand flex items-center justify-center text-spice z-10">
+            <div className="w-8 h-8 rounded-full bg-[var(--bg-main)] border border-[#D5C6B4] flex items-center justify-center text-[#A85846] z-10">
               <BookHeart className="w-[14px] h-[14px]" />
             </div>
             <div className="text-right">
-              <p className="text-xs font-bold text-howl">First Memory</p>
-              <p className="text-[10px] text-howl/60">Oct 12</p>
+              <p className="text-xs font-bold text-[var(--text-main)]">First Memory</p>
+              <p className="text-[10px] text-[var(--text-muted)]">Oct 12</p>
             </div>
           </motion.div>
 
@@ -119,12 +119,12 @@ export default function JourneyPage() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.3 }}
           >
-            <div className="w-8 h-8 rounded-full bg-lynx border border-sand flex items-center justify-center text-honey z-10">
+            <div className="w-8 h-8 rounded-full bg-[var(--bg-main)] border border-[#D5C6B4] flex items-center justify-center text-[#DE9C52] z-10">
               <Flame className="w-[14px] h-[14px]" />
             </div>
             <div>
-              <p className="text-xs font-bold text-howl">7 Day Streak</p>
-              <p className="text-[10px] text-howl/60">Oct 04</p>
+              <p className="text-xs font-bold text-[var(--text-main)]">7 Day Streak</p>
+              <p className="text-[10px] text-[var(--text-muted)]">Oct 04</p>
             </div>
           </motion.div>
 
@@ -136,8 +136,8 @@ export default function JourneyPage() {
             animate={{ opacity: 0.6, y: 0 }}
             transition={{ delay: 0.4 }}
           >
-            <div className="w-3 h-3 rounded-full bg-sand" />
-            <p className="text-[10px] uppercase tracking-widest text-howl/40">
+            <div className="w-3 h-3 rounded-full bg-[#D5C6B4]" />
+            <p className="text-[10px] uppercase tracking-widest text-[var(--text-muted)]">
               Beginning
             </p>
           </motion.div>

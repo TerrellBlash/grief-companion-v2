@@ -8,7 +8,8 @@ export default function CompanionPage() {
   const router = useRouter()
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-[#F5F0E8] via-[#E8E4E0] to-[#D5C6B4]/30 safe-all">
+    <div className="min-h-screen aurora-bg relative safe-all transition-colors duration-500">
+      <div className="absolute inset-0 noise-texture pointer-events-none z-0 mix-blend-overlay" />
       <Header title="Companion" subtitle="Always here" onBack={() => router.back()} />
       <ChatInterface />
     </div>

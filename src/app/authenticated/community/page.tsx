@@ -9,7 +9,8 @@ export default async function CommunityPage() {
   const circles = await getCircles()
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-[#F5F0E8] via-[#E8E4E0] to-[#D5C6B4]/30 safe-all pb-40">
+    <div className="min-h-screen aurora-bg relative safe-all pb-40">
+      <div className="absolute inset-0 noise-texture pointer-events-none z-0 mix-blend-overlay" />
       <Header title="Community Circles" subtitle="Find your space to heal together" />
       <CirclesList circles={circles} />
       <FloatingNav />
