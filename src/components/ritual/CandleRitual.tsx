@@ -82,7 +82,7 @@ export function CandleRitual({ durationSeconds = 120 }: CandleRitualProps) {
   }
 
   return (
-    <div className="h-screen w-full flex flex-col relative overflow-hidden bg-howl transition-colors duration-700">
+    <div className="h-screen w-full flex flex-col relative overflow-hidden bg-[#18181F] transition-colors duration-700">
       {/* Noise Texture Overlay */}
       <div className="absolute inset-0 noise-texture opacity-20 pointer-events-none" />
 
@@ -98,7 +98,7 @@ export function CandleRitual({ durationSeconds = 120 }: CandleRitualProps) {
         </button>
 
         {/* Title */}
-        <span className="font-serif text-lynx text-lg font-medium tracking-wide">
+        <span className="font-serif text-[#E8E6E3] text-lg font-medium tracking-wide">
           Daily Ritual
         </span>
 
@@ -127,7 +127,7 @@ export function CandleRitual({ durationSeconds = 120 }: CandleRitualProps) {
         >
           {/* Breathing Circle - Expands/contracts when active */}
           {breathingActive && isLit && (
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-72 h-72 rounded-full border-2 border-honey/30 animate-breathe pointer-events-none" />
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-72 h-72 rounded-full border-2 border-[#DE9C52]/30 animate-breathe pointer-events-none" />
           )}
 
           {/* Dynamic Ambient Glow */}
@@ -145,7 +145,7 @@ export function CandleRitual({ durationSeconds = 120 }: CandleRitualProps) {
           {/* Secondary Glow Layer */}
           {isLit && (
             <div
-              className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-48 h-48 bg-honey/30 rounded-full blur-[60px] ${
+              className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-48 h-48 bg-[#DE9C52]/30 rounded-full blur-[60px] ${
                 breathingActive ? 'animate-breathe' : 'animate-glow-pulse'
               }`}
             />
@@ -193,7 +193,7 @@ export function CandleRitual({ durationSeconds = 120 }: CandleRitualProps) {
             animate={{ opacity: 1 }}
             className="text-center mb-6"
           >
-            <p className="text-honey/80 font-serif text-lg animate-pulse-slow">
+            <p className="text-[#DE9C52]/80 font-serif text-lg animate-pulse-slow">
               Breathe in... and out...
             </p>
           </motion.div>
@@ -206,10 +206,10 @@ export function CandleRitual({ durationSeconds = 120 }: CandleRitualProps) {
           transition={{ duration: 0.5, delay: 0.2 }}
           className="text-center space-y-4 max-w-xs mx-auto mb-10"
         >
-          <h1 className="font-serif text-[32px] leading-[1.2] text-lynx font-medium drop-shadow-sm">
+          <h1 className="font-serif text-[32px] leading-[1.2] text-[#E8E6E3] font-medium drop-shadow-sm">
             Light a candle for those you hold dear
           </h1>
-          <p className="font-serif italic text-lynx/60 text-[17px] leading-relaxed">
+          <p className="font-serif italic text-[#E8E6E3]/60 text-[17px] leading-relaxed">
             Take a moment to pause, breathe, and honor their memory in your
             heart.
           </p>
@@ -223,10 +223,10 @@ export function CandleRitual({ durationSeconds = 120 }: CandleRitualProps) {
             transition={{ duration: 0.3 }}
             className="text-center mb-10"
           >
-            <div className="font-serif text-[56px] text-honey leading-none mb-2 drop-shadow-sm">
+            <div className="font-serif text-[56px] text-[#DE9C52] leading-none mb-2 drop-shadow-[0_0_30px_rgba(222,156,82,0.4)]">
               {formatTime(timeLeft)}
             </div>
-            <div className="text-[11px] font-sans font-bold text-lynx/40 uppercase tracking-[0.2em]">
+            <div className="text-[11px] font-sans font-bold text-[#E8E6E3]/40 uppercase tracking-[0.2em]">
               Reflection Time
             </div>
           </motion.div>
@@ -240,7 +240,7 @@ export function CandleRitual({ durationSeconds = 120 }: CandleRitualProps) {
             transition={{ duration: 0.5, delay: 0.3 }}
             className="w-full max-w-sm space-y-3 mb-8"
           >
-            <label className="block text-center text-[11px] font-sans font-bold text-lynx/40 uppercase tracking-[0.2em]">
+            <label className="block text-center text-[11px] font-sans font-bold text-[#E8E6E3]/40 uppercase tracking-[0.2em]">
               Dedicate this moment to
             </label>
             <Input
@@ -249,7 +249,7 @@ export function CandleRitual({ durationSeconds = 120 }: CandleRitualProps) {
               value={dedication}
               onChange={(e) => setDedication(e.target.value)}
               disabled={state === 'reflection' || isLoading}
-              className="bg-martinique/50 border border-white/10 text-center text-lynx placeholder:text-lynx/20"
+              className="bg-[#242430] border border-[#E8E6E3]/10 text-center text-[#E8E6E3] placeholder:text-[#E8E6E3]/30 focus:ring-[#DE9C52]/30"
             />
           </motion.div>
         )}
@@ -273,10 +273,10 @@ export function CandleRitual({ durationSeconds = 120 }: CandleRitualProps) {
             className="text-center space-y-4"
           >
             <div className="text-6xl mb-4">✨</div>
-            <h2 className="font-serif text-2xl text-lynx font-medium">
+            <h2 className="font-serif text-2xl text-[#E8E6E3] font-medium">
               Ritual Complete
             </h2>
-            <p className="text-lynx/60 font-serif italic">
+            <p className="text-[#E8E6E3]/60 font-serif italic">
               {dedication && `Your light shines for ${dedication}`}
             </p>
           </motion.div>
@@ -289,7 +289,7 @@ export function CandleRitual({ durationSeconds = 120 }: CandleRitualProps) {
             animate={{ opacity: 1 }}
             transition={{ duration: 0.5, delay: 0.4 }}
             onClick={handleBeginRitual}
-            className="w-full max-w-sm bg-gradient-to-r from-spice to-honey text-white rounded-2xl py-4 font-sans font-bold text-[16px] flex items-center justify-center gap-2 transition-all active:scale-[0.98] shadow-lg shadow-spice/30 hover:shadow-honey/30"
+            className="w-full max-w-sm bg-gradient-to-r from-[#A85846] to-[#DE9C52] text-white rounded-2xl py-4 font-sans font-bold text-[16px] flex items-center justify-center gap-2 transition-all active:scale-[0.98] shadow-lg shadow-[#A85846]/30 hover:shadow-[#DE9C52]/40"
           >
             <svg
               width="16"

@@ -3,28 +3,54 @@
 @import "tailwindcss";
 
 :root {
-  /* ========== GEMINI COLOR PALETTE ========== */
-  --color-lynx: #F7F7F7;                    /* Light surface */
-  --color-sand: #D5C6B4;                    /* Warm mid-tone */
-  --color-honey: #DE9C52;                   /* Warm accent / golden orange */
-  --color-spice: #A85846;                   /* Rich warm / rust */
-  --color-martinique: #3C3748;              /* Dark primary */
-  --color-howl: #202030;                    /* Very dark background */
+  /* ========== EMBER WARMTH COLOR PALETTE ========== */
+  /* Core */
+  --lynx-white: #F7F7F7;                    /* Main BG - soft cream white */
+  --black-howl: #202030;                    /* Primary text - deep navy-black */
 
-  /* ========== SEMANTIC COLORS ========== */
-  --color-success: #4A7C59;                 /* Forest Green */
-  --color-warning: #C4A77D;                 /* Muted Gold */
-  --color-error: #B85450;                   /* Muted Red */
-  --color-info: #5B7A8C;                    /* Slate Blue */
+  /* Warm Accent Family */
+  --honeycomb: #DE9C52;                     /* Primary accent - golden amber (ACTIONS) */
+  --cottage-spice: #A85846;                 /* Secondary accent - terracotta (EMPHASIS) */
+  --pastel-sand: #D5C6B4;                   /* Tertiary - warm taupe (BORDERS/SOFT) */
 
-  /* ========== SHADOWS ========== */
-  --shadow-glass: 0 8px 32px rgba(60, 55, 72, 0.08);
-  --shadow-glass-hover: 0 12px 40px rgba(60, 55, 72, 0.12);
-  --shadow-glass-deep: 0 20px 60px rgba(60, 55, 72, 0.25);
+  /* Depth */
+  --martinique: #3C3748;                    /* Dark purple-grey for depth */
+
+  /* Dark Mode Core */
+  --bg-dark: #18181F;                       /* Dark background - warm black */
+  --surface-dark: #242430;                  /* Dark surfaces */
+  --text-dark: #E8E6E3;                     /* Dark mode text - warm off-white */
+
+  /* Semantic */
+  --success: #7D9D6A;                       /* Sage green */
+  --gentle-error: #C97B7B;                  /* Muted rose */
+
+  /* Legacy aliases for compatibility */
+  --color-lynx: #F7F7F7;
+  --color-sand: #D5C6B4;
+  --color-honey: #DE9C52;
+  --color-spice: #A85846;
+  --color-martinique: #3C3748;
+  --color-howl: #202030;
+  --color-success: #7D9D6A;
+  --color-warning: #C4A77D;
+  --color-error: #C97B7B;
+  --color-info: #5B7A8C;
+
+  /* ========== WARM-TINTED SHADOWS ========== */
+  --shadow-sm: 0 1px 2px rgba(168, 88, 70, 0.05);
+  --shadow-md: 0 4px 12px rgba(168, 88, 70, 0.08);
+  --shadow-lg: 0 10px 30px rgba(168, 88, 70, 0.1);
+  --shadow-xl: 0 20px 40px rgba(168, 88, 70, 0.12);
+  --shadow-glass: 0 8px 32px rgba(168, 88, 70, 0.08);
+  --shadow-glass-hover: 0 12px 40px rgba(168, 88, 70, 0.12);
+  --shadow-glass-deep: 0 20px 60px rgba(168, 88, 70, 0.15);
+  --shadow-glow-honey: 0 0 30px rgba(222, 156, 82, 0.4);
+  --shadow-glow-spice: 0 0 30px rgba(168, 88, 70, 0.3);
 
   /* ========== LIGHT MODE ========== */
-  --background: #E8E4E0;
-  --foreground: #1A1A1A;
+  --background: #F7F7F7;
+  --foreground: #202030;
 }
 
 @theme inline {
