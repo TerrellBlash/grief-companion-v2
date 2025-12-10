@@ -5,7 +5,7 @@ import { ThemeProvider } from '@/contexts/ThemeContext';
 export default function DashboardLayout({ children }: { children: ReactNode }) {
   return (
     <ThemeProvider>
-      <MobileAppShell showNav={true}>
+      <MobileAppShell>
         {children}
       </MobileAppShell>
     </ThemeProvider>

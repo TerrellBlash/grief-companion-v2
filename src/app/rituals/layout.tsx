@@ -4,10 +4,9 @@ import { ThemeProvider } from '@/contexts/ThemeContext';
 export default function RitualsLayout({ children }: { children: ReactNode }) {
   return (
     <ThemeProvider>
-      <div className="app-container">
-        <div className="content-scroll">
-          {children}
-        </div>
+      {/* Full screen, no nav for rituals */}
+      <div className="h-[100dvh] w-full overflow-hidden">
+        {children}
       </div>
     </ThemeProvider>
   );
