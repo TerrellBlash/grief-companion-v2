@@ -1,6 +1,5 @@
 import type { Metadata, Viewport } from "next";
 import { DM_Sans, Playfair_Display, Caveat } from "next/font/google";
-import { ThemeProvider } from "@/contexts/ThemeContext";
 import "./globals.css";
 
 const dmSans = DM_Sans({
@@ -41,10 +40,8 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={`${dmSans.variable} ${playfair.variable} ${caveat.variable}`}>
-      <body className="font-sans antialiased">
-        <ThemeProvider>
-          {children}
-        </ThemeProvider>
+      <body className="font-sans antialiased overflow-hidden">
+        {children}
       </body>
     </html>
   );

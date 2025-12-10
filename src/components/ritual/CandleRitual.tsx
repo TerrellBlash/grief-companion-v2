@@ -82,7 +82,7 @@ export function CandleRitual({ durationSeconds = 120 }: CandleRitualProps) {
   }
 
   return (
-    <div className="h-screen w-full flex flex-col relative overflow-hidden bg-[#18181F] transition-colors duration-700">
+    <div className="h-[100dvh] w-full flex flex-col relative overflow-hidden bg-[#18181F] transition-colors duration-700">
       {/* Noise Texture Overlay */}
       <div className="absolute inset-0 noise-texture opacity-20 pointer-events-none" />
 

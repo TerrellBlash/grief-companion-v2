@@ -16,7 +16,7 @@ export default function JourneyPage() {
   }
 
   return (
-    <div className="min-h-screen aurora-bg flex flex-col pt-12 relative overflow-hidden transition-colors duration-500">
+    <div className="min-h-full pb-32 aurora-bg flex flex-col pt-12 relative overflow-hidden transition-colors duration-500">
       {/* Noise Texture Overlay */}
       <div className="absolute inset-0 noise-texture pointer-events-none z-0 mix-blend-overlay" />
 

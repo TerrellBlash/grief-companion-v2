@@ -2,7 +2,6 @@
 
 import { useRouter } from 'next/navigation'
 import { Header } from '@/components/ui'
-import { FloatingNav } from '@/components/layout/FloatingNav'
 import { StreakContent } from '@/components/dashboard/StreakContent'
 import type { StreakData } from '@/lib/services/streaks'
 
@@ -14,10 +13,10 @@ export function ProgressPageClient({ data }: ProgressPageClientProps) {
   const router = useRouter()
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-[#F5F0E8] via-[#E8E4E0] to-[#D5C6B4]/30 safe-all">
+    <div className="min-h-full pb-32 aurora-bg relative transition-colors duration-500">
+      <div className="absolute inset-0 noise-texture pointer-events-none z-0 mix-blend-overlay" />
       <Header title="Ritual Streak" onBack={() => router.back()} />
       <StreakContent data={data} />
-      <FloatingNav />
     </div>
   )
 }
