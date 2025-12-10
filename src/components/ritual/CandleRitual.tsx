@@ -2,326 +2,190 @@
 
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
-import { motion } from 'framer-motion'
-import { X, Wind } from 'lucide-react'
-import { CandleFlame } from './CandleFlame'
-import { Button } from '@/components/ui/Button'
-import { Input } from '@/components/ui/Input'
+import { ArrowLeft, Heart } from 'lucide-react'
 
 interface CandleRitualProps {
   durationSeconds?: number
 }
 
-type RitualState = 'setup' | 'lighting' | 'reflection' | 'completing'
-
-export function CandleRitual({ durationSeconds = 120 }: CandleRitualProps) {
+export function CandleRitual({ durationSeconds = 300 }: CandleRitualProps) {
   const router = useRouter()
-  const [state, setState] = useState<RitualState>('setup')
-  const [isLit, setIsLit] = useState(false)
-  const [timeLeft, setTimeLeft] = useState(durationSeconds)
+  const [ritualStarted, setRitualStarted] = useState(false)
+  const [isBreathing, setIsBreathing] = useState(false)
   const [dedication, setDedication] = useState('')
-  const [isLoading, setIsLoading] = useState(false)
-  const [error, setError] = useState<string | null>(null)
-  const [breathingActive, setBreathingActive] = useState(false)
+  const [timeLeft, setTimeLeft] = useState(durationSeconds)
 
   // Timer effect
   useEffect(() => {
-    if (state !== 'reflection' || timeLeft <= 0) return
+    if (!ritualStarted || timeLeft <= 0) return
 
     const timer = setInterval(() => {
       setTimeLeft((prev) => {
-        if (prev <= 1) {
-          setState('completing')
-          return 0
-        }
+        if (prev <= 1) return 0
         return prev - 1
       })
     }, 1000)
 
     return () => clearInterval(timer)
-  }, [state, timeLeft])
+  }, [ritualStarted, timeLeft])
 
   const formatTime = (seconds: number) => {
     const mins = Math.floor(seconds / 60)
     const secs = seconds % 60
-    return `${mins}:${secs.toString().padStart(2, '0')}`
+    return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`
   }
 
-  const handleBeginRitual = () => {
-    setIsLit(true)
-    setState('reflection')
-    setTimeLeft(durationSeconds)
-  }
-
-  const handleCompleteRitual = async () => {
-    setIsLoading(true)
-    setError(null)
-
-    try {
-      const response = await fetch('/api/rituals/complete', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          ritualType: 'candle',
-          dedication,
-        }),
-      })
-
-      if (!response.ok) {
-        throw new Error('Failed to complete ritual')
-      }
-
-      setState('completing')
-      setTimeout(() => {
-        router.push('/dashboard/home')
-      }, 1500)
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'An error occurred')
-      setIsLoading(false)
+  const toggleRitual = () => {
+    if (!ritualStarted) {
+      if (!dedication.trim()) return
+      setRitualStarted(true)
+      setIsBreathing(true)
+    } else {
+      router.push('/dashboard/home')
     }
   }
 
   return (
-    <div className="h-[100dvh] w-full flex flex-col relative overflow-hidden bg-[#18181F] transition-colors duration-700">
-      {/* Noise Texture Overlay */}
-      <div className="absolute inset-0 noise-texture opacity-20 pointer-events-none" />
+    <div className="h-full bg-[#18181F] relative overflow-hidden flex flex-col items-center justify-between py-6">
+      {/* Noise Texture */}
+      <div className="absolute inset-0 noise-texture opacity-10 pointer-events-none" />
 
-      {/* Header Area */}
-      <div className="relative z-50 flex items-center justify-between pt-8 pb-4 px-6">
-        {/* Close Button */}
+      {/* Ambient Glow - Breathing animation */}
+      <div
+        className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] h-[300px] rounded-full bg-[#DE9C52]/10 blur-[80px] transition-all duration-[4s] ${
+          isBreathing ? 'scale-150 opacity-20' : 'scale-100 opacity-10'
+        }`}
+      />
+
+      {/* Header */}
+      <div className="w-full px-6 flex justify-between items-center relative z-10">
+        {/* Back Button - Dark Style */}
         <button
           onClick={() => router.back()}
-          className="w-11 h-11 rounded-full bg-white/10 flex items-center justify-center text-white/80 hover:bg-white/20 transition-all border border-white/5 active:scale-95 backdrop-blur-md"
-          aria-label="Close ritual"
+          className="w-10 h-10 rounded-full flex items-center justify-center bg-[#E8E6E3]/10 text-[#E8E6E3] hover:bg-[#E8E6E3]/20 transition-all active:scale-95 z-20"
         >
-          <X size={20} strokeWidth={1.5} />
+          <ArrowLeft size={20} />
         </button>
 
-        {/* Title */}
-        <span className="font-serif text-[#E8E6E3] text-lg font-medium tracking-wide">
-          Daily Ritual
-        </span>
-
-        {/* Breathing Toggle */}
-        <button
-          onClick={() => setBreathingActive(!breathingActive)}
-          className={`w-11 h-11 rounded-full flex items-center justify-center transition-all border active:scale-95 backdrop-blur-md ${
-            breathingActive
-              ? 'bg-honey/20 border-honey/40 text-honey'
-              : 'bg-white/10 border-white/5 text-white/80 hover:bg-white/20'
-          }`}
-          aria-label="Toggle breathing guide"
-        >
-          <Wind size={20} strokeWidth={1.5} />
-        </button>
+        {/* Guide Breath Button - Only visible when ritual started */}
+        <div className={`transition-opacity duration-500 ${ritualStarted ? 'opacity-100' : 'opacity-0'}`}>
+          <button
+            onClick={() => setIsBreathing(!isBreathing)}
+            className={`px-4 py-2 rounded-full border text-xs font-medium tracking-wide transition-all ${
+              isBreathing
+                ? 'bg-[#DE9C52]/20 border-[#DE9C52] text-[#DE9C52]'
+                : 'border-[#E8E6E3]/20 text-[#E8E6E3]/60'
+            }`}
+          >
+            {isBreathing ? 'Breathing...' : 'Guide Breath'}
+          </button>
+        </div>
       </div>
 
-      {/* Main Content Area */}
-      <div className="flex-1 flex flex-col items-center relative z-10 px-6 pt-10">
-        {/* Candle Graphic */}
-        <motion.div
-          initial={{ opacity: 0, scale: 0.9 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.5 }}
-          className="relative mb-12 scale-110"
-        >
-          {/* Breathing Circle - Expands/contracts when active */}
-          {breathingActive && isLit && (
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-72 h-72 rounded-full border-2 border-[#DE9C52]/30 animate-breathe pointer-events-none" />
-          )}
-
-          {/* Dynamic Ambient Glow */}
-          <div
-            className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 rounded-full blur-[80px] transition-all duration-1000 ${
-              isLit ? 'opacity-100' : 'opacity-30'
-            } ${breathingActive ? 'animate-breathe' : ''}`}
-            style={{
-              background: isLit
-                ? 'radial-gradient(circle, rgba(222,156,82,0.4) 0%, rgba(168,88,70,0.2) 50%, transparent 70%)'
-                : 'rgba(222,156,82,0.2)',
-            }}
-          />
-
-          {/* Secondary Glow Layer */}
-          {isLit && (
-            <div
-              className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-48 h-48 bg-[#DE9C52]/30 rounded-full blur-[60px] ${
-                breathingActive ? 'animate-breathe' : 'animate-glow-pulse'
-              }`}
-            />
-          )}
-
-          {/* Candle Body */}
-          <div className="relative flex flex-col items-center">
-            {/* Flame */}
-            <div
-              className={`absolute -top-[100px] transition-opacity duration-700 ${
-                isLit ? 'opacity-100' : 'opacity-0'
-              }`}
-            >
-              <div className="flame-core">
-                <CandleFlame isLit={true} />
-              </div>
-            </div>
-
-            {/* Wick */}
-            <div
-              className={`w-1 h-3 bg-martinique mb-[-2px] transition-opacity duration-300 ${
-                isLit ? 'opacity-0' : 'opacity-100'
-              }`}
-            />
-
-            {/* Wax Body */}
-            <div className="w-16 h-36 bg-gradient-to-b from-lynx to-sand rounded-t-lg rounded-b-xl relative shadow-lg">
-              {/* Highlight */}
-              <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-r from-white/30 to-transparent rounded-t-lg rounded-b-xl pointer-events-none" />
-              {/* Top Surface */}
-              <div className="absolute -top-1.5 left-0 w-full h-3 bg-[#F0ECE4] rounded-[50%]" />
-              {/* Drip */}
-              <div className="absolute top-4 right-[-4px] w-2 h-8 bg-[#EAE4D8] rounded-full shadow-sm" />
-            </div>
-
-            {/* Candle Base */}
-            <div className="w-24 h-4 bg-[#8B7355] rounded-full mt-[-2px] shadow-md relative z-10" />
-          </div>
-        </motion.div>
-
-        {/* Breathing Guide Text */}
-        {breathingActive && isLit && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            className="text-center mb-6"
-          >
-            <p className="text-[#DE9C52]/80 font-serif text-lg animate-pulse-slow">
-              Breathe in... and out...
+      {/* Main Content */}
+      <div className="flex-1 flex flex-col items-center justify-center w-full px-6 overflow-y-auto no-scrollbar relative z-10">
+        {/* Pre-ritual title */}
+        {!ritualStarted && (
+          <div className="text-center mb-10 animate-enter absolute top-12 left-0 right-0">
+            <h2 className="font-serif text-3xl text-[#E8E6E3] mb-3 leading-tight tracking-tight">
+              Light a candle for
+              <br />
+              those you hold dear
+            </h2>
+            <p className="text-[#E8E6E3]/60 text-xs font-medium leading-relaxed max-w-[260px] mx-auto tracking-wide">
+              Take a moment to pause, breathe, and honor their memory in your heart.
             </p>
-          </motion.div>
+          </div>
         )}
 
-        {/* Typography */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.5, delay: 0.2 }}
-          className="text-center space-y-4 max-w-xs mx-auto mb-10"
+        {/* Post-ritual dedication display */}
+        {ritualStarted && (
+          <div className="text-center mb-10 animate-enter absolute top-16 left-0 right-0">
+            <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-[#A85846] mb-2">
+              In Loving Memory
+            </p>
+            <h2 className="font-serif text-3xl text-[#E8E6E3] tracking-wide">For {dedication}</h2>
+          </div>
+        )}
+
+        {/* Name Input - Only visible before starting */}
+        <div
+          className={`w-full max-w-[280px] mb-8 transition-all duration-700 absolute top-[220px] z-20 ${
+            !ritualStarted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10 pointer-events-none'
+          }`}
         >
-          <h1 className="font-serif text-[32px] leading-[1.2] text-[#E8E6E3] font-medium drop-shadow-sm">
-            Light a candle for those you hold dear
-          </h1>
-          <p className="font-serif italic text-[#E8E6E3]/60 text-[17px] leading-relaxed">
-            Take a moment to pause, breathe, and honor their memory in your
-            heart.
-          </p>
-        </motion.div>
-
-        {/* Timer Section - Only show during reflection */}
-        {state === 'reflection' && (
-          <motion.div
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.3 }}
-            className="text-center mb-10"
-          >
-            <div className="font-serif text-[56px] text-[#DE9C52] leading-none mb-2 drop-shadow-[0_0_30px_rgba(222,156,82,0.4)]">
-              {formatTime(timeLeft)}
-            </div>
-            <div className="text-[11px] font-sans font-bold text-[#E8E6E3]/40 uppercase tracking-[0.2em]">
-              Reflection Time
-            </div>
-          </motion.div>
-        )}
-
-        {/* Dedication Input - Only show during setup and reflection */}
-        {(state === 'setup' || state === 'reflection') && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.5, delay: 0.3 }}
-            className="w-full max-w-sm space-y-3 mb-8"
-          >
-            <label className="block text-center text-[11px] font-sans font-bold text-[#E8E6E3]/40 uppercase tracking-[0.2em]">
-              Dedicate this moment to
-            </label>
-            <Input
+          <label className="block text-[10px] font-bold uppercase tracking-[0.2em] text-[#A85846] mb-3 text-center">
+            Reflection Time
+          </label>
+          <div className="relative group">
+            <input
               type="text"
-              placeholder="Enter a name..."
               value={dedication}
               onChange={(e) => setDedication(e.target.value)}
-              disabled={state === 'reflection' || isLoading}
-              className="bg-[#242430] border border-[#E8E6E3]/10 text-center text-[#E8E6E3] placeholder:text-[#E8E6E3]/30 focus:ring-[#DE9C52]/30"
+              placeholder="Enter a name"
+              className="w-full bg-white/5 border border-white/10 rounded-2xl py-3 px-4 text-center text-[#DE9C52] placeholder:text-white/20 outline-none focus:border-[#DE9C52]/50 focus:bg-white/10 transition-all font-serif text-lg tracking-wide group-hover:border-white/20"
             />
-          </motion.div>
-        )}
+            {dedication && (
+              <div className="absolute right-3 top-1/2 -translate-y-1/2 text-[#DE9C52] animate-enter">
+                <Heart size={14} fill="currentColor" />
+              </div>
+            )}
+          </div>
+        </div>
 
-        {/* Error Message */}
-        {error && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            className="w-full max-w-sm mb-4 p-4 bg-red-500/20 border border-red-500/30 rounded-2xl"
-          >
-            <p className="text-sm text-red-200 text-center">{error}</p>
-          </motion.div>
-        )}
+        {/* Candle Visualization */}
+        <div
+          className={`relative mb-6 shrink-0 transition-transform duration-1000 ${
+            ritualStarted ? 'scale-110 mt-12' : 'scale-90 mt-[180px]'
+          }`}
+        >
+          {/* Breathing Circle */}
+          <div
+            className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full border border-[#DE9C52]/20 transition-all duration-[4000ms] ease-in-out ${
+              isBreathing ? 'w-64 h-64 opacity-100' : 'w-32 h-32 opacity-0'
+            }`}
+          />
 
-        {/* Completion State */}
-        {state === 'completing' && (
-          <motion.div
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            className="text-center space-y-4"
-          >
-            <div className="text-6xl mb-4">✨</div>
-            <h2 className="font-serif text-2xl text-[#E8E6E3] font-medium">
-              Ritual Complete
-            </h2>
-            <p className="text-[#E8E6E3]/60 font-serif italic">
-              {dedication && `Your light shines for ${dedication}`}
-            </p>
-          </motion.div>
-        )}
+          {/* Candle Body */}
+          <div className="w-16 h-40 bg-gradient-to-t from-[#202030] to-[#3C3748] rounded-t-xl rounded-b-lg relative mx-auto shadow-2xl">
+            {/* Top ellipse */}
+            <div className="absolute top-0 w-full h-4 bg-[#3C3748] rounded-[50%] -translate-y-2 opacity-50" />
+            {/* Wick */}
+            <div className="absolute -top-4 left-1/2 -translate-x-1/2 w-1 h-4 bg-black/60" />
+            {/* Flame */}
+            <div className="absolute -top-16 left-1/2 -translate-x-1/2 w-8 h-16 bg-gradient-to-t from-[#DE9C52] via-[#D5C6B4] to-white rounded-[50%_50%_50%_50%_/_60%_60%_40%_40%] flame-core mix-blend-screen filter blur-[1px]" />
+          </div>
+        </div>
 
-        {/* Action Button */}
-        {state === 'setup' && (
-          <motion.button
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.5, delay: 0.4 }}
-            onClick={handleBeginRitual}
-            className="w-full max-w-sm bg-gradient-to-r from-[#A85846] to-[#DE9C52] text-white rounded-2xl py-4 font-sans font-bold text-[16px] flex items-center justify-center gap-2 transition-all active:scale-[0.98] shadow-lg shadow-[#A85846]/30 hover:shadow-[#DE9C52]/40"
+        {/* Timer / Breathing Text */}
+        <div
+          className={`text-center space-y-2 h-10 transition-opacity duration-1000 ${
+            ritualStarted ? 'opacity-100' : 'opacity-0'
+          }`}
+        >
+          <h2
+            className={`font-serif text-4xl text-[#E8E6E3] transition-all duration-[4000ms] ${
+              isBreathing ? 'tracking-widest opacity-80' : 'tracking-normal opacity-100'
+            }`}
           >
-            <svg
-              width="16"
-              height="16"
-              viewBox="0 0 24 24"
-              fill="currentColor"
-              className="opacity-90"
-            >
-              <path d="M12 2C10.5 5.5 8 8 8 11.5C8 14.5 10 17 12 17C14 17 16 14.5 16 11.5C16 8 13.5 5.5 12 2Z" />
-            </svg>
-            Begin Ritual
-          </motion.button>
-        )}
+            {isBreathing ? 'Inhale' : formatTime(timeLeft)}
+          </h2>
+        </div>
+      </div>
 
-        {/* Complete Button - Show at end of reflection */}
-        {state === 'reflection' && timeLeft <= 0 && !isLoading && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.3 }}
-            className="w-full max-w-sm"
-          >
-            <Button
-              onClick={handleCompleteRitual}
-              variant="primary"
-              fullWidth
-              disabled={isLoading}
-            >
-              {isLoading ? 'Completing Ritual...' : 'Complete Ritual'}
-            </Button>
-          </motion.div>
-        )}
+      {/* Action Button */}
+      <div className="w-full px-8 relative z-10 pt-4">
+        <button
+          onClick={toggleRitual}
+          disabled={!ritualStarted && !dedication.trim()}
+          className={`w-full py-4 rounded-[24px] font-serif text-lg tracking-wide shadow-[0_0_30px_rgba(222,156,82,0.3)] transition-all font-medium ${
+            !ritualStarted && !dedication.trim()
+              ? 'bg-[#3C3748] text-[#E8E6E3]/30 cursor-not-allowed shadow-none'
+              : 'bg-[#DE9C52] text-[#202030] hover:brightness-110'
+          }`}
+        >
+          {ritualStarted ? 'End Ritual' : 'Begin Ritual'}
+        </button>
       </div>
     </div>
   )

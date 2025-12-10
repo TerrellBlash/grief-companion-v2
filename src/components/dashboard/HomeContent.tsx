@@ -1,22 +1,66 @@
 'use client';
 
-import { useState } from 'react';
 import Link from 'next/link';
-import { Settings, Flame, Users, Archive, Mail, Sparkles, ArrowRight, X } from 'lucide-react';
+import { Settings, Flame, BookHeart, Mail, Sparkles, ArrowRight } from 'lucide-react';
+
+// Avatar component matching Aura.build
+const Avatar = ({ src, initial }: { src?: string; initial?: string }) => (
+  <div className="w-9 h-9 rounded-full bg-[#D5C6B4] border-[3px] border-[var(--bg-main)] flex items-center justify-center text-[10px] font-bold text-[#202030] relative -ml-3 first:ml-0 transition-colors duration-500 shadow-sm overflow-hidden">
+    {src ? (
+      <img src={src} alt="" className="w-full h-full object-cover" />
+    ) : (
+      initial
+    )}
+  </div>
+);
+
+// List Button component matching Aura.build exactly
+const ListButton = ({
+  title,
+  subtitle,
+  icon: Icon,
+  iconBg = "bg-[#F6F4EF]",
+  iconColor = "text-[#202030]",
+  href,
+  delay = ""
+}: {
+  title: string;
+  subtitle: string;
+  icon: React.ElementType;
+  iconBg?: string;
+  iconColor?: string;
+  href: string;
+  delay?: string;
+}) => (
+  <Link
+    href={href}
+    className={`glass-regular rounded-[36px] p-5 flex items-center gap-5 relative overflow-hidden cursor-pointer active:scale-[0.98] transition-all duration-300 animate-enter ${delay} hover:bg-white/80`}
+  >
+    <div className={`w-16 h-16 rounded-[24px] flex items-center justify-center ${iconBg} ${iconColor} shadow-sm shrink-0`}>
+      <Icon size={28} />
+    </div>
+    <div className="flex-1 min-w-0">
+      <h3 className="font-serif text-2xl text-[var(--text-main)] mb-0.5 tracking-tight">{title}</h3>
+      <p className="text-[var(--text-muted)] text-sm leading-tight truncate">{subtitle}</p>
+    </div>
+    <div className="w-10 h-10 rounded-full bg-white/60 flex items-center justify-center text-[var(--text-main)] shadow-sm shrink-0">
+      <ArrowRight size={20} />
+    </div>
+  </Link>
+);
 
 export default function HomeContent() {
-  const [showNudge, setShowNudge] = useState(true);
-  const timeOfDay = new Date().getHours() < 12 ? 'Morning' : new Date().getHours() < 17 ? 'Afternoon' : 'Evening';
+  const timeOfDay = new Date().getHours() < 12 ? 'Morning' : 'Evening';
   const dayOfWeek = new Date().toLocaleDateString('en-US', { weekday: 'long' });
 
   return (
-    <div className="min-h-full aurora-bg relative" style={{ paddingBottom: '160px' }}>
+    <div className="pb-36 min-h-full aurora-bg relative transition-colors duration-500">
       {/* Noise Texture */}
       <div className="absolute inset-0 noise-texture pointer-events-none z-0 mix-blend-overlay" />
 
-      {/* Header */}
-      <header className="pt-14 px-6 mb-6 relative z-10 animate-enter flex justify-between items-start">
-        <div>
+      {/* Header - Aura.build exact */}
+      <header className="pt-14 px-8 mb-4 relative z-10 animate-enter flex justify-between items-start">
+        <div className="flex-1">
           <div className="flex items-center gap-2 mb-3">
             <span className="relative flex h-2 w-2">
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#DE9C52] opacity-75" />
@@ -31,6 +75,9 @@ export default function HomeContent() {
             <br />
             <span className="font-hand text-[#A85846] text-4xl relative top-1">Michelle</span>
           </h1>
+          <p className="text-[var(--text-muted)] mt-2 text-sm font-medium">
+            Your space is here whenever you need it.
+          </p>
         </div>
         <Link
           href="/dashboard/settings"
@@ -40,144 +87,121 @@ export default function HomeContent() {
         </Link>
       </header>
 
-      {/* Nudge Banner */}
-      {showNudge && (
-        <div className="mx-5 mb-6 glass-thin border-l-4 border-l-[#DE9C52] p-4 rounded-r-[16px] rounded-l-[4px] relative animate-enter shadow-sm flex items-start gap-3">
-          <div className="min-w-[24px] pt-0.5 text-[#A85846]">
-            <Flame size={20} />
-          </div>
-          <div className="flex-1">
-            <p className="font-serif text-[var(--text-main)] text-lg leading-tight mb-1">
-              Your space is here whenever you need it.
-            </p>
-            <p className="text-[var(--text-muted)] text-xs">
-              Tomorrow marks one year since Mom&apos;s passing.
-            </p>
-          </div>
-          <button
-            onClick={() => setShowNudge(false)}
-            className="text-[var(--text-muted)] hover:text-[var(--text-main)]"
-          >
-            <X size={16} />
-          </button>
-        </div>
-      )}
+      {/* Cards Container */}
+      <div className="px-5 flex flex-col gap-4 relative z-10">
 
-      {/* Cards - VERTICAL LAYOUT */}
-      <div className="px-5 space-y-4 relative z-10">
-        {/* Candle Card - Full Width Gradient */}
+        {/* Candle Ritual Hero Card - Aura.build exact */}
         <Link
           href="/rituals/candle"
-          className="block aspect-[16/9] rounded-[36px] relative overflow-hidden cursor-pointer group animate-enter delay-100 shadow-xl shadow-[#A85846]/10 transition-all duration-700 hover:shadow-2xl hover:shadow-[#A85846]/15 hover:-translate-y-1"
+          className="w-full relative h-[220px] rounded-[36px] overflow-hidden cursor-pointer group animate-enter delay-100 shadow-[0_20px_40px_-15px_rgba(168,88,70,0.3)] transition-all active:scale-[0.98]"
         >
-          <div className="absolute inset-0 bg-gradient-to-br from-[#202030] via-[#A85846] to-[#DE9C52] transition-transform duration-[2s] group-hover:scale-105" />
+          {/* Gradient Background - Dark Plum to Orange Warmth */}
+          <div className="absolute inset-0 bg-gradient-to-br from-[#2A232E] via-[#8E4A3C] to-[#DFA35C]" />
+
+          {/* Noise Texture */}
           <div className="absolute inset-0 noise-texture opacity-20 mix-blend-overlay" />
-          <div className="relative z-10 p-7 h-full flex flex-col justify-between">
-            <div className="glass-thin px-3 py-1.5 rounded-full flex items-center gap-2 w-fit border-white/10">
-              <div className="w-1.5 h-1.5 rounded-full bg-[#DE9C52] shadow-[0_0_8px_#DE9C52]" />
-              <span className="text-[10px] font-bold tracking-[0.15em] text-[#F7F7F7]">DAILY RITUAL</span>
+
+          {/* Decorative Glow */}
+          <div className="absolute top-0 right-0 w-64 h-64 bg-[#DE9C52]/20 rounded-full blur-[60px] pointer-events-none mix-blend-screen" />
+
+          {/* Content */}
+          <div className="absolute inset-0 p-8 flex flex-col justify-between z-10">
+            {/* Badge */}
+            <div className="self-start glass-thin border border-white/20 rounded-full pl-2 pr-4 py-1.5 flex items-center gap-2 backdrop-blur-md">
+              <div className="w-2.5 h-2.5 rounded-full bg-[#DE9C52] shadow-[0_0_8px_#DE9C52] animate-pulse" />
+              <span className="text-[10px] font-bold tracking-[0.2em] text-white/90 uppercase">Daily Ritual</span>
             </div>
-            <div className="flex justify-between items-end">
-              <div>
-                <h2 className="font-serif text-3xl text-[#F7F7F7] leading-none mb-2 drop-shadow-lg">
-                  Light a<br />Candle
-                </h2>
-                <p className="text-[#D5C6B4] text-xs font-medium tracking-wide">Reflect & remember.</p>
-              </div>
-              <div className="w-12 h-12 rounded-2xl bg-white/10 backdrop-blur-md flex items-center justify-center text-[#DE9C52] border border-white/20 group-hover:bg-white/20 transition-all shadow-[0_0_20px_rgba(222,156,82,0.3)]">
-                <Flame size={22} className="flame-core" fill="currentColor" />
-              </div>
+
+            {/* Texts */}
+            <div>
+              <h2 className="font-serif text-[42px] leading-[0.9] text-[#F7F7F7] mb-2 tracking-tight">
+                Light a <br />Candle
+              </h2>
+              <p className="text-[#F7F7F7]/80 text-lg font-medium tracking-wide">Reflect & remember.</p>
             </div>
+          </div>
+
+          {/* Floating Button Icon Bottom Right */}
+          <div className="absolute bottom-6 right-6 w-16 h-16 rounded-[24px] glass-thin border border-white/20 flex items-center justify-center text-[#DE9C52] shadow-lg group-hover:bg-white/20 transition-colors backdrop-blur-md">
+            <Flame size={28} fill="currentColor" />
           </div>
         </Link>
 
-        {/* Memory Jar - Full Width */}
-        <Link
+        {/* Stats Row - 2 columns */}
+        <div className="grid grid-cols-2 gap-4 animate-enter delay-200">
+          {/* Days Card */}
+          <div className="glass-regular rounded-[36px] p-6 flex flex-col items-center justify-center text-center aspect-[5/4]">
+            <span className="font-serif text-[42px] leading-none text-[var(--text-main)] mb-1">0</span>
+            <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-[var(--text-muted)]">Days</span>
+          </div>
+
+          {/* Journey Card */}
+          <Link
+            href="/dashboard/journey"
+            className="glass-regular rounded-[36px] p-6 flex flex-col items-center justify-center text-center aspect-[5/4] cursor-pointer active:scale-95 transition-transform hover:bg-white/80"
+          >
+            <h3 className="font-serif text-2xl text-[var(--text-main)] mb-1">Journey</h3>
+            <p className="text-[var(--text-muted)] text-sm">Your path</p>
+          </Link>
+        </div>
+
+        {/* List Buttons */}
+        <ListButton
+          title="Memory Jar"
+          subtitle="Save a thought for today"
+          icon={BookHeart}
+          iconBg="bg-[#F6F4EF]"
+          iconColor="text-[#202030]"
           href="/dashboard/memories"
-          className="block glass-regular rounded-[32px] p-5 relative overflow-hidden cursor-pointer transition-all duration-500 hover:-translate-y-1 hover:shadow-lg hover:shadow-[#A85846]/10 active:scale-[0.98] animate-enter delay-200"
-        >
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-4">
-              <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-[#F7F7F7] to-[#D5C6B4]/60 dark:from-[#2A2A35] dark:to-[#3A3A45] border border-white/50 dark:border-white/10 flex items-center justify-center text-[#A85846]">
-                <Archive size={24} />
-              </div>
-              <div>
-                <h3 className="font-serif text-xl text-[var(--text-main)]">Memory Jar</h3>
-                <p className="text-[var(--text-muted)] text-sm">Save a thought for today</p>
-              </div>
-            </div>
-            <div className="w-10 h-10 rounded-full bg-white/80 dark:bg-white/10 flex items-center justify-center text-[var(--text-muted)]">
-              <ArrowRight size={18} />
-            </div>
-          </div>
-        </Link>
+          delay="delay-300"
+        />
 
-        {/* Legacy Letters - Full Width */}
-        <Link
+        <ListButton
+          title="Legacy Letters"
+          subtitle="Words across time"
+          icon={Mail}
+          iconBg="bg-[#EFE8E2]"
+          iconColor="text-[#A85846]"
           href="/dashboard/letters"
-          className="block glass-regular rounded-[32px] p-5 relative overflow-hidden cursor-pointer transition-all duration-500 hover:-translate-y-1 hover:shadow-lg hover:shadow-[#A85846]/10 active:scale-[0.98] animate-enter delay-300"
-        >
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-4">
-              <div className="w-14 h-14 rounded-2xl bg-[#A85846]/10 flex items-center justify-center text-[#A85846]">
-                <Mail size={24} />
-              </div>
-              <div>
-                <h3 className="font-serif text-xl text-[var(--text-main)]">Legacy Letters</h3>
-                <p className="text-[var(--text-muted)] text-sm">Words across time</p>
-              </div>
-            </div>
-            <div className="w-10 h-10 rounded-full bg-white/80 dark:bg-white/10 flex items-center justify-center text-[var(--text-muted)]">
-              <ArrowRight size={18} />
-            </div>
-          </div>
-        </Link>
+          delay="delay-400"
+        />
 
-        {/* Companion - Full Width */}
-        <Link
+        <ListButton
+          title="Companion"
+          subtitle="Always here to listen"
+          icon={Sparkles}
+          iconBg="bg-[#EBEBEF]"
+          iconColor="text-[#202030]"
           href="/dashboard/companion"
-          className="block glass-regular rounded-[32px] p-5 relative overflow-hidden cursor-pointer transition-all duration-500 hover:-translate-y-1 hover:shadow-lg hover:shadow-[#A85846]/10 active:scale-[0.98] animate-enter delay-400"
+          delay="delay-500"
+        />
+
+        {/* Circles Card - Aura.build exact */}
+        <Link
+          href="/dashboard/community"
+          className="glass-regular rounded-[36px] p-6 flex flex-col justify-center relative overflow-hidden cursor-pointer active:scale-[0.98] transition-all duration-300 animate-enter delay-500 hover:bg-white/80 min-h-[140px]"
         >
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-4">
-              <div className="w-14 h-14 rounded-2xl bg-[#DE9C52]/10 flex items-center justify-center text-[#DE9C52]">
-                <Sparkles size={24} />
-              </div>
-              <div>
-                <h3 className="font-serif text-xl text-[var(--text-main)]">Companion</h3>
-                <p className="text-[var(--text-muted)] text-sm">Always here to listen</p>
-              </div>
+          <div className="flex justify-between items-start mb-4 relative z-10">
+            <div>
+              <h3 className="font-serif text-2xl text-[var(--text-main)] mb-1">Circles</h3>
+              <p className="text-[var(--text-muted)] text-sm">Finding healing together</p>
             </div>
-            <div className="w-10 h-10 rounded-full bg-white/80 dark:bg-white/10 flex items-center justify-center text-[var(--text-muted)]">
-              <ArrowRight size={18} />
+            <div className="w-10 h-10 rounded-full bg-white/60 flex items-center justify-center text-[var(--text-main)] shadow-sm">
+              <ArrowRight size={20} />
             </div>
           </div>
+          <div className="flex items-center pl-2 relative z-10">
+            <Avatar initial="S" />
+            <Avatar initial="M" />
+            <Avatar initial="K" />
+            <div className="w-9 h-9 rounded-full bg-[#DE9C52] text-white flex items-center justify-center text-[10px] font-bold relative -ml-3 shadow-md ring-[3px] ring-[var(--bg-main)]">
+              +5
+            </div>
+          </div>
+          {/* Abstract bg element for Circles */}
+          <div className="absolute -bottom-6 -right-6 w-32 h-32 bg-gradient-to-t from-[#D5C6B4]/30 to-transparent rounded-full blur-xl" />
         </Link>
 
-        {/* Community Circles - Full Width */}
-        <Link
-          href="/authenticated/community"
-          className="block glass-regular rounded-[32px] p-5 relative overflow-hidden cursor-pointer transition-all duration-500 hover:-translate-y-1 hover:shadow-lg hover:shadow-[#A85846]/10 active:scale-[0.98] animate-enter delay-500 border-l-4 border-l-[#DE9C52]"
-        >
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-4">
-              <div className="w-14 h-14 rounded-2xl bg-[#D5C6B4]/20 flex items-center justify-center text-[#A85846]">
-                <Users size={24} />
-              </div>
-              <div>
-                <h3 className="font-serif text-xl text-[var(--text-main)]">Circles</h3>
-                <p className="text-[var(--text-muted)] text-sm">Finding healing together</p>
-              </div>
-            </div>
-            <div className="flex items-center gap-2">
-              <div className="flex -space-x-2">
-                <div className="w-8 h-8 rounded-full bg-[#D5C6B4] border-2 border-[var(--bg-main)] flex items-center justify-center text-[10px] font-bold text-[#202030]">S</div>
-                <div className="w-8 h-8 rounded-full bg-[#D5C6B4] border-2 border-[var(--bg-main)] flex items-center justify-center text-[10px] font-bold text-[#202030]">M</div>
-                <div className="w-8 h-8 rounded-full bg-[#DE9C52] border-2 border-[var(--bg-main)] flex items-center justify-center text-[10px] font-bold text-white">+3</div>
-              </div>
-            </div>
-          </div>
-        </Link>
       </div>
     </div>
   );
