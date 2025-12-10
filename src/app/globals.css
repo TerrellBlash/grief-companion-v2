@@ -1,19 +1,18 @@
 @import "tailwindcss";
 
-/* ===== CSS CUSTOM PROPERTIES ===== */
+/* ============================================
+   ROOT VARIABLES
+   ============================================ */
 :root {
-  /* Core Palette */
   --honeycomb: #DE9C52;
   --cottage-spice: #A85846;
   --pastel-sand: #D5C6B4;
 
-  /* Theme Variables - Light (Default) */
   --bg-main: #F7F7F7;
   --text-main: #202030;
   --text-muted: rgba(32, 32, 48, 0.6);
   --text-inverse: #F7F7F7;
 
-  /* Glass Variables */
   --glass-bg-thin: rgba(247, 247, 247, 0.6);
   --glass-bg-regular: rgba(255, 255, 255, 0.65);
   --glass-bg-thick: rgba(247, 247, 247, 0.85);
@@ -22,38 +21,37 @@
 
   --nav-bg: rgba(247, 247, 247, 0.85);
   --input-bg: rgba(255, 255, 255, 0.6);
-
-  /* Easings */
   --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-/* Dark Theme Override */
 [data-theme="dark"] {
   --bg-main: #18181F;
   --text-main: #E8E6E3;
   --text-muted: rgba(232, 230, 227, 0.5);
   --text-inverse: #18181F;
-
   --glass-bg-thin: rgba(30, 30, 35, 0.6);
   --glass-bg-regular: rgba(40, 40, 48, 0.65);
   --glass-bg-thick: rgba(24, 24, 31, 0.85);
   --glass-border: rgba(255, 255, 255, 0.1);
   --glass-shadow: rgba(0, 0, 0, 0.2);
-
   --nav-bg: rgba(30, 30, 35, 0.85);
   --input-bg: rgba(40, 40, 50, 0.5);
 }
 
-/* ===== BASE STYLES ===== */
-* {
+/* ============================================
+   CRITICAL MOBILE LAYOUT - DO NOT MODIFY
+   ============================================ */
+html, body {
   margin: 0;
   padding: 0;
-  box-sizing: border-box;
-}
-
-html, body {
   height: 100%;
-  overflow: hidden;
+  width: 100%;
+  overflow: hidden !important;
+  position: fixed !important;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
 }
 
 body {
@@ -63,10 +61,62 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   overscroll-behavior: none;
-  transition: background-color 0.5s ease, color 0.5s ease;
+  -webkit-overflow-scrolling: touch;
 }
 
-/* ===== TYPOGRAPHY ===== */
+/* App Container - THIS IS THE KEY */
+.app-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background-color: var(--bg-main);
+}
+
+/* Scrollable Content Area */
+.content-scroll {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior-y: contain;
+}
+
+/* Nav Container - Fixed at Bottom */
+.nav-container {
+  position: absolute;
+  bottom: 2rem;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: center;
+  z-index: 50;
+  pointer-events: none;
+}
+
+.nav-container > * {
+  pointer-events: auto;
+}
+
+/* Bottom Fade Gradient */
+.bottom-fade {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 6rem;
+  background: linear-gradient(to top, var(--bg-main), transparent);
+  pointer-events: none;
+  z-index: 40;
+}
+
+/* ============================================
+   TYPOGRAPHY
+   ============================================ */
 h1, h2, h3, h4, .font-serif {
   font-family: 'Playfair Display', serif;
 }
@@ -75,16 +125,17 @@ h1, h2, h3, h4, .font-serif {
   font-family: 'Caveat', cursive;
 }
 
-/* ===== SCROLLBAR ===== */
-.no-scrollbar::-webkit-scrollbar {
-  display: none;
-}
-.no-scrollbar {
-  -ms-overflow-style: none;
-  scrollbar-width: none;
-}
+/* ============================================
+   SCROLLBAR HIDE
+   ============================================ */
+.no-scrollbar::-webkit-scrollbar { display: none; }
+.no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+.content-scroll::-webkit-scrollbar { display: none; }
+.content-scroll { -ms-overflow-style: none; scrollbar-width: none; }
 
-/* ===== GLASS MORPHISM ===== */
+/* ============================================
+   GLASS MORPHISM
+   ============================================ */
 .glass-thin {
   background: var(--glass-bg-thin);
   backdrop-filter: blur(12px);
@@ -108,7 +159,9 @@ h1, h2, h3, h4, .font-serif {
   box-shadow: 0 10px 40px -10px var(--glass-shadow);
 }
 
-/* ===== ANIMATIONS ===== */
+/* ============================================
+   ANIMATIONS
+   ============================================ */
 @keyframes aurora-shift {
   0% { background-position: 0% 50%; }
   50% { background-position: 100% 50%; }
@@ -120,23 +173,6 @@ h1, h2, h3, h4, .font-serif {
   to { opacity: 1; transform: translateY(0); }
 }
 
-@keyframes wax-drip {
-  0% { transform: scale(0); opacity: 0; }
-  50% { transform: scale(1.1); opacity: 1; }
-  100% { transform: scale(1); opacity: 1; }
-}
-
-@keyframes stamp-press {
-  0% { transform: scale(1.5); opacity: 0; }
-  100% { transform: scale(1); opacity: 1; }
-}
-
-@keyframes float-paper {
-  0% { transform: translateY(0) rotate(0deg); }
-  50% { transform: translateY(-5px) rotate(2deg); }
-  100% { transform: translateY(0) rotate(0deg); }
-}
-
 @keyframes flame-flicker {
   0%, 100% { transform: scale(1) rotate(-1deg); opacity: 0.9; }
   25% { transform: scale(1.05) rotate(1deg); opacity: 1; }
@@ -144,7 +180,6 @@ h1, h2, h3, h4, .font-serif {
   75% { transform: scale(1.02) rotate(1deg); opacity: 0.95; }
 }
 
-/* Animation Utilities */
 .animate-enter {
   animation: enter-up 0.6s var(--ease-out-expo) forwards;
   opacity: 0;
@@ -160,18 +195,15 @@ h1, h2, h3, h4, .font-serif {
   transform-origin: center bottom;
 }
 
-.memory-paper {
-  animation: float-paper 4s ease-in-out infinite;
-}
-
-/* ===== BACKGROUNDS ===== */
+/* ============================================
+   BACKGROUNDS
+   ============================================ */
 .aurora-bg {
   background: linear-gradient(-45deg, var(--bg-main), #D5C6B4, var(--bg-main), #DE9C52);
   background-size: 400% 400%;
   animation: aurora-shift 30s ease infinite;
 }
 
-/* Dark mode aurora adjustment */
 [data-theme="dark"] .aurora-bg {
   background: linear-gradient(-45deg, #18181F, #2A2030, #18181F, #3A2A20);
   background-size: 400% 400%;
@@ -181,18 +213,9 @@ h1, h2, h3, h4, .font-serif {
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.05'/%3E%3C/svg%3E");
 }
 
-/* ===== COMPONENT UTILITIES ===== */
-.avatar-ring {
-  box-shadow: 0 0 0 3px var(--bg-main);
-}
-
-/* Text color utilities using CSS variables */
-.text-main { color: var(--text-main); }
-.text-muted { color: var(--text-muted); }
-.text-inverse { color: var(--text-inverse); }
-.bg-main { background-color: var(--bg-main); }
-
-/* Selection */
+/* ============================================
+   SELECTION
+   ============================================ */
 ::selection {
   background-color: rgba(222, 156, 82, 0.3);
   color: #202030;

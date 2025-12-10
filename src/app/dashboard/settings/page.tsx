@@ -16,7 +16,7 @@ export default function SettingsPage() {
   const isDarkMode = theme === 'dark'
 
   return (
-    <div className="min-h-full aurora-bg relative flex flex-col pt-12 px-6 pb-12 transition-colors duration-500">
+    <div className="aurora-bg relative flex flex-col pt-12 px-6 transition-colors duration-500" style={{ paddingBottom: '160px', minHeight: '100%' }}>
       <div className="absolute inset-0 noise-texture pointer-events-none z-0 mix-blend-overlay" />
       {/* Header */}
       <div className="flex items-center justify-between mb-8 relative z-10">

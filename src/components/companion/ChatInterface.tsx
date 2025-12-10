@@ -166,7 +166,7 @@ export function ChatInterface() {
       </div>
 
       {/* Input Area - Floating Glass Panel */}
-      <div className="absolute bottom-32 left-0 right-0 px-4 z-20">
+      <div className="absolute left-0 right-0 px-4 z-20" style={{ bottom: '140px' }}>
         <div className="glass-thick rounded-[40px] p-2 shadow-glass-deep border border-white/50">
           {/* Suggestions */}
           {messages.length < 3 && (

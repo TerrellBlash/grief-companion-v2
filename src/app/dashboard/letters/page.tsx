@@ -44,7 +44,7 @@ export default function LettersPage() {
   // List View
   if (step === 'LIST') {
     return (
-      <div className="min-h-full pb-32 aurora-bg relative flex flex-col pt-12 px-6 transition-colors duration-500">
+      <div className="aurora-bg relative flex flex-col pt-12 px-6 transition-colors duration-500" style={{ paddingBottom: '160px', minHeight: '100%' }}>
         <div className="absolute inset-0 noise-texture pointer-events-none z-0 mix-blend-overlay" />
         <div className="flex items-center justify-between mb-8 relative z-10">
           <button
@@ -108,7 +108,7 @@ export default function LettersPage() {
   // Wizard Step 1: Choose Recipient
   if (step === 'WIZARD_1') {
     return (
-      <div className="min-h-full pb-32 aurora-bg relative flex flex-col pt-12 px-6 transition-colors duration-500">
+      <div className="aurora-bg relative flex flex-col pt-12 px-6 transition-colors duration-500" style={{ paddingBottom: '160px', minHeight: '100%' }}>
         <div className="absolute inset-0 noise-texture pointer-events-none z-0 mix-blend-overlay" />
         <div className="flex items-center justify-between mb-8 relative z-10">
           <button
@@ -165,7 +165,7 @@ export default function LettersPage() {
   // Wizard Step 2: Choose Delivery Date
   if (step === 'WIZARD_2') {
     return (
-      <div className="min-h-full pb-32 aurora-bg relative flex flex-col pt-12 px-6 transition-colors duration-500">
+      <div className="aurora-bg relative flex flex-col pt-12 px-6 transition-colors duration-500" style={{ paddingBottom: '160px', minHeight: '100%' }}>
         <div className="absolute inset-0 noise-texture pointer-events-none z-0 mix-blend-overlay" />
         <div className="flex items-center justify-between mb-8 relative z-10">
           <button
@@ -208,7 +208,7 @@ export default function LettersPage() {
   // Wizard Step 3: Write Letter
   if (step === 'WIZARD_3') {
     return (
-      <div className="min-h-full pb-32 aurora-bg relative flex flex-col pt-12 px-6 transition-colors duration-500">
+      <div className="aurora-bg relative flex flex-col pt-12 px-6 transition-colors duration-500" style={{ paddingBottom: '160px', minHeight: '100%' }}>
         <div className="absolute inset-0 noise-texture pointer-events-none z-0 mix-blend-overlay" />
         <div className="flex items-center justify-between mb-4 relative z-10">
           <button
