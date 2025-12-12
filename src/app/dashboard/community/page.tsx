@@ -1,29 +1,10 @@
-'use client'
+'use client';
 
-import { useRouter } from 'next/navigation'
-import { ArrowLeft, Flower2, Dog, Home, Coffee, Users } from 'lucide-react'
-
-// BackButton component
-const BackButton = ({ onClick }: { onClick: () => void }) => (
-  <button
-    onClick={onClick}
-    className="w-10 h-10 rounded-full flex items-center justify-center bg-[var(--glass-bg-regular)] text-[var(--text-main)] border border-[var(--glass-border)] shadow-sm transition-all active:scale-95 hover:bg-[var(--glass-bg-thick)]"
-  >
-    <ArrowLeft size={20} />
-  </button>
-)
-
-// Avatar component
-const Avatar = ({ initial }: { initial: string }) => (
-  <div className="w-10 h-10 rounded-full border-2 border-white overflow-hidden bg-[var(--color-sand)]">
-    <div className="w-full h-full flex items-center justify-center text-xs font-bold text-[var(--text-main)]">
-      {initial}
-    </div>
-  </div>
-)
+import { useRouter } from 'next/navigation';
+import { ArrowLeft, Flower2, Dog, Home, Coffee, Users } from 'lucide-react';
 
 export default function CommunityCirclesPage() {
-  const router = useRouter()
+  const router = useRouter();
 
   const circles = [
     {
@@ -32,10 +13,9 @@ export default function CommunityCirclesPage() {
       active: true,
       description: 'A safe space for those navigating life after losing a spouse or partner.',
       icon: Flower2,
-      iconBg: 'bg-[#F3EBE6]',
-      iconColor: 'text-[#9E584D]',
-      buttonStyle: 'bg-[#2D2A26] text-[#F9F7F5] hover:bg-black',
-      buttonText: 'Join',
+      iconBg: '#F3EBE6',
+      iconColor: '#9E584D',
+      buttonActive: true,
       avatars: ['J', 'M', 'K'],
     },
     {
@@ -44,10 +24,9 @@ export default function CommunityCirclesPage() {
       active: false,
       description: 'Connect with others who understand the deep bond with our animal companions.',
       icon: Dog,
-      iconBg: 'bg-[#E6E8E7]',
-      iconColor: 'text-[#7E8D85]',
-      buttonStyle: 'bg-white border border-[#E5E5E5] text-[#2D2A26] hover:bg-[#FAFAFA] shadow-sm',
-      buttonText: 'Request',
+      iconBg: '#E6E8E7',
+      iconColor: '#7E8D85',
+      buttonActive: false,
       avatars: ['S', 'L', 'P'],
     },
     {
@@ -56,10 +35,9 @@ export default function CommunityCirclesPage() {
       active: true,
       description: 'Supporting one another through the loss of parents, siblings, and children.',
       icon: Home,
-      iconBg: 'bg-[#EBF0F5]',
-      iconColor: 'text-[#6A7A85]',
-      buttonStyle: 'bg-[#2D2A26] text-[#F9F7F5] hover:bg-black',
-      buttonText: 'Join',
+      iconBg: '#EBF0F5',
+      iconColor: '#6A7A85',
+      buttonActive: true,
       avatars: ['A', 'B', 'C'],
     },
     {
@@ -68,81 +46,241 @@ export default function CommunityCirclesPage() {
       active: true,
       description: 'Honoring the chosen family and deep friendships that shaped our lives.',
       icon: Coffee,
-      iconBg: 'bg-[#F4EFF2]',
-      iconColor: 'text-[#856A7A]',
-      buttonStyle: 'bg-[#2D2A26] text-[#F9F7F5] hover:bg-black',
-      buttonText: 'Join',
+      iconBg: '#F4EFF2',
+      iconColor: '#856A7A',
+      buttonActive: true,
       avatars: ['R', 'T', 'N'],
     },
-  ]
+  ];
 
   return (
-    <div className="h-full flex flex-col bg-[#F9F7F5] pt-12 relative overflow-hidden transition-colors duration-500">
+    <div style={{
+      height: '100%',
+      display: 'flex',
+      flexDirection: 'column',
+      backgroundColor: '#F9F7F5',
+      paddingTop: '48px',
+      position: 'relative',
+      overflow: 'hidden',
+    }}>
       {/* Header */}
-      <div className="px-6 flex items-center justify-between mb-2 relative z-10">
-        <BackButton onClick={() => router.back()} />
-        <div className="w-10" />
+      <div style={{
+        padding: '0 24px',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        marginBottom: '8px',
+        position: 'relative',
+        zIndex: 10,
+      }}>
+        <button
+          onClick={() => router.back()}
+          style={{
+            width: '40px',
+            height: '40px',
+            borderRadius: '50%',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            background: 'rgba(255, 255, 255, 0.6)',
+            color: '#2D2A26',
+            border: '1px solid rgba(255, 255, 255, 0.5)',
+            boxShadow: '0 2px 8px rgba(0, 0, 0, 0.04)',
+            cursor: 'pointer',
+          }}
+        >
+          <ArrowLeft size={20} />
+        </button>
+        <div style={{ width: '40px' }} />
       </div>
 
-      <div className="flex-1 overflow-y-auto no-scrollbar px-6 pb-32 pt-2 relative z-10">
-        <h2 className="font-serif text-[38px] leading-tight text-[var(--text-main)] mb-3 tracking-tight animate-enter">
+      <div
+        className="no-scrollbar"
+        style={{
+          flex: 1,
+          overflowY: 'auto',
+          padding: '8px 24px 128px',
+          position: 'relative',
+          zIndex: 10,
+        }}
+      >
+        <h2 style={{
+          fontFamily: "'Playfair Display', serif",
+          fontSize: '38px',
+          lineHeight: 1.1,
+          color: '#2D2A26',
+          marginBottom: '12px',
+          letterSpacing: '-0.02em',
+        }}>
           Community Circles
         </h2>
-        <p className="text-[11px] font-bold tracking-[0.1em] text-[var(--color-clay)] opacity-80 uppercase font-sans mb-10 animate-enter delay-100">
+        <p style={{
+          fontSize: '11px',
+          fontWeight: 700,
+          letterSpacing: '0.1em',
+          color: '#9E584D',
+          opacity: 0.8,
+          textTransform: 'uppercase',
+          marginBottom: '40px',
+        }}>
           Find your space to heal together
         </p>
 
-        <div className="space-y-4">
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
           {circles.map((circle, index) => (
             <div
               key={index}
-              className="bg-white rounded-[32px] p-6 shadow-sm border border-white/60 animate-enter"
-              style={{ animationDelay: `${200 + index * 100}ms` }}
+              style={{
+                backgroundColor: 'white',
+                borderRadius: '32px',
+                padding: '24px',
+                boxShadow: '0 2px 20px rgba(0, 0, 0, 0.02)',
+                border: '1px solid rgba(255, 255, 255, 0.6)',
+              }}
             >
               {/* Card Header */}
-              <div className="flex gap-4 mb-4">
-                <div
-                  className={`w-14 h-14 rounded-[20px] ${circle.iconBg} ${circle.iconColor} flex items-center justify-center shrink-0`}
-                >
+              <div style={{ display: 'flex', gap: '16px', marginBottom: '16px' }}>
+                <div style={{
+                  width: '56px',
+                  height: '56px',
+                  borderRadius: '20px',
+                  backgroundColor: circle.iconBg,
+                  color: circle.iconColor,
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  flexShrink: 0,
+                }}>
                   <circle.icon size={28} strokeWidth={1.5} />
                 </div>
-                <div className="flex-1 min-w-0 pt-0.5">
-                  <h3 className="font-serif text-2xl text-[var(--text-main)] mb-2 tracking-tight">{circle.title}</h3>
-                  <div className="flex items-center gap-3 flex-wrap">
+                <div style={{ flex: 1, minWidth: 0, paddingTop: '2px' }}>
+                  <h3 style={{
+                    fontFamily: "'Playfair Display', serif",
+                    fontSize: '24px',
+                    color: '#2D2A26',
+                    marginBottom: '8px',
+                    letterSpacing: '-0.02em',
+                  }}>
+                    {circle.title}
+                  </h3>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '12px', flexWrap: 'wrap' }}>
                     {circle.active ? (
-                      <div className="px-2.5 py-1 rounded-full bg-[#EBF5EE] border border-[#DEE8E1] flex items-center gap-1.5">
-                        <div className="w-1.5 h-1.5 rounded-full bg-[#7E8D85]" />
-                        <span className="text-[10px] font-bold text-[#7E8D85] uppercase tracking-wide">Active Now</span>
+                      <div style={{
+                        padding: '4px 10px',
+                        borderRadius: '9999px',
+                        backgroundColor: '#EBF5EE',
+                        border: '1px solid #DEE8E1',
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '6px',
+                      }}>
+                        <div style={{
+                          width: '6px',
+                          height: '6px',
+                          borderRadius: '50%',
+                          backgroundColor: '#7E8D85',
+                        }} />
+                        <span style={{
+                          fontSize: '10px',
+                          fontWeight: 700,
+                          color: '#7E8D85',
+                          textTransform: 'uppercase',
+                          letterSpacing: '0.05em',
+                        }}>
+                          Active Now
+                        </span>
                       </div>
                     ) : (
-                      <div className="px-2.5 py-1 rounded-full bg-[#F5F5F5] border border-[#EBEBEB] flex items-center gap-1.5">
-                        <span className="text-[10px] font-bold text-[#999] uppercase tracking-wide">Closed</span>
+                      <div style={{
+                        padding: '4px 10px',
+                        borderRadius: '9999px',
+                        backgroundColor: '#F5F5F5',
+                        border: '1px solid #EBEBEB',
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '6px',
+                      }}>
+                        <span style={{
+                          fontSize: '10px',
+                          fontWeight: 700,
+                          color: '#999',
+                          textTransform: 'uppercase',
+                          letterSpacing: '0.05em',
+                        }}>
+                          Closed
+                        </span>
                       </div>
                     )}
-                    <div className="flex items-center gap-1.5 text-[var(--text-muted)]">
+                    <div style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '6px',
+                      color: 'rgba(60, 56, 54, 0.55)',
+                    }}>
                       <Users size={14} />
-                      <span className="text-xs font-medium opacity-80">{circle.members} members</span>
+                      <span style={{ fontSize: '12px', fontWeight: 500, opacity: 0.8 }}>
+                        {circle.members} members
+                      </span>
                     </div>
                   </div>
                 </div>
               </div>
 
               {/* Description */}
-              <p className="text-[var(--text-main)] opacity-60 text-[15px] leading-relaxed mb-8 font-medium">
+              <p style={{
+                color: '#2D2A26',
+                opacity: 0.6,
+                fontSize: '15px',
+                lineHeight: 1.6,
+                marginBottom: '32px',
+                fontWeight: 500,
+              }}>
                 {circle.description}
               </p>
 
               {/* Footer: Avatars + Button */}
-              <div className="flex items-center justify-between">
-                <div className="flex -space-x-3">
+              <div style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+              }}>
+                <div style={{ display: 'flex' }}>
                   {circle.avatars.map((initial, i) => (
-                    <Avatar key={i} initial={initial} />
+                    <div
+                      key={i}
+                      style={{
+                        width: '40px',
+                        height: '40px',
+                        borderRadius: '50%',
+                        border: '2px solid white',
+                        overflow: 'hidden',
+                        backgroundColor: '#DBCBB8',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        fontSize: '12px',
+                        fontWeight: 700,
+                        color: '#2D2A26',
+                        marginLeft: i > 0 ? '-12px' : 0,
+                      }}
+                    >
+                      {initial}
+                    </div>
                   ))}
                 </div>
-                <button
-                  className={`px-8 py-3 rounded-[16px] text-sm font-semibold transition-transform active:scale-95 ${circle.buttonStyle}`}
-                >
-                  {circle.buttonText}
+                <button style={{
+                  padding: '12px 32px',
+                  borderRadius: '16px',
+                  fontSize: '14px',
+                  fontWeight: 600,
+                  border: 'none',
+                  cursor: 'pointer',
+                  backgroundColor: circle.buttonActive ? '#2D2A26' : 'white',
+                  color: circle.buttonActive ? '#F9F7F5' : '#2D2A26',
+                  boxShadow: circle.buttonActive ? 'none' : '0 2px 8px rgba(0, 0, 0, 0.04)',
+                  ...(circle.buttonActive ? {} : { border: '1px solid #E5E5E5' }),
+                }}>
+                  {circle.buttonActive ? 'Join' : 'Request'}
                 </button>
               </div>
             </div>
@@ -150,5 +288,5 @@ export default function CommunityCirclesPage() {
         </div>
       </div>
     </div>
-  )
+  );
 }

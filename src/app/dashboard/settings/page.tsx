@@ -1,139 +1,334 @@
-'use client'
+'use client';
 
-import { useState } from 'react'
-import { useRouter } from 'next/navigation'
-import { ArrowLeft, Sun, Moon } from 'lucide-react'
-import { useTheme } from '@/contexts/ThemeContext'
-
-// BackButton component
-const BackButton = ({ onClick }: { onClick: () => void }) => (
-  <button
-    onClick={onClick}
-    className="w-10 h-10 rounded-full flex items-center justify-center bg-[var(--glass-bg-regular)] text-[var(--text-main)] border border-[var(--glass-border)] shadow-sm transition-all active:scale-95 hover:bg-[var(--glass-bg-thick)]"
-  >
-    <ArrowLeft size={20} />
-  </button>
-)
-
-// Toggle component
-const Toggle = ({ enabled, onChange, label }: { enabled: boolean; onChange: (val: boolean) => void; label: string }) => (
-  <div onClick={() => onChange(!enabled)} className="flex items-center justify-between py-3 cursor-pointer group">
-    <span className="font-medium text-[var(--text-main)]">{label}</span>
-    <div
-      className={`w-12 h-7 rounded-full p-1 transition-colors duration-300 flex items-center ${
-        enabled ? 'bg-[var(--color-clay)]' : 'bg-[var(--color-stone)]/30'
-      }`}
-    >
-      <div
-        className={`w-5 h-5 rounded-full bg-white shadow-sm transition-transform duration-300 ${
-          enabled ? 'translate-x-5' : 'translate-x-0'
-        }`}
-      />
-    </div>
-  </div>
-)
-
-// Radio Option component
-const RadioOption = ({
-  value,
-  label,
-  sub,
-  selectedValue,
-  onSelect,
-}: {
-  value: string
-  label: string
-  sub: string
-  selectedValue: string
-  onSelect: (val: string) => void
-}) => (
-  <button
-    onClick={() => onSelect(value)}
-    className={`w-full flex items-center gap-4 p-3 rounded-[20px] transition-all duration-300 border ${
-      selectedValue === value
-        ? 'bg-[var(--bg-main)] border-[var(--color-amber)]'
-        : 'bg-transparent border-transparent hover:bg-[var(--glass-bg-thin)]'
-    }`}
-  >
-    <div
-      className={`w-6 h-6 rounded-full border flex items-center justify-center shrink-0 ${
-        selectedValue === value ? 'border-[var(--color-amber)] text-[var(--color-amber)]' : 'border-[var(--text-muted)] opacity-30'
-      }`}
-    >
-      {selectedValue === value && <div className="w-3 h-3 rounded-full bg-[var(--color-amber)]" />}
-    </div>
-    <div className="text-left">
-      <p className={`text-sm font-semibold ${selectedValue === value ? 'text-[var(--text-main)]' : 'text-[var(--text-muted)]'}`}>
-        {label}
-      </p>
-      <p className="text-[11px] text-[var(--text-muted)] opacity-80">{sub}</p>
-    </div>
-  </button>
-)
+import { useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { ArrowLeft, Sun, Moon } from 'lucide-react';
+import { useTheme } from '@/contexts/ThemeContext';
 
 export default function SettingsPage() {
-  const router = useRouter()
-  const { theme, toggleTheme } = useTheme()
-  const [reminderMode, setReminderMode] = useState('on')
-  const [anniversaryNudge, setAnniversaryNudge] = useState(true)
-  const [streakNudge, setStreakNudge] = useState(true)
+  const router = useRouter();
+  const { theme, toggleTheme } = useTheme();
+  const [reminderMode, setReminderMode] = useState('on');
+  const [anniversaryNudge, setAnniversaryNudge] = useState(true);
+  const [streakNudge, setStreakNudge] = useState(true);
+
+  const backButtonStyle = {
+    width: '40px',
+    height: '40px',
+    borderRadius: '50%',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    background: 'rgba(255, 255, 255, 0.6)',
+    color: '#2D2A26',
+    border: '1px solid rgba(255, 255, 255, 0.5)',
+    boxShadow: '0 2px 8px rgba(0, 0, 0, 0.04)',
+    cursor: 'pointer',
+  } as React.CSSProperties;
+
+  const glassRegularStyle = {
+    background: 'rgba(255, 255, 255, 0.6)',
+    backdropFilter: 'blur(24px) saturate(105%)',
+    WebkitBackdropFilter: 'blur(24px) saturate(105%)',
+    border: '1px solid rgba(255, 255, 255, 0.5)',
+    boxShadow: '0 8px 32px -8px rgba(158, 88, 77, 0.06)',
+  } as React.CSSProperties;
+
+  const RadioOption = ({
+    value,
+    label,
+    sub,
+    selectedValue,
+    onSelect,
+  }: {
+    value: string;
+    label: string;
+    sub: string;
+    selectedValue: string;
+    onSelect: (val: string) => void;
+  }) => (
+    <button
+      onClick={() => onSelect(value)}
+      style={{
+        width: '100%',
+        display: 'flex',
+        alignItems: 'center',
+        gap: '16px',
+        padding: '12px',
+        borderRadius: '20px',
+        border: selectedValue === value ? '1px solid #D68F54' : '1px solid transparent',
+        backgroundColor: selectedValue === value ? '#F5F2ED' : 'transparent',
+        cursor: 'pointer',
+        transition: 'all 0.3s',
+      }}
+    >
+      <div style={{
+        width: '24px',
+        height: '24px',
+        borderRadius: '50%',
+        border: selectedValue === value ? '2px solid #D68F54' : '2px solid rgba(60, 56, 54, 0.3)',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        flexShrink: 0,
+      }}>
+        {selectedValue === value && (
+          <div style={{
+            width: '12px',
+            height: '12px',
+            borderRadius: '50%',
+            backgroundColor: '#D68F54',
+          }} />
+        )}
+      </div>
+      <div style={{ textAlign: 'left' }}>
+        <p style={{
+          fontSize: '14px',
+          fontWeight: 600,
+          color: selectedValue === value ? '#2D2A26' : 'rgba(60, 56, 54, 0.55)',
+        }}>
+          {label}
+        </p>
+        <p style={{
+          fontSize: '11px',
+          color: 'rgba(60, 56, 54, 0.55)',
+          opacity: 0.8,
+        }}>
+          {sub}
+        </p>
+      </div>
+    </button>
+  );
+
+  const Toggle = ({
+    enabled,
+    onChange,
+    label,
+  }: {
+    enabled: boolean;
+    onChange: (val: boolean) => void;
+    label: string;
+  }) => (
+    <div
+      onClick={() => onChange(!enabled)}
+      style={{
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        padding: '12px 0',
+        cursor: 'pointer',
+      }}
+    >
+      <span style={{
+        fontWeight: 500,
+        color: '#2D2A26',
+      }}>
+        {label}
+      </span>
+      <div style={{
+        width: '48px',
+        height: '28px',
+        borderRadius: '9999px',
+        padding: '4px',
+        backgroundColor: enabled ? '#9E584D' : 'rgba(150, 148, 143, 0.3)',
+        display: 'flex',
+        alignItems: 'center',
+        transition: 'background-color 0.3s',
+      }}>
+        <div style={{
+          width: '20px',
+          height: '20px',
+          borderRadius: '50%',
+          backgroundColor: 'white',
+          boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
+          transform: enabled ? 'translateX(20px)' : 'translateX(0)',
+          transition: 'transform 0.3s',
+        }} />
+      </div>
+    </div>
+  );
 
   return (
-    <div className="h-full flex flex-col bg-[var(--bg-main)] pt-12 transition-colors duration-500">
+    <div style={{
+      height: '100%',
+      display: 'flex',
+      flexDirection: 'column',
+      backgroundColor: '#F5F2ED',
+      paddingTop: '48px',
+    }}>
       {/* Header */}
-      <div className="px-6 flex items-center justify-between mb-8">
-        <BackButton onClick={() => router.back()} />
-        <h2 className="font-serif text-2xl text-[var(--text-main)]">Settings</h2>
-        <div className="w-10" />
+      <div style={{
+        padding: '0 24px',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        marginBottom: '32px',
+      }}>
+        <button onClick={() => router.back()} style={backButtonStyle}>
+          <ArrowLeft size={20} />
+        </button>
+        <h2 style={{
+          fontFamily: "'Playfair Display', serif",
+          fontSize: '24px',
+          color: '#2D2A26',
+        }}>
+          Settings
+        </h2>
+        <div style={{ width: '40px' }} />
       </div>
 
-      <div className="flex-1 overflow-y-auto no-scrollbar pb-32">
-        <div className="px-6 space-y-6">
+      <div
+        className="no-scrollbar"
+        style={{
+          flex: 1,
+          overflowY: 'auto',
+          paddingBottom: '128px',
+        }}
+      >
+        <div style={{
+          padding: '0 24px',
+          display: 'flex',
+          flexDirection: 'column',
+          gap: '24px',
+        }}>
           {/* Dark Mode Toggle */}
           <button
             onClick={toggleTheme}
-            className="w-full glass-regular p-4 rounded-[24px] flex items-center justify-between active:scale-[0.98] transition-all"
+            style={{
+              width: '100%',
+              ...glassRegularStyle,
+              padding: '16px',
+              borderRadius: '24px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              cursor: 'pointer',
+            }}
           >
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-full bg-[var(--color-sand)]/20 flex items-center justify-center text-[var(--text-main)]">
+            <div style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '12px',
+            }}>
+              <div style={{
+                width: '40px',
+                height: '40px',
+                borderRadius: '50%',
+                backgroundColor: 'rgba(219, 203, 184, 0.2)',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                color: '#2D2A26',
+              }}>
                 {theme === 'dark' ? <Moon size={20} /> : <Sun size={20} />}
               </div>
-              <span className="font-medium text-[var(--text-main)]">Dark Mode</span>
+              <span style={{
+                fontWeight: 500,
+                color: '#2D2A26',
+              }}>
+                Dark Mode
+              </span>
             </div>
-            <div
-              className={`w-12 h-7 rounded-full p-1 transition-colors duration-300 flex items-center ${
-                theme === 'dark' ? 'bg-[var(--color-amber)]' : 'bg-[var(--color-stone)]/30'
-              }`}
-            >
-              <div
-                className={`w-5 h-5 rounded-full bg-white shadow-sm transition-transform duration-300 ${
-                  theme === 'dark' ? 'translate-x-5' : 'translate-x-0'
-                }`}
-              />
+            <div style={{
+              width: '48px',
+              height: '28px',
+              borderRadius: '9999px',
+              padding: '4px',
+              backgroundColor: theme === 'dark' ? '#D68F54' : 'rgba(150, 148, 143, 0.3)',
+              display: 'flex',
+              alignItems: 'center',
+              transition: 'background-color 0.3s',
+            }}>
+              <div style={{
+                width: '20px',
+                height: '20px',
+                borderRadius: '50%',
+                backgroundColor: 'white',
+                boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
+                transform: theme === 'dark' ? 'translateX(20px)' : 'translateX(0)',
+                transition: 'transform 0.3s',
+              }} />
             </div>
           </button>
 
           {/* Gentle Reminders Section */}
           <div>
-            <h3 className="font-serif text-lg text-[var(--text-main)] mb-3 pl-2">Gentle Reminders</h3>
-            <div className="glass-regular rounded-[32px] p-2 border border-[var(--color-sand)]/30">
-              <div className="p-2 space-y-1 mb-2">
-                <RadioOption value="on" label="On" sub="Check in if I'm away" selectedValue={reminderMode} onSelect={setReminderMode} />
-                <RadioOption value="quiet" label="Quiet" sub="Only important dates" selectedValue={reminderMode} onSelect={setReminderMode} />
-                <RadioOption value="off" label="Off" sub="I'll come when ready" selectedValue={reminderMode} onSelect={setReminderMode} />
+            <h3 style={{
+              fontFamily: "'Playfair Display', serif",
+              fontSize: '18px',
+              color: '#2D2A26',
+              marginBottom: '12px',
+              paddingLeft: '8px',
+            }}>
+              Gentle Reminders
+            </h3>
+            <div style={{
+              ...glassRegularStyle,
+              borderRadius: '32px',
+              padding: '8px',
+              border: '1px solid rgba(219, 203, 184, 0.3)',
+            }}>
+              <div style={{
+                padding: '8px',
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '4px',
+                marginBottom: '8px',
+              }}>
+                <RadioOption
+                  value="on"
+                  label="On"
+                  sub="Check in if I'm away"
+                  selectedValue={reminderMode}
+                  onSelect={setReminderMode}
+                />
+                <RadioOption
+                  value="quiet"
+                  label="Quiet"
+                  sub="Only important dates"
+                  selectedValue={reminderMode}
+                  onSelect={setReminderMode}
+                />
+                <RadioOption
+                  value="off"
+                  label="Off"
+                  sub="I'll come when ready"
+                  selectedValue={reminderMode}
+                  onSelect={setReminderMode}
+                />
               </div>
-              <div className="h-px bg-[var(--color-sand)]/20 mx-4 mb-2" />
-              <div className="px-4 pb-2">
-                <Toggle label="Anniversary Reminders" enabled={anniversaryNudge} onChange={setAnniversaryNudge} />
-                <Toggle label="Missed Streak Nudges" enabled={streakNudge} onChange={setStreakNudge} />
+              <div style={{
+                height: '1px',
+                backgroundColor: 'rgba(219, 203, 184, 0.2)',
+                margin: '0 16px 8px',
+              }} />
+              <div style={{ padding: '0 16px 8px' }}>
+                <Toggle
+                  label="Anniversary Reminders"
+                  enabled={anniversaryNudge}
+                  onChange={setAnniversaryNudge}
+                />
+                <Toggle
+                  label="Missed Streak Nudges"
+                  enabled={streakNudge}
+                  onChange={setStreakNudge}
+                />
               </div>
             </div>
-            <p className="text-[11px] text-[var(--text-muted)] mt-3 px-4 leading-relaxed opacity-70 text-center">
+            <p style={{
+              fontSize: '11px',
+              color: 'rgba(60, 56, 54, 0.55)',
+              marginTop: '12px',
+              padding: '0 16px',
+              lineHeight: 1.6,
+              opacity: 0.7,
+              textAlign: 'center',
+            }}>
               We&apos;ll only reach out when we think you might need a moment of space. No pressure, ever.
             </p>
           </div>
         </div>
       </div>
     </div>
-  )
+  );
 }

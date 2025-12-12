@@ -1,53 +1,157 @@
-'use client'
+'use client';
 
-import { useRouter } from 'next/navigation'
-import { ArrowLeft, Sparkles, BookHeart } from 'lucide-react'
-
-// BackButton component
-const BackButton = ({ onClick }: { onClick: () => void }) => (
-  <button
-    onClick={onClick}
-    className="w-10 h-10 rounded-full flex items-center justify-center bg-[var(--glass-bg-regular)] text-[var(--text-main)] border border-[var(--glass-border)] shadow-sm transition-all active:scale-95 hover:bg-[var(--glass-bg-thick)]"
-  >
-    <ArrowLeft size={20} />
-  </button>
-)
+import { useRouter } from 'next/navigation';
+import { ArrowLeft, Sparkles, BookHeart } from 'lucide-react';
 
 export default function JourneyPage() {
-  const router = useRouter()
+  const router = useRouter();
 
   return (
-    <div className="h-full flex flex-col bg-[#F5F2ED] relative overflow-hidden transition-colors duration-500">
-      <div className="pt-12 px-6 pb-4 relative z-20">
-        <div className="flex items-center justify-between mb-6">
-          <BackButton onClick={() => router.back()} />
-          <h2 className="font-serif text-2xl text-[var(--text-main)]">Your Journey</h2>
-          <div className="w-10" />
+    <div style={{
+      height: '100%',
+      display: 'flex',
+      flexDirection: 'column',
+      backgroundColor: '#F5F2ED',
+      position: 'relative',
+      overflow: 'hidden',
+    }}>
+      <div style={{
+        paddingTop: '48px',
+        padding: '48px 24px 16px',
+        position: 'relative',
+        zIndex: 20,
+      }}>
+        <div style={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          marginBottom: '24px',
+        }}>
+          <button
+            onClick={() => router.back()}
+            style={{
+              width: '40px',
+              height: '40px',
+              borderRadius: '50%',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              background: 'rgba(255, 255, 255, 0.6)',
+              color: '#2D2A26',
+              border: '1px solid rgba(255, 255, 255, 0.5)',
+              boxShadow: '0 2px 8px rgba(0, 0, 0, 0.04)',
+              cursor: 'pointer',
+            }}
+          >
+            <ArrowLeft size={20} />
+          </button>
+          <h2 style={{
+            fontFamily: "'Playfair Display', serif",
+            fontSize: '24px',
+            color: '#2D2A26',
+          }}>
+            Your Journey
+          </h2>
+          <div style={{ width: '40px' }} />
         </div>
 
         {/* Stats Card */}
-        <div className="glass-opaque backdrop-blur-md rounded-[32px] p-6 shadow-sm border border-white/50 animate-enter">
-          <h3 className="font-serif text-lg text-[var(--text-main)] text-center mb-6 leading-tight">
+        <div style={{
+          background: 'rgba(255, 255, 255, 0.75)',
+          backdropFilter: 'blur(20px)',
+          WebkitBackdropFilter: 'blur(20px)',
+          borderRadius: '32px',
+          padding: '24px',
+          boxShadow: '0 4px 20px rgba(0, 0, 0, 0.02)',
+          border: '1px solid rgba(255, 255, 255, 0.5)',
+        }}>
+          <h3 style={{
+            fontFamily: "'Playfair Display', serif",
+            fontSize: '18px',
+            color: '#2D2A26',
+            textAlign: 'center',
+            marginBottom: '24px',
+            lineHeight: 1.4,
+          }}>
             &quot;You&apos;ve saved 12 memories of Mom&quot;
           </h3>
-          <div className="flex justify-between items-center px-2 relative">
-            <div className="absolute left-1/3 top-2 bottom-2 w-px bg-[var(--color-sand)]/40" />
-            <div className="absolute right-1/3 top-2 bottom-2 w-px bg-[var(--color-sand)]/40" />
-            <div className="flex-1 text-center">
-              <div className="font-serif text-2xl text-[var(--color-amber)] mb-1">34</div>
-              <div className="text-[9px] font-bold tracking-[0.15em] text-[var(--color-clay)]/60 uppercase font-sans">
+          <div style={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            padding: '0 8px',
+            position: 'relative',
+          }}>
+            <div style={{
+              position: 'absolute',
+              left: '33.33%',
+              top: '8px',
+              bottom: '8px',
+              width: '1px',
+              backgroundColor: 'rgba(219, 203, 184, 0.4)',
+            }} />
+            <div style={{
+              position: 'absolute',
+              right: '33.33%',
+              top: '8px',
+              bottom: '8px',
+              width: '1px',
+              backgroundColor: 'rgba(219, 203, 184, 0.4)',
+            }} />
+            <div style={{ flex: 1, textAlign: 'center' }}>
+              <div style={{
+                fontFamily: "'Playfair Display', serif",
+                fontSize: '24px',
+                color: '#D68F54',
+                marginBottom: '4px',
+              }}>
+                34
+              </div>
+              <div style={{
+                fontSize: '9px',
+                fontWeight: 700,
+                letterSpacing: '0.15em',
+                color: 'rgba(158, 88, 77, 0.6)',
+                textTransform: 'uppercase',
+              }}>
                 Candles
               </div>
             </div>
-            <div className="flex-1 text-center">
-              <div className="font-serif text-2xl text-[var(--color-amber)] mb-1">12</div>
-              <div className="text-[9px] font-bold tracking-[0.15em] text-[var(--color-clay)]/60 uppercase font-sans">
+            <div style={{ flex: 1, textAlign: 'center' }}>
+              <div style={{
+                fontFamily: "'Playfair Display', serif",
+                fontSize: '24px',
+                color: '#D68F54',
+                marginBottom: '4px',
+              }}>
+                12
+              </div>
+              <div style={{
+                fontSize: '9px',
+                fontWeight: 700,
+                letterSpacing: '0.15em',
+                color: 'rgba(158, 88, 77, 0.6)',
+                textTransform: 'uppercase',
+              }}>
                 Memories
               </div>
             </div>
-            <div className="flex-1 text-center">
-              <div className="font-serif text-2xl text-[var(--color-amber)] mb-1">47</div>
-              <div className="text-[9px] font-bold tracking-[0.15em] text-[var(--color-clay)]/60 uppercase font-sans">
+            <div style={{ flex: 1, textAlign: 'center' }}>
+              <div style={{
+                fontFamily: "'Playfair Display', serif",
+                fontSize: '24px',
+                color: '#D68F54',
+                marginBottom: '4px',
+              }}>
+                47
+              </div>
+              <div style={{
+                fontSize: '9px',
+                fontWeight: 700,
+                letterSpacing: '0.15em',
+                color: 'rgba(158, 88, 77, 0.6)',
+                textTransform: 'uppercase',
+              }}>
                 Days
               </div>
             </div>
@@ -56,60 +160,218 @@ export default function JourneyPage() {
       </div>
 
       {/* Journey Path Visualization */}
-      <div className="flex-1 relative w-full overflow-y-auto no-scrollbar" style={{ perspective: '1000px' }}>
-        <div className="min-h-[600px] relative w-full pb-32">
+      <div
+        className="no-scrollbar"
+        style={{
+          flex: 1,
+          position: 'relative',
+          width: '100%',
+          overflowY: 'auto',
+          perspective: '1000px',
+        }}
+      >
+        <div style={{
+          minHeight: '600px',
+          position: 'relative',
+          width: '100%',
+          paddingBottom: '128px',
+        }}>
           {/* SVG Winding Path */}
           <svg
-            className="absolute top-0 left-0 w-full h-full pointer-events-none z-0"
+            style={{
+              position: 'absolute',
+              top: 0,
+              left: 0,
+              width: '100%',
+              height: '100%',
+              pointerEvents: 'none',
+              zIndex: 0,
+            }}
             viewBox="0 0 390 800"
             preserveAspectRatio="none"
           >
             <path
               d="M 65 50 C 65 150, 320 150, 320 320 C 320 480, 100 500, 100 650"
               fill="none"
-              stroke="var(--color-sand)"
+              stroke="#DBCBB8"
               strokeWidth="2"
               strokeDasharray="8 8"
               strokeLinecap="round"
-              className="opacity-60"
+              style={{ opacity: 0.6 }}
             />
           </svg>
 
           {/* Today Milestone */}
-          <div className="absolute top-[50px] left-[20px] flex items-center gap-4 animate-enter delay-100 z-10">
-            <div className="w-14 h-14 rounded-full bg-[#F9F7F5] border-2 border-[var(--color-amber)]/20 flex items-center justify-center text-[var(--color-amber)] shadow-sm relative group">
-              <div className="absolute inset-0 bg-[var(--color-amber)]/10 rounded-full animate-pulse" />
+          <div style={{
+            position: 'absolute',
+            top: '50px',
+            left: '20px',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '16px',
+            zIndex: 10,
+          }}>
+            <div style={{
+              width: '56px',
+              height: '56px',
+              borderRadius: '50%',
+              backgroundColor: '#F9F7F5',
+              border: '2px solid rgba(214, 143, 84, 0.2)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              color: '#D68F54',
+              boxShadow: '0 2px 8px rgba(0, 0, 0, 0.04)',
+              position: 'relative',
+            }}>
+              <div style={{
+                position: 'absolute',
+                inset: 0,
+                backgroundColor: 'rgba(214, 143, 84, 0.1)',
+                borderRadius: '50%',
+                animation: 'pulse 2s infinite',
+              }} />
               <Sparkles size={22} />
             </div>
-            <div className="glass-opaque px-4 py-2 rounded-xl border border-white/50 shadow-sm">
-              <p className="font-bold text-sm text-[var(--text-main)] mb-0.5">Today</p>
-              <p className="text-[11px] text-[var(--text-muted)] font-medium">You&apos;re here now</p>
+            <div style={{
+              background: 'rgba(255, 255, 255, 0.75)',
+              backdropFilter: 'blur(20px)',
+              WebkitBackdropFilter: 'blur(20px)',
+              padding: '8px 16px',
+              borderRadius: '12px',
+              border: '1px solid rgba(255, 255, 255, 0.5)',
+              boxShadow: '0 2px 8px rgba(0, 0, 0, 0.04)',
+            }}>
+              <p style={{
+                fontWeight: 700,
+                fontSize: '14px',
+                color: '#2D2A26',
+                marginBottom: '2px',
+              }}>
+                Today
+              </p>
+              <p style={{
+                fontSize: '11px',
+                color: 'rgba(60, 56, 54, 0.55)',
+                fontWeight: 500,
+              }}>
+                You&apos;re here now
+              </p>
             </div>
           </div>
 
           {/* First Memory Milestone */}
-          <div className="absolute top-[300px] right-[20px] flex flex-row-reverse items-center gap-4 animate-enter delay-200 z-10">
-            <div className="w-12 h-12 rounded-full bg-[#F9F7F5] border-2 border-[var(--color-clay)]/20 flex items-center justify-center text-[var(--color-clay)] shadow-sm">
+          <div style={{
+            position: 'absolute',
+            top: '300px',
+            right: '20px',
+            display: 'flex',
+            flexDirection: 'row-reverse',
+            alignItems: 'center',
+            gap: '16px',
+            zIndex: 10,
+          }}>
+            <div style={{
+              width: '48px',
+              height: '48px',
+              borderRadius: '50%',
+              backgroundColor: '#F9F7F5',
+              border: '2px solid rgba(158, 88, 77, 0.2)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              color: '#9E584D',
+              boxShadow: '0 2px 8px rgba(0, 0, 0, 0.04)',
+            }}>
               <BookHeart size={20} />
             </div>
-            <div className="glass-opaque px-4 py-2 rounded-xl border border-white/50 shadow-sm text-right">
-              <p className="font-bold text-sm text-[var(--text-main)] mb-0.5">First Memory</p>
-              <p className="text-[11px] text-[var(--text-muted)] font-medium">Oct 12</p>
+            <div style={{
+              background: 'rgba(255, 255, 255, 0.75)',
+              backdropFilter: 'blur(20px)',
+              WebkitBackdropFilter: 'blur(20px)',
+              padding: '8px 16px',
+              borderRadius: '12px',
+              border: '1px solid rgba(255, 255, 255, 0.5)',
+              boxShadow: '0 2px 8px rgba(0, 0, 0, 0.04)',
+              textAlign: 'right',
+            }}>
+              <p style={{
+                fontWeight: 700,
+                fontSize: '14px',
+                color: '#2D2A26',
+                marginBottom: '2px',
+              }}>
+                First Memory
+              </p>
+              <p style={{
+                fontSize: '11px',
+                color: 'rgba(60, 56, 54, 0.55)',
+                fontWeight: 500,
+              }}>
+                Oct 12
+              </p>
             </div>
           </div>
 
           {/* Week 1 Milestone */}
-          <div className="absolute top-[500px] left-[60px] flex items-center gap-4 animate-enter delay-300 z-10">
-            <div className="w-10 h-10 rounded-full bg-[var(--color-sand)]/20 border border-[var(--color-sand)]/40 flex items-center justify-center text-[var(--color-stone)] shadow-sm">
-              <span className="text-xs font-bold">1</span>
+          <div style={{
+            position: 'absolute',
+            top: '500px',
+            left: '60px',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '16px',
+            zIndex: 10,
+          }}>
+            <div style={{
+              width: '40px',
+              height: '40px',
+              borderRadius: '50%',
+              backgroundColor: 'rgba(219, 203, 184, 0.2)',
+              border: '1px solid rgba(219, 203, 184, 0.4)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              color: '#96948F',
+              boxShadow: '0 2px 8px rgba(0, 0, 0, 0.04)',
+            }}>
+              <span style={{ fontSize: '12px', fontWeight: 700 }}>1</span>
             </div>
-            <div className="glass-opaque px-4 py-2 rounded-xl border border-white/50 shadow-sm">
-              <p className="font-bold text-sm text-[var(--text-main)] mb-0.5">Week 1</p>
-              <p className="text-[11px] text-[var(--text-muted)] font-medium">Your journey begins</p>
+            <div style={{
+              background: 'rgba(255, 255, 255, 0.75)',
+              backdropFilter: 'blur(20px)',
+              WebkitBackdropFilter: 'blur(20px)',
+              padding: '8px 16px',
+              borderRadius: '12px',
+              border: '1px solid rgba(255, 255, 255, 0.5)',
+              boxShadow: '0 2px 8px rgba(0, 0, 0, 0.04)',
+            }}>
+              <p style={{
+                fontWeight: 700,
+                fontSize: '14px',
+                color: '#2D2A26',
+                marginBottom: '2px',
+              }}>
+                Week 1
+              </p>
+              <p style={{
+                fontSize: '11px',
+                color: 'rgba(60, 56, 54, 0.55)',
+                fontWeight: 500,
+              }}>
+                Your journey begins
+              </p>
             </div>
           </div>
         </div>
       </div>
+
+      <style jsx global>{`
+        @keyframes pulse {
+          0%, 100% { opacity: 1; }
+          50% { opacity: 0.5; }
+        }
+      `}</style>
     </div>
-  )
+  );
 }
