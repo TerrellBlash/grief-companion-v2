@@ -62,7 +62,7 @@
   }
 
   body {
-    font-family: 'DM Sans', sans-serif;
+    font-family: var(--font-dm-sans), 'DM Sans', sans-serif;
     background-color: var(--bg-main);
     color: var(--text-main);
     -webkit-font-smoothing: antialiased;
@@ -76,11 +76,11 @@
   }
 
   h1, h2, h3, h4, .font-serif {
-    font-family: 'Playfair Display', serif;
+    font-family: var(--font-playfair), 'Playfair Display', serif;
   }
 
   .font-hand {
-    font-family: 'Caveat', cursive;
+    font-family: var(--font-caveat), 'Caveat', cursive;
   }
 
   a {
