@@ -2,244 +2,631 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
-import { Settings, Flame, ArrowRight, X, HeartHandshake, BookHeart, Mail, Sparkles } from 'lucide-react';
-
-// MenuCard component matching Aura.build exactly
-const MenuCard = ({
-  title,
-  subtitle,
-  icon: Icon,
-  href,
-  delay,
-  customIcon,
-  color = 'text-[var(--color-clay)]',
-  bgColor = 'bg-[#F3F1EB]',
-}: {
-  title: string;
-  subtitle: string;
-  icon?: typeof BookHeart;
-  href: string;
-  delay: string;
-  customIcon?: React.ReactNode;
-  color?: string;
-  bgColor?: string;
-}) => (
-  <Link
-    href={href}
-    className={`glass-opaque rounded-[32px] p-5 flex items-center gap-5 cursor-pointer active:scale-[0.98] transition-all duration-300 hover:bg-white animate-enter ${delay} mb-3 no-underline`}
-  >
-    <div
-      className={`w-16 h-16 rounded-[24px] flex items-center justify-center ${bgColor} ${color} shadow-sm shrink-0 border border-[var(--color-sand)]/20`}
-    >
-      {customIcon ? customIcon : Icon && <Icon size={26} />}
-    </div>
-    <div className="flex-1 min-w-0">
-      <h3 className="font-serif text-[22px] text-[var(--text-main)] mb-0.5 tracking-tight font-medium">
-        {title}
-      </h3>
-      <p className="text-[var(--text-muted)] text-[13px] leading-tight truncate font-medium opacity-80">
-        {subtitle}
-      </p>
-    </div>
-    <div className="w-11 h-11 rounded-full bg-white flex items-center justify-center text-[var(--text-main)] shadow-sm shrink-0 border border-[var(--color-sand)]/20 group-hover:scale-105 transition-transform">
-      <ArrowRight size={20} className="opacity-60" />
-    </div>
-  </Link>
-);
+import { Settings, Flame, Mail, ArrowRight, X, HeartHandshake, BookHeart, Sparkles } from 'lucide-react';
 
 export default function HomeContent() {
   const [showNudge, setShowNudge] = useState(true);
   const hours = new Date().getHours();
-  const timeOfDay = hours < 12 ? 'Morning' : 'Evening';
-  const dayName = new Date().toLocaleDateString('en-US', { weekday: 'long' });
+  const timeOfDay = hours < 12 ? 'MORNING' : hours < 17 ? 'AFTERNOON' : 'EVENING';
+  const dayName = new Date().toLocaleDateString('en-US', { weekday: 'long' }).toUpperCase();
 
   return (
-    <div className="pb-36 min-h-full aurora-bg relative transition-colors duration-500">
-      {/* Noise texture overlay */}
-      <div className="absolute inset-0 noise-texture pointer-events-none z-0 mix-blend-overlay" />
+    <div
+      style={{
+        minHeight: '100%',
+        paddingBottom: '140px',
+        background: 'linear-gradient(-45deg, #F5F2ED, #E3E0D9, #E0E6E3, #E8DCCF)',
+        backgroundSize: '400% 400%',
+        animation: 'aurora-shift 35s ease infinite',
+        position: 'relative',
+      }}
+    >
+      {/* Header */}
+      <header style={{
+        paddingTop: '56px',
+        paddingLeft: '24px',
+        paddingRight: '24px',
+        paddingBottom: '16px',
+        position: 'relative',
+        zIndex: 10,
+      }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+          <div style={{ flex: 1 }}>
+            {/* Day indicator */}
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px' }}>
+              <span style={{
+                width: '8px',
+                height: '8px',
+                borderRadius: '50%',
+                backgroundColor: '#D68F54',
+              }} />
+              <p style={{
+                color: '#9E584D',
+                fontWeight: 600,
+                fontSize: '11px',
+                letterSpacing: '0.12em',
+                fontFamily: "'DM Sans', sans-serif",
+              }}>
+                {dayName} {timeOfDay}
+              </p>
+            </div>
 
-      {/* Header - EXACT Aura.build: pt-14 px-8 */}
-      <header className="pt-14 px-8 mb-6 relative z-10 animate-enter flex justify-between items-start">
-        <div className="flex-1">
-          {/* Day indicator */}
-          <div className="flex items-center gap-2 mb-3">
-            <span className="relative flex h-2 w-2">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[var(--color-amber)] opacity-75" />
-              <span className="relative inline-flex rounded-full h-2 w-2 bg-[var(--color-amber)]" />
-            </span>
-            <p className="text-[var(--color-clay)] font-semibold text-xs uppercase tracking-[0.15em] opacity-90">
-              {dayName} {timeOfDay}
+            {/* Welcome text */}
+            <h1 style={{
+              fontFamily: "'Playfair Display', serif",
+              fontSize: '32px',
+              lineHeight: 1.15,
+              color: '#2D2A26',
+              letterSpacing: '-0.02em',
+              margin: 0,
+            }}>
+              Welcome home,
+            </h1>
+            <p style={{
+              fontFamily: "'Caveat', cursive",
+              color: '#9E584D',
+              fontSize: '34px',
+              lineHeight: 1.1,
+              marginTop: '2px',
+            }}>
+              Michelle
+            </p>
+            <p style={{
+              color: 'rgba(45, 42, 38, 0.5)',
+              fontSize: '14px',
+              marginTop: '12px',
+              fontWeight: 500,
+              lineHeight: 1.5,
+              maxWidth: '220px',
+              fontFamily: "'DM Sans', sans-serif",
+            }}>
+              Your space is here whenever you need it.
             </p>
           </div>
 
-          {/* Welcome text */}
-          <h1 className="font-serif text-[32px] leading-[1.1] text-[var(--text-main)] tracking-tight">
-            <span className="opacity-70 font-normal">Welcome home,</span>
-            <br />
-            <span className="font-hand text-[var(--color-clay)] text-4xl relative top-1">Michelle</span>
-          </h1>
-          <p className="text-[var(--text-muted)] text-sm mt-3 font-medium opacity-80 leading-relaxed max-w-[240px]">
-            Your space is here whenever you need it.
-          </p>
+          {/* Settings button */}
+          <Link
+            href="/dashboard/settings"
+            style={{
+              width: '40px',
+              height: '40px',
+              borderRadius: '50%',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              background: 'rgba(255, 255, 255, 0.4)',
+              backdropFilter: 'blur(12px)',
+              WebkitBackdropFilter: 'blur(12px)',
+              border: '1px solid rgba(255, 255, 255, 0.5)',
+              textDecoration: 'none',
+            }}
+          >
+            <Settings size={20} color="rgba(45, 42, 38, 0.4)" />
+          </Link>
         </div>
-
-        {/* Settings button */}
-        <Link
-          href="/dashboard/settings"
-          className="w-10 h-10 rounded-full glass-thin flex items-center justify-center text-[var(--text-muted)] hover:text-[var(--text-main)] active:scale-95 transition-all no-underline"
-        >
-          <Settings size={20} />
-        </Link>
       </header>
 
-      {/* Content - EXACT Aura.build: px-5 flex flex-col gap-4 */}
-      <div className="px-5 flex flex-col gap-4 relative z-10">
+      {/* Content */}
+      <div style={{ padding: '0 20px', position: 'relative', zIndex: 10 }}>
+
         {/* Gentle Nudge Banner */}
         {showNudge && (
-          <div className="bg-[var(--bg-card)] border border-[var(--color-sand)]/40 rounded-[24px] p-4 flex items-center justify-between shadow-[0_4px_20px_-4px_rgba(158,88,77,0.1)] relative overflow-hidden group animate-enter">
-            <div className="absolute inset-0 bg-gradient-to-r from-[var(--color-clay)]/5 to-transparent opacity-50" />
-            <div className="flex gap-4 items-center relative z-10">
-              <div className="w-10 h-10 rounded-full bg-white border border-[var(--color-sand)]/30 flex items-center justify-center text-[var(--color-clay)] shadow-sm shrink-0">
-                <HeartHandshake size={18} />
-              </div>
-              <div className="min-w-0">
-                <p className="font-serif text-[17px] text-[var(--text-main)] mb-0.5 tracking-tight">
-                  Your candle is waiting
-                </p>
-                <p className="text-[var(--text-muted)] text-xs font-medium">
-                  No pressure. Just here if you need us.
-                </p>
-              </div>
+          <div
+            style={{
+              background: 'white',
+              borderRadius: '20px',
+              padding: '16px',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '16px',
+              marginBottom: '12px',
+              border: '1px solid rgba(219, 203, 184, 0.4)',
+              boxShadow: '0 4px 20px -4px rgba(158, 88, 77, 0.08)',
+            }}
+          >
+            <div style={{
+              width: '40px',
+              height: '40px',
+              borderRadius: '50%',
+              background: 'white',
+              border: '1px solid rgba(219, 203, 184, 0.3)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              flexShrink: 0,
+            }}>
+              <HeartHandshake size={18} color="#9E584D" />
+            </div>
+            <div style={{ flex: 1, minWidth: 0 }}>
+              <p style={{
+                fontFamily: "'Playfair Display', serif",
+                fontSize: '16px',
+                color: '#2D2A26',
+                marginBottom: '2px',
+              }}>
+                Your candle is waiting 🕯️
+              </p>
+              <p style={{
+                color: 'rgba(45, 42, 38, 0.5)',
+                fontSize: '12px',
+                fontWeight: 500,
+                fontFamily: "'DM Sans', sans-serif",
+              }}>
+                No pressure. Just here if you need us.
+              </p>
             </div>
             <button
               onClick={() => setShowNudge(false)}
-              className="w-8 h-8 flex items-center justify-center text-[var(--text-muted)] hover:text-[var(--color-clay)] transition-colors relative z-10"
+              style={{
+                width: '32px',
+                height: '32px',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                background: 'transparent',
+                border: 'none',
+                cursor: 'pointer',
+              }}
             >
-              <X size={16} />
+              <X size={16} color="rgba(45, 42, 38, 0.3)" />
             </button>
           </div>
         )}
 
-        {/* Daily Ritual Card - EXACT Aura.build gradient and styling */}
+        {/* Daily Ritual Card */}
         <Link
           href="/rituals/candle"
-          className="group relative w-full overflow-hidden rounded-[32px] p-6 min-h-[190px] flex flex-col justify-between cursor-pointer active:scale-[0.98] transition-all shadow-[0_10px_30px_-10px_rgba(168,88,70,0.3)] animate-enter delay-100 mb-2 no-underline"
+          style={{
+            display: 'block',
+            width: '100%',
+            borderRadius: '28px',
+            padding: '20px',
+            minHeight: '175px',
+            background: 'linear-gradient(110deg, #2A2730 0%, #9E584D 55%, #D68F54 100%)',
+            boxShadow: '0 10px 30px -10px rgba(168, 88, 70, 0.35)',
+            textDecoration: 'none',
+            marginBottom: '12px',
+            position: 'relative',
+            overflow: 'hidden',
+          }}
         >
-          {/* Gradient Background */}
-          <div className="absolute inset-0 bg-[linear-gradient(110deg,#2A2730_0%,#9E584D_55%,#D68F54_100%)] transition-transform duration-700 group-hover:scale-105" />
-          <div className="absolute inset-0 noise-texture opacity-30 mix-blend-overlay" />
-
           {/* Tag */}
-          <div className="relative z-10 self-start">
-            <div className="flex items-center gap-2 px-3 py-1.5 rounded-full border border-white/25 bg-white/10 backdrop-blur-md shadow-sm">
-              <div className="w-1.5 h-1.5 rounded-full bg-[#E8B991]" />
-              <span className="text-[10px] font-bold text-white tracking-[0.15em] uppercase">
-                Daily Ritual
-              </span>
-            </div>
+          <div style={{
+            display: 'inline-flex',
+            alignItems: 'center',
+            gap: '8px',
+            padding: '6px 12px',
+            borderRadius: '999px',
+            background: 'rgba(255, 255, 255, 0.1)',
+            border: '1px solid rgba(255, 255, 255, 0.2)',
+            backdropFilter: 'blur(8px)',
+          }}>
+            <div style={{
+              width: '6px',
+              height: '6px',
+              borderRadius: '50%',
+              backgroundColor: '#E8B991',
+            }} />
+            <span style={{
+              fontSize: '10px',
+              fontWeight: 700,
+              color: 'white',
+              letterSpacing: '0.12em',
+              fontFamily: "'DM Sans', sans-serif",
+            }}>
+              DAILY RITUAL
+            </span>
           </div>
 
           {/* Content */}
-          <div className="relative z-10 flex justify-between items-end mt-4">
+          <div style={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'flex-end',
+            marginTop: '32px',
+          }}>
             <div>
-              <h2 className="font-serif text-[36px] leading-[1.1] text-white mb-1.5 tracking-tight">
-                Light a
-                <br />
-                Candle
+              <h2 style={{
+                fontFamily: "'Playfair Display', serif",
+                fontSize: '34px',
+                lineHeight: 1.05,
+                color: 'white',
+                letterSpacing: '-0.02em',
+                margin: 0,
+              }}>
+                Light a<br/>Candle
               </h2>
-              <p className="text-[#F2F0E9]/80 text-sm font-medium tracking-wide">
+              <p style={{
+                color: 'rgba(255, 255, 255, 0.7)',
+                fontSize: '13px',
+                fontWeight: 500,
+                marginTop: '6px',
+                letterSpacing: '0.02em',
+                fontFamily: "'DM Sans', sans-serif",
+              }}>
                 Reflect & remember.
               </p>
             </div>
 
-            <div className="w-14 h-14 rounded-[22px] bg-white/10 backdrop-blur-md border border-white/20 flex items-center justify-center text-[#E8B991] shadow-lg group-hover:bg-white/20 transition-colors">
-              <Flame size={26} fill="currentColor" />
+            <div style={{
+              width: '48px',
+              height: '48px',
+              borderRadius: '18px',
+              background: 'rgba(255, 255, 255, 0.1)',
+              border: '1px solid rgba(255, 255, 255, 0.15)',
+              backdropFilter: 'blur(8px)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}>
+              <Flame size={24} color="#E8B991" fill="#E8B991" />
             </div>
           </div>
         </Link>
 
-        {/* Top Grid: Streak & Journey - EXACT Aura.build */}
-        <div className="grid grid-cols-2 gap-3 mb-2 animate-enter delay-200">
-          {/* Days/Streak */}
+        {/* Days & Journey Grid */}
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', marginBottom: '12px' }}>
+          {/* Days */}
           <Link
             href="/dashboard/streak"
-            className="glass-opaque rounded-[32px] p-6 flex flex-col items-center justify-center text-center aspect-[6/5] cursor-pointer active:scale-95 transition-transform hover:bg-white border border-[var(--color-sand)]/20 no-underline"
+            style={{
+              borderRadius: '28px',
+              padding: '20px',
+              aspectRatio: '1.15',
+              background: 'rgba(255, 255, 255, 0.75)',
+              backdropFilter: 'blur(20px)',
+              WebkitBackdropFilter: 'blur(20px)',
+              border: '1px solid rgba(255, 255, 255, 0.6)',
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              justifyContent: 'center',
+              textDecoration: 'none',
+            }}
           >
-            <div className="flex items-end gap-1 mb-1">
-              <span className="font-serif text-[42px] leading-none text-[var(--text-main)]">0</span>
-            </div>
-            <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-[var(--color-clay)]/80">
-              Days
+            <span style={{
+              fontFamily: "'Playfair Display', serif",
+              fontSize: '40px',
+              lineHeight: 1,
+              color: '#2D2A26',
+            }}>0</span>
+            <span style={{
+              fontSize: '10px',
+              fontWeight: 700,
+              letterSpacing: '0.18em',
+              color: 'rgba(158, 88, 77, 0.8)',
+              marginTop: '4px',
+              fontFamily: "'DM Sans', sans-serif",
+            }}>
+              DAYS
             </span>
           </Link>
 
           {/* Journey */}
           <Link
             href="/dashboard/journey"
-            className="glass-opaque rounded-[32px] p-6 flex flex-col items-center justify-center text-center aspect-[6/5] cursor-pointer active:scale-95 transition-transform hover:bg-white border border-[var(--color-sand)]/20 no-underline"
+            style={{
+              borderRadius: '28px',
+              padding: '20px',
+              aspectRatio: '1.15',
+              background: 'rgba(255, 255, 255, 0.75)',
+              backdropFilter: 'blur(20px)',
+              WebkitBackdropFilter: 'blur(20px)',
+              border: '1px solid rgba(255, 255, 255, 0.6)',
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              justifyContent: 'center',
+              textDecoration: 'none',
+            }}
           >
-            <h3 className="font-serif text-2xl text-[var(--text-main)] mb-1">Journey</h3>
-            <p className="text-[var(--text-muted)] text-sm font-medium opacity-80">Your path</p>
+            <h3 style={{
+              fontFamily: "'Playfair Display', serif",
+              fontSize: '22px',
+              color: '#2D2A26',
+              margin: 0,
+            }}>Journey</h3>
+            <p style={{
+              color: 'rgba(45, 42, 38, 0.5)',
+              fontSize: '13px',
+              fontWeight: 500,
+              marginTop: '2px',
+              fontFamily: "'DM Sans', sans-serif",
+            }}>Your path</p>
           </Link>
         </div>
 
-        {/* Vertical Menu List - EXACT Aura.build */}
-        <div className="flex flex-col gap-0.5">
+        {/* Menu Cards */}
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+
           {/* Memory Jar */}
-          <MenuCard
-            title="Memory Jar"
-            subtitle="Save a thought for today"
-            icon={BookHeart}
-            bgColor="bg-[#F5F2ED]"
-            color="text-[var(--text-main)]"
+          <Link
             href="/dashboard/memories"
-            delay="delay-300"
-          />
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '16px',
+              padding: '16px',
+              borderRadius: '28px',
+              background: 'rgba(255, 255, 255, 0.75)',
+              backdropFilter: 'blur(20px)',
+              WebkitBackdropFilter: 'blur(20px)',
+              border: '1px solid rgba(255, 255, 255, 0.6)',
+              textDecoration: 'none',
+            }}
+          >
+            <div style={{
+              width: '56px',
+              height: '56px',
+              borderRadius: '20px',
+              background: '#F5F2ED',
+              border: '1px solid rgba(219, 203, 184, 0.2)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              flexShrink: 0,
+            }}>
+              <BookHeart size={24} color="#2D2A26" />
+            </div>
+            <div style={{ flex: 1, minWidth: 0 }}>
+              <h3 style={{
+                fontFamily: "'Playfair Display', serif",
+                fontSize: '20px',
+                color: '#2D2A26',
+                letterSpacing: '-0.02em',
+                margin: 0,
+              }}>Memory Jar</h3>
+              <p style={{
+                color: 'rgba(45, 42, 38, 0.5)',
+                fontSize: '12px',
+                fontWeight: 500,
+                fontFamily: "'DM Sans', sans-serif",
+              }}>Save a thought for today</p>
+            </div>
+            <div style={{
+              width: '40px',
+              height: '40px',
+              borderRadius: '50%',
+              background: 'white',
+              border: '1px solid rgba(219, 203, 184, 0.2)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              flexShrink: 0,
+            }}>
+              <ArrowRight size={18} color="rgba(45, 42, 38, 0.5)" />
+            </div>
+          </Link>
 
           {/* Legacy Letters */}
-          <MenuCard
-            title="Legacy Letters"
-            subtitle="Words across time"
-            icon={Mail}
-            bgColor="bg-[#F9F3F2]"
-            color="text-[var(--color-clay)]"
+          <Link
             href="/dashboard/letters"
-            delay="delay-400"
-          />
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '16px',
+              padding: '16px',
+              borderRadius: '28px',
+              background: 'rgba(255, 255, 255, 0.75)',
+              backdropFilter: 'blur(20px)',
+              WebkitBackdropFilter: 'blur(20px)',
+              border: '1px solid rgba(255, 255, 255, 0.6)',
+              textDecoration: 'none',
+            }}
+          >
+            <div style={{
+              width: '56px',
+              height: '56px',
+              borderRadius: '20px',
+              background: '#F9F3F2',
+              border: '1px solid rgba(219, 203, 184, 0.2)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              flexShrink: 0,
+            }}>
+              <Mail size={24} color="#9E584D" />
+            </div>
+            <div style={{ flex: 1, minWidth: 0 }}>
+              <h3 style={{
+                fontFamily: "'Playfair Display', serif",
+                fontSize: '20px',
+                color: '#2D2A26',
+                letterSpacing: '-0.02em',
+                margin: 0,
+              }}>Legacy Letters</h3>
+              <p style={{
+                color: 'rgba(45, 42, 38, 0.5)',
+                fontSize: '12px',
+                fontWeight: 500,
+                fontFamily: "'DM Sans', sans-serif",
+              }}>Words across time</p>
+            </div>
+            <div style={{
+              width: '40px',
+              height: '40px',
+              borderRadius: '50%',
+              background: 'white',
+              border: '1px solid rgba(219, 203, 184, 0.2)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              flexShrink: 0,
+            }}>
+              <ArrowRight size={18} color="rgba(45, 42, 38, 0.5)" />
+            </div>
+          </Link>
 
           {/* Companion */}
-          <MenuCard
-            title="Companion"
-            subtitle="Always here to listen"
-            icon={Sparkles}
-            bgColor="bg-[#F2F4F3]"
-            color="text-[var(--color-sage)]"
+          <Link
             href="/dashboard/companion"
-            delay="delay-500"
-          />
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '16px',
+              padding: '16px',
+              borderRadius: '28px',
+              background: 'rgba(255, 255, 255, 0.75)',
+              backdropFilter: 'blur(20px)',
+              WebkitBackdropFilter: 'blur(20px)',
+              border: '1px solid rgba(255, 255, 255, 0.6)',
+              textDecoration: 'none',
+            }}
+          >
+            <div style={{
+              width: '56px',
+              height: '56px',
+              borderRadius: '20px',
+              background: '#F2F4F3',
+              border: '1px solid rgba(219, 203, 184, 0.2)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              flexShrink: 0,
+            }}>
+              <Sparkles size={24} color="#7E8D85" />
+            </div>
+            <div style={{ flex: 1, minWidth: 0 }}>
+              <h3 style={{
+                fontFamily: "'Playfair Display', serif",
+                fontSize: '20px',
+                color: '#2D2A26',
+                letterSpacing: '-0.02em',
+                margin: 0,
+              }}>Companion</h3>
+              <p style={{
+                color: 'rgba(45, 42, 38, 0.5)',
+                fontSize: '12px',
+                fontWeight: 500,
+                fontFamily: "'DM Sans', sans-serif",
+              }}>Always here to listen</p>
+            </div>
+            <div style={{
+              width: '40px',
+              height: '40px',
+              borderRadius: '50%',
+              background: 'white',
+              border: '1px solid rgba(219, 203, 184, 0.2)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              flexShrink: 0,
+            }}>
+              <ArrowRight size={18} color="rgba(45, 42, 38, 0.5)" />
+            </div>
+          </Link>
 
           {/* Circles */}
-          <MenuCard
-            title="Circles"
-            subtitle="Finding healing together"
-            bgColor="bg-white"
-            color="text-[var(--color-amber)]"
+          <Link
             href="/dashboard/community"
-            delay="delay-600"
-            customIcon={
-              <div className="flex items-center justify-center -space-x-2">
-                <div className="w-7 h-7 rounded-full bg-[var(--color-sand)] border-2 border-white flex items-center justify-center text-[8px] font-bold text-[var(--text-main)]">
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '16px',
+              padding: '16px',
+              borderRadius: '28px',
+              background: 'rgba(255, 255, 255, 0.75)',
+              backdropFilter: 'blur(20px)',
+              WebkitBackdropFilter: 'blur(20px)',
+              border: '1px solid rgba(255, 255, 255, 0.6)',
+              textDecoration: 'none',
+            }}
+          >
+            <div style={{
+              width: '56px',
+              height: '56px',
+              borderRadius: '20px',
+              background: 'white',
+              border: '1px solid rgba(219, 203, 184, 0.2)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              flexShrink: 0,
+            }}>
+              <div style={{ display: 'flex', alignItems: 'center' }}>
+                <div style={{
+                  width: '24px',
+                  height: '24px',
+                  borderRadius: '50%',
+                  backgroundColor: '#DBCBB8',
+                  border: '2px solid white',
+                  marginRight: '-8px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  fontSize: '10px',
+                  fontWeight: 700,
+                  color: '#2D2A26',
+                }}>
                   S
                 </div>
-                <div className="w-7 h-7 rounded-full bg-[var(--color-clay)] border-2 border-white flex items-center justify-center text-[8px] font-bold text-white">
+                <div style={{
+                  width: '24px',
+                  height: '24px',
+                  borderRadius: '50%',
+                  backgroundColor: '#9E584D',
+                  border: '2px solid white',
+                  marginRight: '-8px',
+                  position: 'relative',
+                  zIndex: 1,
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  fontSize: '10px',
+                  fontWeight: 700,
+                  color: 'white',
+                }}>
                   M
                 </div>
-                <div className="w-7 h-7 rounded-full bg-[var(--color-amber)] border-2 border-white flex items-center justify-center text-[8px] font-bold text-white">
+                <div style={{
+                  width: '24px',
+                  height: '24px',
+                  borderRadius: '50%',
+                  backgroundColor: '#D68F54',
+                  border: '2px solid white',
+                  position: 'relative',
+                  zIndex: 2,
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  fontSize: '10px',
+                  fontWeight: 700,
+                  color: 'white',
+                }}>
                   K
                 </div>
               </div>
-            }
-          />
+            </div>
+            <div style={{ flex: 1, minWidth: 0 }}>
+              <h3 style={{
+                fontFamily: "'Playfair Display', serif",
+                fontSize: '20px',
+                color: '#2D2A26',
+                letterSpacing: '-0.02em',
+                margin: 0,
+              }}>Circles</h3>
+              <p style={{
+                color: 'rgba(45, 42, 38, 0.5)',
+                fontSize: '12px',
+                fontWeight: 500,
+                fontFamily: "'DM Sans', sans-serif",
+              }}>Finding healing together</p>
+            </div>
+            <div style={{
+              width: '40px',
+              height: '40px',
+              borderRadius: '50%',
+              background: 'white',
+              border: '1px solid rgba(219, 203, 184, 0.2)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              flexShrink: 0,
+            }}>
+              <ArrowRight size={18} color="rgba(45, 42, 38, 0.5)" />
+            </div>
+          </Link>
+
         </div>
       </div>
     </div>
