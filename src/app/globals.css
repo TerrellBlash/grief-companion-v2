@@ -27,6 +27,10 @@
     --text-muted: rgba(60, 56, 54, 0.55);
     --text-inverse: #F9F7F5;
 
+    /* Dark Theme Variables */
+    --bg-dark-main: #1F1D24;
+    --bg-dark-card: #2A2730;
+
     /* Glass Variables */
     --glass-bg-thin: rgba(255, 255, 255, 0.4);
     --glass-bg-regular: rgba(255, 255, 255, 0.6);
@@ -41,7 +45,7 @@
   }
 
   [data-theme="dark"] {
-    --bg-main: #1F1D24;
+    --bg-main: var(--bg-dark-main);
     --text-main: #EBE8E1;
     --text-muted: rgba(235, 232, 225, 0.5);
     --text-inverse: #1F1D24;
@@ -56,31 +60,24 @@
     --input-bg: rgba(42, 39, 48, 0.5);
   }
 
-  html {
-    height: 100%;
-    overflow: hidden;
-  }
-
+  /* EXACT Aura.build body styling */
   body {
-    font-family: var(--font-dm-sans), 'DM Sans', sans-serif;
+    font-family: 'DM Sans', sans-serif;
     background-color: var(--bg-main);
     color: var(--text-main);
     -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
     margin: 0;
-    padding: 0;
-    height: 100%;
-    overflow: hidden;
     overscroll-behavior: none;
     transition: background-color 0.6s cubic-bezier(0.2, 0.8, 0.2, 1), color 0.6s ease;
   }
 
+  /* EXACT Aura.build font classes */
   h1, h2, h3, h4, .font-serif {
-    font-family: var(--font-playfair), 'Playfair Display', serif;
+    font-family: 'Playfair Display', serif;
   }
 
   .font-hand {
-    font-family: var(--font-caveat), 'Caveat', cursive;
+    font-family: 'Caveat', cursive;
   }
 
   a {
@@ -98,6 +95,7 @@
     scrollbar-width: none;
   }
 
+  /* EXACT Aura.build glass classes */
   .glass-thin {
     background: var(--glass-bg-thin);
     backdrop-filter: blur(12px);
@@ -147,6 +145,7 @@
     box-shadow: 0 10px 40px -10px var(--glass-shadow);
   }
 
+  /* EXACT Aura.build aurora background */
   .aurora-bg {
     background: linear-gradient(-45deg, var(--bg-main), #E3E0D9, #E0E6E3, #E8DCCF);
     background-size: 400% 400%;
@@ -185,6 +184,7 @@
   }
 }
 
+/* EXACT Aura.build keyframes */
 @keyframes aurora-shift {
   0% { background-position: 0% 50%; }
   50% { background-position: 100% 50%; }
