@@ -14,95 +14,46 @@ export default function FloatingNav() {
     return pathname?.startsWith(path);
   };
 
-  return (
-    <nav
-      className="pointer-events-auto flex items-center gap-4 px-5 h-[68px] rounded-[32px] border border-white/50"
-      style={{
-        background: 'rgba(245, 242, 237, 0.85)',
-        backdropFilter: 'blur(40px) saturate(120%)',
-        WebkitBackdropFilter: 'blur(40px) saturate(120%)',
-        boxShadow: '0 20px 40px -10px rgba(158, 88, 77, 0.1)',
-      }}
+  // NavButton component matching Aura.build exactly
+  const NavButton = ({ href, icon: Icon, active }: { href: string; icon: typeof Home; active: boolean }) => (
+    <Link
+      href={href}
+      className={`relative w-12 h-12 flex items-center justify-center transition-all duration-300 rounded-2xl group no-underline ${
+        active ? 'text-[var(--text-main)]' : 'text-[var(--text-muted)] hover:text-[var(--text-main)]'
+      }`}
     >
+      <Icon
+        size={24}
+        strokeWidth={active ? 2.5 : 2}
+        className="relative z-10 transition-transform group-active:scale-90"
+      />
+      {active && (
+        <span className="absolute -bottom-2 w-1.5 h-1.5 rounded-full bg-[var(--color-clay)] animate-enter" />
+      )}
+    </Link>
+  );
+
+  return (
+    <div className="glass-thick rounded-[32px] px-6 h-[72px] flex items-center gap-6 shadow-[0_20px_40px_-10px_var(--glass-shadow)] pointer-events-auto border border-[var(--glass-border)]">
       {/* Home */}
-      <Link
-        href="/dashboard/home"
-        className="relative w-11 h-11 flex items-center justify-center rounded-xl no-underline"
-      >
-        <Home
-          size={22}
-          strokeWidth={isActive('/dashboard/home') ? 2.5 : 1.5}
-          className={isActive('/dashboard/home') ? 'text-[#2D2A26]' : 'text-[#2D2A26]/40'}
-        />
-        {isActive('/dashboard/home') && (
-          <span className="absolute -bottom-1 w-1 h-1 rounded-full bg-[#9E584D]" />
-        )}
-      </Link>
+      <NavButton href="/dashboard/home" icon={Home} active={isActive('/dashboard/home')} />
 
       {/* Journey/Map */}
-      <Link
-        href="/dashboard/journey"
-        className="relative w-11 h-11 flex items-center justify-center rounded-xl no-underline"
-      >
-        <Map
-          size={22}
-          strokeWidth={isActive('/dashboard/journey') ? 2.5 : 1.5}
-          className={isActive('/dashboard/journey') ? 'text-[#2D2A26]' : 'text-[#2D2A26]/40'}
-        />
-        {isActive('/dashboard/journey') && (
-          <span className="absolute -bottom-1 w-1 h-1 rounded-full bg-[#9E584D]" />
-        )}
-      </Link>
+      <NavButton href="/dashboard/journey" icon={Map} active={isActive('/dashboard/journey')} />
 
-      {/* Center Sparkle Button - Elevated */}
-      <Link
-        href="/rituals/candle"
-        className="relative -mt-6 no-underline"
-      >
-        <div
-          className="absolute inset-0 rounded-full blur-xl"
-          style={{ background: 'rgba(214, 143, 84, 0.4)' }}
-        />
-        <div
-          className="relative w-14 h-14 rounded-full flex items-center justify-center text-white border-4 border-[#F5F2ED]"
-          style={{
-            background: 'linear-gradient(to top right, #9E584D, #D68F54)',
-            boxShadow: '0 8px 24px -4px rgba(158, 88, 77, 0.4)',
-          }}
-        >
-          <Sparkles size={22} className="animate-[spin_8s_linear_infinite]" />
+      {/* Center Sparkle Button - EXACT Aura.build: -mt-8, w-16 h-16 */}
+      <Link href="/rituals/candle" className="relative -mt-8 group cursor-pointer no-underline">
+        <div className="absolute inset-0 bg-[var(--color-amber)]/40 rounded-full blur-xl animate-pulse" />
+        <div className="w-16 h-16 rounded-full bg-gradient-to-tr from-[var(--color-clay)] to-[var(--color-amber)] flex items-center justify-center text-white shadow-xl shadow-[var(--color-clay)]/30 relative z-10 transition-transform duration-300 group-hover:scale-110 group-active:scale-95 border-4 border-[var(--bg-main)]">
+          <Sparkles size={24} className="animate-[spin_8s_linear_infinite]" />
         </div>
       </Link>
 
       {/* Mail/Letters */}
-      <Link
-        href="/dashboard/letters"
-        className="relative w-11 h-11 flex items-center justify-center rounded-xl no-underline"
-      >
-        <Mail
-          size={22}
-          strokeWidth={isActive('/dashboard/letters') ? 2.5 : 1.5}
-          className={isActive('/dashboard/letters') ? 'text-[#2D2A26]' : 'text-[#2D2A26]/40'}
-        />
-        {isActive('/dashboard/letters') && (
-          <span className="absolute -bottom-1 w-1 h-1 rounded-full bg-[#9E584D]" />
-        )}
-      </Link>
+      <NavButton href="/dashboard/letters" icon={Mail} active={isActive('/dashboard/letters')} />
 
       {/* Companion/Chat */}
-      <Link
-        href="/dashboard/companion"
-        className="relative w-11 h-11 flex items-center justify-center rounded-xl no-underline"
-      >
-        <MessageCircle
-          size={22}
-          strokeWidth={isActive('/dashboard/companion') ? 2.5 : 1.5}
-          className={isActive('/dashboard/companion') ? 'text-[#2D2A26]' : 'text-[#2D2A26]/40'}
-        />
-        {isActive('/dashboard/companion') && (
-          <span className="absolute -bottom-1 w-1 h-1 rounded-full bg-[#9E584D]" />
-        )}
-      </Link>
-    </nav>
+      <NavButton href="/dashboard/companion" icon={MessageCircle} active={isActive('/dashboard/companion')} />
+    </div>
   );
 }
