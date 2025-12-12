@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { ArrowLeft, Mic, Send, Sparkles } from 'lucide-react';
+import { ArrowLeft, Mic, MicOff, Send, Sparkles } from 'lucide-react';
 
 export default function CompanionPage() {
   const router = useRouter();
@@ -10,7 +10,9 @@ export default function CompanionPage() {
   const [messages, setMessages] = useState([
     { role: 'assistant', content: "Hi there. I'm here whenever you need someone to listen. What's on your mind today?" }
   ]);
+  const [isListening, setIsListening] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const recognitionRef = useRef<SpeechRecognition | null>(null);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -20,8 +22,59 @@ export default function CompanionPage() {
     scrollToBottom();
   }, [messages]);
 
+  // Initialize Web Speech API
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+      if (SpeechRecognition) {
+        const recognition = new SpeechRecognition();
+        recognition.continuous = false;
+        recognition.interimResults = true;
+        recognition.lang = 'en-US';
+
+        recognition.onresult = (event) => {
+          const transcript = Array.from(event.results)
+            .map(result => result[0].transcript)
+            .join('');
+          setMessage(transcript);
+        };
+
+        recognition.onend = () => {
+          setIsListening(false);
+        };
+
+        recognition.onerror = () => {
+          setIsListening(false);
+        };
+
+        recognitionRef.current = recognition;
+      }
+    }
+  }, []);
+
+  const toggleListening = () => {
+    if (!recognitionRef.current) {
+      alert('Speech recognition is not supported in your browser.');
+      return;
+    }
+
+    if (isListening) {
+      recognitionRef.current.stop();
+      setIsListening(false);
+    } else {
+      recognitionRef.current.start();
+      setIsListening(true);
+    }
+  };
+
   const handleSend = () => {
     if (!message.trim()) return;
+
+    // Stop listening if active
+    if (isListening && recognitionRef.current) {
+      recognitionRef.current.stop();
+      setIsListening(false);
+    }
 
     setMessages(prev => [...prev, { role: 'user', content: message }]);
     setMessage('');
@@ -170,22 +223,38 @@ export default function CompanionPage() {
         <div ref={messagesEndRef} />
       </div>
 
-      {/* Input Area */}
+      {/* Input Area - Fixed at bottom */}
       <div style={{
-        padding: '16px 24px 32px',
+        padding: '16px 24px',
+        paddingBottom: 'max(32px, env(safe-area-inset-bottom, 32px))',
         backgroundColor: '#F5F2ED',
+        borderTop: '1px solid rgba(219, 203, 184, 0.3)',
+        position: 'relative',
+        zIndex: 100,
       }}>
+        {/* Listening indicator */}
+        {isListening && (
+          <div style={{
+            textAlign: 'center',
+            marginBottom: '8px',
+            fontSize: '12px',
+            color: '#9E584D',
+            fontWeight: 600,
+            fontFamily: 'var(--font-dm-sans), DM Sans, sans-serif',
+          }}>
+            Listening...
+          </div>
+        )}
+
         <div style={{
           display: 'flex',
           alignItems: 'center',
-          gap: '12px',
-          background: 'rgba(255, 255, 255, 0.8)',
-          backdropFilter: 'blur(16px)',
-          WebkitBackdropFilter: 'blur(16px)',
+          gap: '8px',
+          background: 'white',
           borderRadius: '28px',
           padding: '8px 8px 8px 20px',
-          border: '1px solid rgba(255, 255, 255, 0.8)',
-          boxShadow: '0 4px 20px rgba(0, 0, 0, 0.04)',
+          border: '1px solid rgba(219, 203, 184, 0.4)',
+          boxShadow: '0 4px 20px rgba(0, 0, 0, 0.06)',
         }}>
           <input
             type="text"
@@ -198,9 +267,10 @@ export default function CompanionPage() {
               background: 'transparent',
               border: 'none',
               outline: 'none',
-              fontSize: '15px',
+              fontSize: '16px',
               color: '#2D2A26',
               fontFamily: 'var(--font-dm-sans), DM Sans, sans-serif',
+              minHeight: '24px',
             }}
           />
 
@@ -220,13 +290,15 @@ export default function CompanionPage() {
               cursor: message.trim() ? 'pointer' : 'not-allowed',
               transition: 'all 0.2s',
               color: message.trim() ? 'white' : 'rgba(158, 88, 77, 0.4)',
+              flexShrink: 0,
             }}
           >
             <Send size={18} strokeWidth={2} />
           </button>
 
-          {/* Mic Button */}
+          {/* Mic Button - Voice to Text */}
           <button
+            onClick={toggleListening}
             style={{
               width: '44px',
               height: '44px',
@@ -234,13 +306,15 @@ export default function CompanionPage() {
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              backgroundColor: 'rgba(214, 143, 84, 0.1)',
+              backgroundColor: isListening ? '#9E584D' : 'rgba(214, 143, 84, 0.15)',
               border: 'none',
               cursor: 'pointer',
-              color: '#D68F54',
+              color: isListening ? 'white' : '#D68F54',
+              transition: 'all 0.2s',
+              flexShrink: 0,
             }}
           >
-            <Mic size={20} strokeWidth={2} />
+            {isListening ? <MicOff size={20} strokeWidth={2} /> : <Mic size={20} strokeWidth={2} />}
           </button>
         </div>
       </div>
