@@ -11,30 +11,32 @@ export default function DashboardLayout({
 }) {
   const pathname = usePathname();
 
-  // Hide nav on candle ritual and settings
-  const hideNav = pathname?.includes('/rituals') || pathname?.includes('/settings');
+  // Hide nav on these screens (matching Aura.build)
+  const hideNav = pathname?.includes('/rituals') ||
+                  pathname?.includes('/settings') ||
+                  pathname?.includes('/memories/create') ||
+                  pathname?.includes('/streak') ||
+                  pathname?.includes('/community');
 
   return (
     <ThemeProvider>
-      {/* App Container */}
-      <div className="w-full max-w-[420px] mx-auto h-[100dvh] bg-[var(--bg-main)] relative overflow-hidden flex flex-col transition-colors duration-500">
+      {/* App Shell - Fixed for iOS Safari */}
+      <div className="fixed inset-0 flex items-center justify-center bg-[var(--bg-main)]">
+        {/* Phone Container - max-w-[420px] for mobile, responsive for iPad */}
+        <div
+          data-theme="light"
+          className="w-full max-w-[420px] h-[100dvh] bg-[var(--bg-main)] sm:h-[90vh] sm:rounded-[48px] sm:shadow-2xl sm:border-[8px] sm:border-white relative overflow-hidden flex flex-col font-sans ring-1 ring-black/5 transition-colors duration-500"
+        >
+          {/* Scrollable Content Area */}
+          <div className="flex-1 overflow-y-auto no-scrollbar scroll-smooth relative z-0">
+            {children}
+          </div>
 
-        {/* Content Area - THIS SCROLLS */}
-        <div className="flex-1 overflow-y-auto no-scrollbar scroll-smooth relative z-0">
-          {children}
+          {/* Floating Navigation */}
+          <div className={`absolute bottom-8 left-0 right-0 flex justify-center z-50 pointer-events-none transition-transform duration-500 ${hideNav ? 'translate-y-32' : 'translate-y-0'}`}>
+            <FloatingNav />
+          </div>
         </div>
-
-        {/* Navigation */}
-        {!hideNav && (
-          <>
-            <div className="absolute bottom-8 left-0 right-0 flex justify-center z-50 pointer-events-none">
-              <FloatingNav />
-            </div>
-
-            {/* Bottom Fade */}
-            <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-[var(--bg-main)] to-transparent pointer-events-none z-10" />
-          </>
-        )}
       </div>
     </ThemeProvider>
   );

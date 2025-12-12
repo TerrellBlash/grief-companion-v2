@@ -25,10 +25,7 @@ export default function FloatingNav() {
         className="relative z-10 transition-transform group-active:scale-90"
       />
       {active && (
-        <>
-          <span className="absolute -bottom-2 w-1.5 h-1.5 rounded-full bg-[#A85846] animate-enter" />
-          <div className="absolute inset-0 bg-white/20 blur-md rounded-full -z-0" />
-        </>
+        <span className="absolute -bottom-2 w-1.5 h-1.5 rounded-full bg-[var(--color-clay)] animate-enter" />
       )}
     </Link>
   );
@@ -40,8 +37,8 @@ export default function FloatingNav() {
 
       {/* Floating Center Action */}
       <Link href="/rituals/candle" className="relative -mt-8 group no-underline">
-        <div className="absolute inset-0 bg-[#DE9C52]/40 rounded-full blur-xl animate-pulse" />
-        <div className="w-16 h-16 rounded-full bg-gradient-to-tr from-[#A85846] to-[#DE9C52] flex items-center justify-center text-white shadow-xl shadow-[#A85846]/30 relative z-10 transition-transform duration-300 group-hover:scale-110 group-active:scale-95 border-4 border-[var(--bg-main)]">
+        <div className="absolute inset-0 bg-[var(--color-amber)]/40 rounded-full blur-xl animate-pulse" />
+        <div className="w-16 h-16 rounded-full bg-gradient-to-tr from-[var(--color-clay)] to-[var(--color-amber)] flex items-center justify-center text-white shadow-xl shadow-[var(--color-clay)]/30 relative z-10 transition-transform duration-300 group-hover:scale-110 group-active:scale-95 border-4 border-[var(--bg-main)]">
           <Sparkles size={24} className="animate-[spin_8s_linear_infinite]" />
         </div>
       </Link>

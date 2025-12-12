@@ -9,28 +9,21 @@ export default {
   theme: {
     extend: {
       colors: {
-        // Core Palette
-        honeycomb: '#DE9C52',
-        honey: '#DE9C52',
-        spice: '#A85846',
-        'cottage-spice': '#A85846',
-        sand: '#D5C6B4',
-        'pastel-sand': '#D5C6B4',
-        martinique: '#3C3748',
-
-        // Light Theme
-        lynx: '#F7F7F7',
-        howl: '#202030',
-        'black-howl': '#202030',
-
-        // Dark Theme
-        'dark-bg': '#18181F',
-        'dark-surface': '#242430',
-        'dark-text': '#E8E6E3',
-
-        // Semantic
-        success: '#7D9D6A',
-        'gentle-error': '#C97B7B',
+        // Aura.build Exact Colors
+        amber: {
+          DEFAULT: '#D68F54',
+          dim: '#E8B991',
+        },
+        clay: {
+          DEFAULT: '#9E584D',
+          soft: '#C68E85',
+        },
+        sage: {
+          DEFAULT: '#7E8D85',
+          light: '#C8D1CD',
+        },
+        sand: '#DBCBB8',
+        stone: '#96948F',
       },
       fontFamily: {
         sans: ['DM Sans', 'sans-serif'],
@@ -43,12 +36,12 @@ export default {
         '6xl': '48px',
       },
       animation: {
-        'aurora': 'aurora-shift 30s ease infinite',
+        'aurora': 'aurora-shift 35s ease infinite',
         'enter': 'enter-up 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards',
-        'flame': 'flame-flicker 3s infinite ease-in-out',
-        'float': 'float-paper 4s ease-in-out infinite',
-        'wax-drip': 'wax-drip 0.6s ease-out forwards',
-        'stamp': 'stamp-press 0.4s ease-out 0.5s backwards',
+        'flame': 'flame-flicker 2s infinite cubic-bezier(0.45, 0.05, 0.55, 0.95)',
+        'wax': 'wax-press 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards',
+        'fold': 'fold-flap 0.8s ease-in-out forwards',
+        'pulse-ring': 'pulse-ring 1.5s cubic-bezier(0.215, 0.61, 0.355, 1) infinite',
       },
     },
   },
