@@ -20,22 +20,22 @@ export default function DashboardLayout({
 
   return (
     <ThemeProvider>
-      {/* App Shell - Fixed for iOS Safari */}
-      <div className="fixed inset-0 flex items-center justify-center bg-[var(--bg-main)]">
-        {/* Phone Container - max-w-[420px] for mobile, responsive for iPad */}
-        <div
-          data-theme="light"
-          className="w-full max-w-[420px] h-[100dvh] bg-[var(--bg-main)] sm:h-[90vh] sm:rounded-[48px] sm:shadow-2xl sm:border-[8px] sm:border-white relative overflow-hidden flex flex-col font-sans ring-1 ring-black/5 transition-colors duration-500"
-        >
-          {/* Scrollable Content Area */}
-          <div className="flex-1 overflow-y-auto no-scrollbar scroll-smooth relative z-0">
-            {children}
-          </div>
+      {/* Full screen container */}
+      <div className="fixed inset-0 w-full h-full bg-[#F5F2ED] flex items-center justify-center">
+        {/* Phone frame - max 420px on mobile, centered */}
+        <div className="relative w-full h-full max-w-[420px] bg-[#F5F2ED] overflow-hidden">
 
-          {/* Floating Navigation */}
-          <div className={`absolute bottom-8 left-0 right-0 flex justify-center z-50 pointer-events-none transition-transform duration-500 ${hideNav ? 'translate-y-32' : 'translate-y-0'}`}>
-            <FloatingNav />
-          </div>
+          {/* Scrollable content area - MUST have padding bottom for nav */}
+          <main className="absolute inset-0 overflow-y-auto overflow-x-hidden overscroll-none">
+            {children}
+          </main>
+
+          {/* Floating nav - ABSOLUTELY positioned at bottom */}
+          {!hideNav && (
+            <div className="absolute bottom-6 left-0 right-0 flex justify-center z-50 pointer-events-none px-4">
+              <FloatingNav />
+            </div>
+          )}
         </div>
       </div>
     </ThemeProvider>
