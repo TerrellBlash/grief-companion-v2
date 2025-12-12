@@ -1,159 +1,352 @@
-'use client'
+'use client';
 
-import { useState } from 'react'
-import { useRouter } from 'next/navigation'
-import { ArrowLeft, BookOpen, Image, MessageSquareQuote, Star, UploadCloud, Calendar, MessageSquare, Quote } from 'lucide-react'
+import { useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { ArrowLeft, BookOpen, Image, MessageSquareQuote, Star, Upload, Calendar, MessageSquare, Quote } from 'lucide-react';
 
-type Step = 'SELECT' | 'INPUT'
-type MemoryType = 'story' | 'photo' | 'quote' | 'favorite' | null
+type MemoryType = 'story' | 'photo' | 'quote' | 'favorite' | null;
+type Step = 'SELECT' | 'INPUT';
 
-// BackButton component
-const BackButton = ({ onClick }: { onClick: () => void }) => (
-  <button
-    onClick={onClick}
-    className="w-10 h-10 rounded-full flex items-center justify-center bg-[var(--glass-bg-regular)] text-[var(--text-main)] border border-[var(--glass-border)] shadow-sm transition-all active:scale-95 hover:bg-[var(--glass-bg-thick)]"
-  >
-    <ArrowLeft size={20} />
-  </button>
-)
-
-export default function MemoriesPage() {
-  const router = useRouter()
-  const [step, setStep] = useState<Step>('SELECT')
-  const [selected, setSelected] = useState<MemoryType>(null)
-  const [favCategory, setFavCategory] = useState('Music')
+export default function CreateMemoryPage() {
+  const router = useRouter();
+  const [step, setStep] = useState<Step>('SELECT');
+  const [selectedType, setSelectedType] = useState<MemoryType>(null);
+  const [favCategory, setFavCategory] = useState('Music');
 
   const memoryTypes = [
     { id: 'story' as const, title: 'Story', sub: 'Share a meaningful moment', icon: BookOpen },
     { id: 'photo' as const, title: 'Photo', sub: 'Upload a cherished picture', icon: Image },
     { id: 'quote' as const, title: 'Quote', sub: 'Remember their words', icon: MessageSquareQuote },
     { id: 'favorite' as const, title: 'Favorite Thing', sub: 'Something they loved', icon: Star },
-  ]
+  ];
 
-  const favCategories = ['Music', 'Food', 'Movie', 'Place', 'Hobby', 'Color']
+  const favCategories = ['Music', 'Food', 'Movie', 'Place', 'Hobby', 'Color'];
 
   const handleTypeSelect = (id: MemoryType) => {
-    setSelected(id)
-    setTimeout(() => setStep('INPUT'), 300)
-  }
+    setSelectedType(id);
+    setTimeout(() => setStep('INPUT'), 300);
+  };
 
-  const getTitle = () => {
-    if (selected === 'story') return 'Story'
-    if (selected === 'photo') return 'Photo'
-    if (selected === 'quote') return 'Quote'
-    if (selected === 'favorite') return 'Favorite'
-    return ''
-  }
+  const handleBack = () => {
+    if (step === 'INPUT') {
+      setStep('SELECT');
+      setSelectedType(null);
+    } else {
+      router.push('/dashboard/home');
+    }
+  };
 
-  // Render Different Input Screens
+  const backButtonStyle = {
+    width: '40px',
+    height: '40px',
+    borderRadius: '50%',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: 'white',
+    border: '1px solid rgba(255, 255, 255, 0.5)',
+    cursor: 'pointer',
+    color: '#2D2A26',
+    boxShadow: '0 2px 8px rgba(0, 0, 0, 0.04)',
+  } as React.CSSProperties;
+
+  const glassInputStyle = {
+    background: 'rgba(255, 255, 255, 0.8)',
+    backdropFilter: 'blur(16px)',
+    WebkitBackdropFilter: 'blur(16px)',
+    borderRadius: '24px',
+    padding: '16px 24px',
+    border: '1px solid rgba(255, 255, 255, 0.8)',
+    boxShadow: '0 2px 20px rgba(0, 0, 0, 0.02)',
+  } as React.CSSProperties;
+
+  // Render input screens based on selection
   const renderInputScreen = () => {
-    switch (selected) {
+    switch (selectedType) {
       case 'story':
         return (
-          <div className="flex flex-col gap-6 animate-enter">
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
             <div>
-              <label className="font-serif text-2xl text-[var(--text-main)] mb-3 block pl-1">Title</label>
-              <div className="glass-card-input rounded-[24px] px-6 py-4 flex items-center">
+              <label style={{
+                fontFamily: 'var(--font-playfair), Playfair Display, serif',
+                fontSize: '24px',
+                color: '#2D2A26',
+                marginBottom: '12px',
+                display: 'block',
+                paddingLeft: '4px',
+              }}>Title</label>
+              <div style={glassInputStyle}>
                 <input
                   type="text"
                   placeholder="Give this story a name..."
-                  className="w-full bg-transparent border-none outline-none text-[var(--text-main)] placeholder:text-[var(--text-muted)]/40 font-bold text-lg"
+                  style={{
+                    width: '100%',
+                    background: 'transparent',
+                    border: 'none',
+                    outline: 'none',
+                    color: '#2D2A26',
+                    fontSize: '18px',
+                    fontWeight: 700,
+                    fontFamily: 'var(--font-dm-sans), DM Sans, sans-serif',
+                  }}
                 />
               </div>
             </div>
             <div>
-              <label className="font-serif text-2xl text-[var(--text-main)] mb-3 block pl-1">The Story</label>
-              <div className="glass-card-input rounded-[32px] p-6 min-h-[300px] relative">
-                <div className="absolute top-0 left-8 bottom-0 w-px bg-[var(--color-clay)]/10" />
+              <label style={{
+                fontFamily: 'var(--font-playfair), Playfair Display, serif',
+                fontSize: '24px',
+                color: '#2D2A26',
+                marginBottom: '12px',
+                display: 'block',
+                paddingLeft: '4px',
+              }}>The Story</label>
+              <div style={{
+                ...glassInputStyle,
+                borderRadius: '32px',
+                padding: '24px',
+                minHeight: '300px',
+                position: 'relative',
+              }}>
+                <div style={{
+                  position: 'absolute',
+                  top: 0,
+                  left: '32px',
+                  bottom: 0,
+                  width: '1px',
+                  backgroundColor: 'rgba(158, 88, 77, 0.1)',
+                }} />
                 <textarea
                   placeholder="Once upon a time..."
-                  className="w-full h-full bg-transparent border-none outline-none resize-none font-serif text-lg leading-loose text-[var(--text-main)] placeholder:text-[var(--text-muted)]/40 pl-6 min-h-[260px]"
+                  style={{
+                    width: '100%',
+                    height: '100%',
+                    minHeight: '250px',
+                    background: 'transparent',
+                    border: 'none',
+                    outline: 'none',
+                    resize: 'none',
+                    fontFamily: 'var(--font-playfair), Playfair Display, serif',
+                    fontSize: '18px',
+                    lineHeight: 2,
+                    color: '#2D2A26',
+                    paddingLeft: '24px',
+                  }}
                 />
               </div>
             </div>
           </div>
-        )
+        );
 
       case 'photo':
         return (
-          <div className="flex flex-col gap-6 animate-enter">
-            <div className="w-full aspect-[4/3] rounded-[32px] border-2 border-dashed border-[var(--color-sand)] bg-[var(--color-sand)]/10 flex flex-col items-center justify-center gap-3 cursor-pointer hover:bg-[var(--color-sand)]/20 transition-colors group">
-              <div className="w-16 h-16 rounded-full bg-white flex items-center justify-center text-[var(--color-clay)] shadow-sm group-hover:scale-110 transition-transform">
-                <UploadCloud size={28} />
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
+            <div style={{
+              width: '100%',
+              aspectRatio: '4/3',
+              borderRadius: '32px',
+              border: '2px dashed #DBCBB8',
+              backgroundColor: 'rgba(219, 203, 184, 0.1)',
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: '12px',
+              cursor: 'pointer',
+              transition: 'background-color 0.2s',
+            }}>
+              <div style={{
+                width: '64px',
+                height: '64px',
+                borderRadius: '50%',
+                backgroundColor: 'white',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                color: '#9E584D',
+                boxShadow: '0 2px 10px rgba(0, 0, 0, 0.05)',
+              }}>
+                <Upload size={28} />
               </div>
-              <span className="text-[var(--text-muted)] font-medium text-sm">Tap to upload photo</span>
+              <span style={{
+                color: 'rgba(45, 42, 38, 0.55)',
+                fontWeight: 500,
+                fontSize: '14px',
+                fontFamily: 'var(--font-dm-sans), DM Sans, sans-serif',
+              }}>Tap to upload photo</span>
             </div>
 
-            <div>
-              <div className="glass-card-input rounded-[24px] px-6 py-4 flex items-center mb-3">
-                <MessageSquare size={20} className="text-[var(--color-clay)] mr-3 opacity-60" />
-                <input
-                  type="text"
-                  placeholder="Add a caption..."
-                  className="w-full bg-transparent border-none outline-none text-[var(--text-main)] placeholder:text-[var(--text-muted)]/40 font-medium"
-                />
-              </div>
-              <div className="glass-card-input rounded-[24px] px-6 py-4 flex items-center">
-                <Calendar size={20} className="text-[var(--color-clay)] mr-3 opacity-60" />
-                <input
-                  type="text"
-                  placeholder="When was this? (Optional)"
-                  className="w-full bg-transparent border-none outline-none text-[var(--text-main)] placeholder:text-[var(--text-muted)]/40 font-medium"
-                />
-              </div>
+            <div style={{
+              ...glassInputStyle,
+              display: 'flex',
+              alignItems: 'center',
+              marginBottom: '12px',
+            }}>
+              <MessageSquare size={20} style={{ color: '#9E584D', marginRight: '12px', opacity: 0.6 }} />
+              <input
+                type="text"
+                placeholder="Add a caption..."
+                style={{
+                  width: '100%',
+                  background: 'transparent',
+                  border: 'none',
+                  outline: 'none',
+                  color: '#2D2A26',
+                  fontWeight: 500,
+                  fontFamily: 'var(--font-dm-sans), DM Sans, sans-serif',
+                }}
+              />
+            </div>
+
+            <div style={{
+              ...glassInputStyle,
+              display: 'flex',
+              alignItems: 'center',
+            }}>
+              <Calendar size={20} style={{ color: '#9E584D', marginRight: '12px', opacity: 0.6 }} />
+              <input
+                type="text"
+                placeholder="When was this? (Optional)"
+                style={{
+                  width: '100%',
+                  background: 'transparent',
+                  border: 'none',
+                  outline: 'none',
+                  color: '#2D2A26',
+                  fontWeight: 500,
+                  fontFamily: 'var(--font-dm-sans), DM Sans, sans-serif',
+                }}
+              />
             </div>
           </div>
-        )
+        );
 
       case 'quote':
         return (
-          <div className="flex flex-col h-full animate-enter">
-            <div className="flex-1 flex flex-col justify-center mb-6 relative">
-              <Quote size={48} className="text-[var(--color-amber)] opacity-20 absolute -top-4 -left-2" />
+          <div style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
+            <div style={{
+              flex: 1,
+              display: 'flex',
+              flexDirection: 'column',
+              justifyContent: 'center',
+              marginBottom: '24px',
+              position: 'relative',
+            }}>
+              <Quote size={48} style={{
+                color: '#D68F54',
+                opacity: 0.2,
+                position: 'absolute',
+                top: '-16px',
+                left: '-8px',
+              }} />
               <textarea
                 placeholder="Type their words here..."
-                className="w-full bg-transparent border-none outline-none resize-none font-serif text-3xl text-center text-[var(--text-main)] placeholder:text-[var(--text-muted)]/30 leading-tight min-h-[200px]"
+                style={{
+                  width: '100%',
+                  background: 'transparent',
+                  border: 'none',
+                  outline: 'none',
+                  resize: 'none',
+                  fontFamily: 'var(--font-playfair), Playfair Display, serif',
+                  fontSize: '28px',
+                  textAlign: 'center',
+                  color: '#2D2A26',
+                  lineHeight: 1.3,
+                  minHeight: '200px',
+                }}
               />
-              <Quote size={48} className="text-[var(--color-amber)] opacity-20 absolute -bottom-4 -right-2 rotate-180" />
+              <Quote size={48} style={{
+                color: '#D68F54',
+                opacity: 0.2,
+                position: 'absolute',
+                bottom: '-16px',
+                right: '-8px',
+                transform: 'rotate(180deg)',
+              }} />
             </div>
 
-            <div className="space-y-3">
-              <label className="text-xs font-bold uppercase tracking-wider text-[var(--text-muted)] pl-4">
-                Context
-              </label>
-              <div className="glass-card-input rounded-[24px] px-6 py-4 flex items-center">
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+              <label style={{
+                fontSize: '10px',
+                fontWeight: 700,
+                textTransform: 'uppercase',
+                letterSpacing: '0.1em',
+                color: 'rgba(45, 42, 38, 0.55)',
+                paddingLeft: '16px',
+                fontFamily: 'var(--font-dm-sans), DM Sans, sans-serif',
+              }}>Context</label>
+              <div style={glassInputStyle}>
                 <input
                   type="text"
                   placeholder="Who said it? (e.g. Dad)"
-                  className="w-full bg-transparent border-none outline-none text-[var(--text-main)] placeholder:text-[var(--text-muted)]/40 font-medium"
+                  style={{
+                    width: '100%',
+                    background: 'transparent',
+                    border: 'none',
+                    outline: 'none',
+                    color: '#2D2A26',
+                    fontWeight: 500,
+                    fontFamily: 'var(--font-dm-sans), DM Sans, sans-serif',
+                  }}
                 />
               </div>
-              <div className="glass-card-input rounded-[24px] px-6 py-4 flex items-center">
+              <div style={glassInputStyle}>
                 <input
                   type="text"
                   placeholder="When/Where?"
-                  className="w-full bg-transparent border-none outline-none text-[var(--text-main)] placeholder:text-[var(--text-muted)]/40 font-medium"
+                  style={{
+                    width: '100%',
+                    background: 'transparent',
+                    border: 'none',
+                    outline: 'none',
+                    color: '#2D2A26',
+                    fontWeight: 500,
+                    fontFamily: 'var(--font-dm-sans), DM Sans, sans-serif',
+                  }}
                 />
               </div>
             </div>
           </div>
-        )
+        );
 
       case 'favorite':
         return (
-          <div className="flex flex-col gap-6 animate-enter">
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
             <div>
-              <label className="font-serif text-2xl text-[var(--text-main)] mb-3 block pl-1">Category</label>
-              <div className="flex gap-2 overflow-x-auto no-scrollbar pb-2">
-                {favCategories.map((cat) => (
+              <label style={{
+                fontFamily: 'var(--font-playfair), Playfair Display, serif',
+                fontSize: '24px',
+                color: '#2D2A26',
+                marginBottom: '12px',
+                display: 'block',
+                paddingLeft: '4px',
+              }}>Category</label>
+              <div style={{
+                display: 'flex',
+                gap: '8px',
+                overflowX: 'auto',
+                paddingBottom: '8px',
+                msOverflowStyle: 'none',
+                scrollbarWidth: 'none',
+              }}>
+                {favCategories.map(cat => (
                   <button
                     key={cat}
                     onClick={() => setFavCategory(cat)}
-                    className={`px-5 py-2.5 rounded-full text-sm font-medium whitespace-nowrap transition-all ${
-                      favCategory === cat
-                        ? 'bg-[var(--text-main)] text-[var(--text-inverse)] shadow-lg'
-                        : 'bg-white border border-[var(--color-sand)]/30 text-[var(--text-muted)]'
-                    }`}
+                    style={{
+                      padding: '10px 20px',
+                      borderRadius: '9999px',
+                      fontSize: '14px',
+                      fontWeight: 500,
+                      whiteSpace: 'nowrap',
+                      transition: 'all 0.2s',
+                      border: favCategory === cat ? 'none' : '1px solid rgba(219, 203, 184, 0.3)',
+                      backgroundColor: favCategory === cat ? '#2D2A26' : 'white',
+                      color: favCategory === cat ? '#F9F7F5' : 'rgba(45, 42, 38, 0.55)',
+                      boxShadow: favCategory === cat ? '0 4px 12px rgba(0, 0, 0, 0.15)' : 'none',
+                      cursor: 'pointer',
+                      fontFamily: 'var(--font-dm-sans), DM Sans, sans-serif',
+                    }}
                   >
                     {cat}
                   </button>
@@ -161,97 +354,290 @@ export default function MemoriesPage() {
               </div>
             </div>
 
-            <div className="glass-card-input rounded-[32px] p-6 flex flex-col gap-4 border border-[var(--color-amber)]/20 shadow-md">
+            <div style={{
+              ...glassInputStyle,
+              borderRadius: '32px',
+              padding: '24px',
+              display: 'flex',
+              flexDirection: 'column',
+              gap: '16px',
+              border: '1px solid rgba(214, 143, 84, 0.2)',
+              boxShadow: '0 4px 20px rgba(0, 0, 0, 0.05)',
+            }}>
               <div>
-                <label className="text-[10px] font-bold uppercase tracking-wider text-[var(--color-clay)] mb-1 block">
-                  Their Favorite {favCategory}
-                </label>
+                <label style={{
+                  fontSize: '10px',
+                  fontWeight: 700,
+                  textTransform: 'uppercase',
+                  letterSpacing: '0.1em',
+                  color: '#9E584D',
+                  marginBottom: '4px',
+                  display: 'block',
+                  fontFamily: 'var(--font-dm-sans), DM Sans, sans-serif',
+                }}>Their Favorite {favCategory}</label>
                 <input
                   type="text"
                   placeholder={`Name of ${favCategory}...`}
-                  className="w-full bg-transparent border-b border-[var(--color-sand)]/30 pb-2 outline-none text-[var(--text-main)] placeholder:text-[var(--text-muted)]/30 font-serif text-2xl"
+                  style={{
+                    width: '100%',
+                    background: 'transparent',
+                    border: 'none',
+                    borderBottom: '1px solid rgba(219, 203, 184, 0.3)',
+                    paddingBottom: '8px',
+                    outline: 'none',
+                    color: '#2D2A26',
+                    fontFamily: 'var(--font-playfair), Playfair Display, serif',
+                    fontSize: '24px',
+                  }}
                 />
               </div>
               <div>
-                <label className="text-[10px] font-bold uppercase tracking-wider text-[var(--text-muted)] mb-1 block mt-2">
-                  Why they loved it
-                </label>
+                <label style={{
+                  fontSize: '10px',
+                  fontWeight: 700,
+                  textTransform: 'uppercase',
+                  letterSpacing: '0.1em',
+                  color: 'rgba(45, 42, 38, 0.55)',
+                  marginBottom: '4px',
+                  marginTop: '8px',
+                  display: 'block',
+                  fontFamily: 'var(--font-dm-sans), DM Sans, sans-serif',
+                }}>Why they loved it</label>
                 <textarea
                   placeholder="Add a small note..."
-                  className="w-full bg-transparent border-none outline-none resize-none font-sans text-base text-[var(--text-main)] placeholder:text-[var(--text-muted)]/40 h-24"
+                  style={{
+                    width: '100%',
+                    background: 'transparent',
+                    border: 'none',
+                    outline: 'none',
+                    resize: 'none',
+                    fontFamily: 'var(--font-dm-sans), DM Sans, sans-serif',
+                    fontSize: '16px',
+                    color: '#2D2A26',
+                    height: '96px',
+                  }}
                 />
               </div>
             </div>
           </div>
-        )
+        );
 
       default:
-        return null
+        return null;
     }
-  }
+  };
 
-  // Selection Screen
+  // SELECT screen - memory type selection
   if (step === 'SELECT') {
     return (
-      <div className="h-full flex flex-col bg-[var(--bg-main)] pt-12 relative overflow-hidden transition-colors duration-500">
-        <div className="absolute top-0 left-0 w-full h-[300px] bg-gradient-to-b from-[var(--color-amber)]/5 to-transparent pointer-events-none" />
+      <div style={{
+        height: '100%',
+        minHeight: '100dvh',
+        display: 'flex',
+        flexDirection: 'column',
+        backgroundColor: '#F5F2ED',
+        paddingTop: '48px',
+        position: 'relative',
+        overflow: 'hidden',
+      }}>
+        {/* Gradient overlay at top */}
+        <div style={{
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          width: '100%',
+          height: '300px',
+          background: 'linear-gradient(to bottom, rgba(214, 143, 84, 0.05), transparent)',
+          pointerEvents: 'none',
+        }} />
 
-        <div className="px-6 flex items-center justify-between mb-2 relative z-10">
-          <BackButton onClick={() => router.back()} />
-          <h2 className="font-serif text-xl text-[var(--text-main)] tracking-tight">Create a Memory</h2>
-          <div className="w-10" />
+        {/* Header */}
+        <div style={{
+          padding: '0 24px',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          marginBottom: '8px',
+          position: 'relative',
+          zIndex: 10,
+        }}>
+          <button onClick={handleBack} style={backButtonStyle}>
+            <ArrowLeft size={20} strokeWidth={1.5} />
+          </button>
+          <h2 style={{
+            fontFamily: 'var(--font-playfair), Playfair Display, serif',
+            fontSize: '20px',
+            color: '#2D2A26',
+            letterSpacing: '-0.02em',
+          }}>Create a Memory</h2>
+          <div style={{ width: '40px' }} />
         </div>
 
-        <div className="flex-1 overflow-y-auto no-scrollbar px-6 pb-32 relative z-10">
-          <h2 className="font-serif text-3xl text-center text-[var(--text-main)] mb-10 mt-10 tracking-tight animate-enter">
+        {/* Content */}
+        <div
+          className="no-scrollbar"
+          style={{
+            flex: 1,
+            overflowY: 'auto',
+            padding: '0 24px 128px',
+            position: 'relative',
+            zIndex: 10,
+          }}
+        >
+          <h2 style={{
+            fontFamily: 'var(--font-playfair), Playfair Display, serif',
+            fontSize: '28px',
+            textAlign: 'center',
+            color: '#2D2A26',
+            marginBottom: '40px',
+            marginTop: '40px',
+            letterSpacing: '-0.02em',
+          }}>
             Choose a memory type
           </h2>
 
-          <div className="space-y-4">
-            {memoryTypes.map((type, idx) => (
-              <div
-                key={type.id}
-                onClick={() => handleTypeSelect(type.id)}
-                className={`relative group glass-regular rounded-[24px] p-4 pr-6 flex items-center gap-5 cursor-pointer transition-all duration-300 animate-enter hover:bg-white/80 ${
-                  selected === type.id ? 'bg-white shadow-md ring-2 ring-[var(--color-amber)]' : 'shadow-sm'
-                }`}
-                style={{ animationDelay: `${100 + idx * 100}ms` }}
-              >
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+            {memoryTypes.map((type) => {
+              const IconComponent = type.icon;
+              const isSelected = selectedType === type.id;
+
+              return (
                 <div
-                  className={`w-14 h-14 rounded-[20px] bg-[var(--color-sand)]/20 flex items-center justify-center text-[var(--text-main)] shrink-0 border border-[var(--color-sand)]/30 transition-colors ${
-                    selected === type.id ? 'bg-[var(--color-amber)]/10 text-[var(--color-amber)]' : ''
-                  }`}
+                  key={type.id}
+                  onClick={() => handleTypeSelect(type.id)}
+                  style={{
+                    position: 'relative',
+                    background: isSelected ? 'white' : 'rgba(255, 255, 255, 0.6)',
+                    backdropFilter: 'blur(24px)',
+                    WebkitBackdropFilter: 'blur(24px)',
+                    borderRadius: '24px',
+                    padding: '16px',
+                    paddingRight: '24px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '20px',
+                    cursor: 'pointer',
+                    transition: 'all 0.3s ease',
+                    border: isSelected
+                      ? '2px solid #D68F54'
+                      : '1px solid rgba(255, 255, 255, 0.5)',
+                    boxShadow: isSelected
+                      ? '0 8px 32px -8px rgba(158, 88, 77, 0.15)'
+                      : '0 2px 8px rgba(0, 0, 0, 0.02)',
+                  }}
                 >
-                  <type.icon size={22} />
+                  <div style={{
+                    width: '56px',
+                    height: '56px',
+                    borderRadius: '20px',
+                    backgroundColor: isSelected ? 'rgba(214, 143, 84, 0.1)' : 'rgba(219, 203, 184, 0.2)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    color: isSelected ? '#D68F54' : '#2D2A26',
+                    flexShrink: 0,
+                    border: '1px solid rgba(219, 203, 184, 0.3)',
+                    transition: 'all 0.2s',
+                  }}>
+                    <IconComponent size={22} strokeWidth={1.5} />
+                  </div>
+                  <div style={{ flex: 1, minWidth: 0 }}>
+                    <h3 style={{
+                      fontFamily: 'var(--font-playfair), Playfair Display, serif',
+                      fontSize: '18px',
+                      color: '#2D2A26',
+                      marginBottom: '2px',
+                      letterSpacing: '-0.02em',
+                    }}>{type.title}</h3>
+                    <p style={{
+                      color: 'rgba(45, 42, 38, 0.55)',
+                      fontSize: '12px',
+                      fontWeight: 500,
+                      overflow: 'hidden',
+                      textOverflow: 'ellipsis',
+                      whiteSpace: 'nowrap',
+                      fontFamily: 'var(--font-dm-sans), DM Sans, sans-serif',
+                    }}>{type.sub}</p>
+                  </div>
                 </div>
-                <div className="flex-1 min-w-0">
-                  <h3 className="font-serif text-lg text-[var(--text-main)] mb-0.5 tracking-tight">{type.title}</h3>
-                  <p className="text-[var(--text-muted)] text-xs font-medium truncate">{type.sub}</p>
-                </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </div>
       </div>
-    )
+    );
   }
 
-  // Input Screen
+  // INPUT screen - form based on selected type
   return (
-    <div className="h-full flex flex-col bg-[var(--bg-main)] pt-12 relative overflow-hidden transition-colors duration-500">
-      <div className="px-6 flex items-center justify-between mb-4 relative z-10">
-        <BackButton onClick={() => setStep('SELECT')} />
-        <h2 className="font-serif text-xl text-[var(--text-main)] tracking-tight capitalize">New {getTitle()}</h2>
-        <div className="w-10" />
+    <div style={{
+      height: '100%',
+      minHeight: '100dvh',
+      display: 'flex',
+      flexDirection: 'column',
+      backgroundColor: '#F5F2ED',
+      paddingTop: '48px',
+    }}>
+      {/* Header */}
+      <div style={{
+        padding: '0 24px',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        marginBottom: '24px',
+      }}>
+        <button onClick={handleBack} style={backButtonStyle}>
+          <ArrowLeft size={20} strokeWidth={1.5} />
+        </button>
+        <h2 style={{
+          fontFamily: 'var(--font-playfair), Playfair Display, serif',
+          fontSize: '20px',
+          color: '#2D2A26',
+          letterSpacing: '-0.02em',
+          textTransform: 'capitalize',
+        }}>
+          {selectedType === 'favorite' ? 'Favorite Thing' : selectedType}
+        </h2>
+        <div style={{ width: '40px' }} />
       </div>
-      <div className="flex-1 overflow-y-auto no-scrollbar px-6 pb-40 relative z-10 scroll-smooth">
+
+      {/* Content */}
+      <div
+        className="no-scrollbar"
+        style={{
+          flex: 1,
+          overflowY: 'auto',
+          padding: '0 24px 180px',
+        }}
+      >
         {renderInputScreen()}
       </div>
-      <div className="absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-[var(--bg-main)] via-[var(--bg-main)] to-transparent z-20">
-        <button className="w-full bg-[var(--text-main)] text-[var(--text-inverse)] py-4 rounded-[20px] font-medium text-lg shadow-xl flex items-center justify-center gap-2 hover:scale-[1.02] active:scale-[0.98] transition-all">
-          <span>Save {getTitle()}</span>
+
+      {/* Save Button */}
+      <div style={{
+        position: 'fixed',
+        bottom: 0,
+        left: 0,
+        right: 0,
+        padding: '16px 24px 32px',
+        background: 'linear-gradient(to top, #F5F2ED, transparent)',
+      }}>
+        <button style={{
+          width: '100%',
+          padding: '16px',
+          borderRadius: '24px',
+          backgroundColor: '#2D2A26',
+          color: '#F9F7F5',
+          fontFamily: 'var(--font-dm-sans), DM Sans, sans-serif',
+          fontSize: '16px',
+          fontWeight: 600,
+          border: 'none',
+          cursor: 'pointer',
+          boxShadow: '0 4px 20px rgba(0, 0, 0, 0.15)',
+        }}>
+          Save Memory
         </button>
       </div>
     </div>
-  )
+  );
 }

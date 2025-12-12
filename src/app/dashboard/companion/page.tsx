@@ -1,203 +1,249 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { ArrowLeft, Volume2, Mic } from 'lucide-react';
+import { ArrowLeft, Mic, Send, Sparkles } from 'lucide-react';
 
 export default function CompanionPage() {
   const router = useRouter();
-  const [isListening, setIsListening] = useState(false);
+  const [message, setMessage] = useState('');
+  const [messages, setMessages] = useState([
+    { role: 'assistant', content: "Hi there. I'm here whenever you need someone to listen. What's on your mind today?" }
+  ]);
+  const messagesEndRef = useRef<HTMLDivElement>(null);
+
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  };
+
+  useEffect(() => {
+    scrollToBottom();
+  }, [messages]);
+
+  const handleSend = () => {
+    if (!message.trim()) return;
+
+    setMessages(prev => [...prev, { role: 'user', content: message }]);
+    setMessage('');
+
+    // Simulate AI response
+    setTimeout(() => {
+      setMessages(prev => [...prev, {
+        role: 'assistant',
+        content: "Thank you for sharing that with me. It takes courage to open up about how you're feeling. I'm here to listen and support you through this."
+      }]);
+    }, 1500);
+  };
 
   return (
     <div style={{
       height: '100%',
+      minHeight: '100dvh',
       display: 'flex',
       flexDirection: 'column',
       backgroundColor: '#F5F2ED',
-      position: 'relative',
+      paddingTop: '48px',
     }}>
       {/* Header */}
       <div style={{
-        paddingTop: '48px',
-        padding: '48px 24px 16px',
+        padding: '0 24px',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'space-between',
-        background: 'rgba(245, 242, 237, 0.85)',
-        backdropFilter: 'blur(20px)',
-        WebkitBackdropFilter: 'blur(20px)',
-        borderBottom: '1px solid rgba(255, 255, 255, 0.5)',
-        zIndex: 20,
+        marginBottom: '16px',
       }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-          <button
-            onClick={() => router.back()}
-            style={{
-              width: '40px',
-              height: '40px',
+        <button
+          onClick={() => router.push('/dashboard/home')}
+          style={{
+            width: '40px',
+            height: '40px',
+            borderRadius: '50%',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            backgroundColor: 'white',
+            border: '1px solid rgba(255, 255, 255, 0.5)',
+            cursor: 'pointer',
+            color: '#2D2A26',
+            boxShadow: '0 2px 8px rgba(0, 0, 0, 0.04)',
+          }}
+        >
+          <ArrowLeft size={20} strokeWidth={1.5} />
+        </button>
+        <div style={{ textAlign: 'center' }}>
+          <h2 style={{
+            fontFamily: 'var(--font-playfair), Playfair Display, serif',
+            fontSize: '20px',
+            color: '#2D2A26',
+            letterSpacing: '-0.02em',
+          }}>Companion</h2>
+          <div style={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            gap: '4px',
+            marginTop: '2px',
+          }}>
+            <div style={{
+              width: '6px',
+              height: '6px',
               borderRadius: '50%',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              background: 'rgba(255, 255, 255, 0.6)',
-              color: '#2D2A26',
-              border: '1px solid rgba(255, 255, 255, 0.5)',
-              boxShadow: '0 2px 8px rgba(0, 0, 0, 0.04)',
-              cursor: 'pointer',
-            }}
-          >
-            <ArrowLeft size={20} />
-          </button>
-          <div>
-            <h2 style={{
-              fontFamily: "'Playfair Display', serif",
-              fontSize: '20px',
-              color: '#2D2A26',
-            }}>
-              Solace
-            </h2>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-              <span style={{
-                width: '6px',
-                height: '6px',
-                borderRadius: '50%',
-                backgroundColor: '#7E8D85',
-                animation: 'pulse 2s infinite',
-              }} />
-              <span style={{
-                fontSize: '10px',
-                textTransform: 'uppercase',
-                fontWeight: 700,
-                color: '#7E8D85',
-                letterSpacing: '0.1em',
-              }}>
-                Compassionate AI
-              </span>
-            </div>
+              backgroundColor: '#7E8D85',
+            }} />
+            <span style={{
+              fontSize: '10px',
+              fontWeight: 600,
+              color: '#7E8D85',
+              textTransform: 'uppercase',
+              letterSpacing: '0.05em',
+              fontFamily: 'var(--font-dm-sans), DM Sans, sans-serif',
+            }}>Always here</span>
           </div>
         </div>
-        <div style={{
-          width: '40px',
-          height: '40px',
-          borderRadius: '50%',
-          backgroundColor: '#F5F2ED',
-          border: '1px solid rgba(219, 203, 184, 0.5)',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          color: 'rgba(60, 56, 54, 0.55)',
-        }}>
-          <Volume2 size={18} />
-        </div>
+        <div style={{ width: '40px' }} />
       </div>
 
-      {/* Chat Messages */}
+      {/* Messages */}
       <div
         className="no-scrollbar"
         style={{
           flex: 1,
           overflowY: 'auto',
-          padding: '24px',
+          padding: '0 24px 16px',
           display: 'flex',
           flexDirection: 'column',
-          gap: '24px',
+          gap: '16px',
         }}
       >
-        {/* AI Message */}
-        <div style={{ display: 'flex', justifyContent: 'flex-start' }}>
-          <div style={{
-            background: 'rgba(255, 255, 255, 0.6)',
-            backdropFilter: 'blur(24px) saturate(105%)',
-            WebkitBackdropFilter: 'blur(24px) saturate(105%)',
-            padding: '20px',
-            borderRadius: '24px',
-            borderTopLeftRadius: '4px',
-            border: '1px solid rgba(255, 255, 255, 0.5)',
-            fontSize: '14px',
-            lineHeight: 1.6,
-            boxShadow: '0 8px 32px -8px rgba(158, 88, 77, 0.06)',
-            color: '#2D2A26',
-            maxWidth: '85%',
-          }}>
-            Hello Michelle. How is your heart feeling today?
+        {messages.map((msg, idx) => (
+          <div
+            key={idx}
+            style={{
+              maxWidth: '85%',
+              alignSelf: msg.role === 'user' ? 'flex-end' : 'flex-start',
+            }}
+          >
+            {msg.role === 'assistant' && (
+              <div style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '8px',
+                marginBottom: '8px',
+              }}>
+                <div style={{
+                  width: '32px',
+                  height: '32px',
+                  borderRadius: '50%',
+                  background: 'linear-gradient(135deg, #9E584D, #D68F54)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }}>
+                  <Sparkles size={14} color="white" />
+                </div>
+                <span style={{
+                  fontSize: '12px',
+                  fontWeight: 600,
+                  color: 'rgba(45, 42, 38, 0.55)',
+                  fontFamily: 'var(--font-dm-sans), DM Sans, sans-serif',
+                }}>Solace</span>
+              </div>
+            )}
+            <div style={{
+              padding: '16px 20px',
+              borderRadius: msg.role === 'user'
+                ? '24px 24px 8px 24px'
+                : '24px 24px 24px 8px',
+              backgroundColor: msg.role === 'user' ? '#2D2A26' : 'white',
+              color: msg.role === 'user' ? '#F9F7F5' : '#2D2A26',
+              fontSize: '15px',
+              lineHeight: 1.6,
+              fontFamily: 'var(--font-dm-sans), DM Sans, sans-serif',
+              boxShadow: msg.role === 'assistant'
+                ? '0 2px 12px rgba(0, 0, 0, 0.04)'
+                : 'none',
+            }}>
+              {msg.content}
+            </div>
           </div>
-        </div>
+        ))}
+        <div ref={messagesEndRef} />
       </div>
 
       {/* Input Area */}
       <div style={{
-        padding: '16px',
-        background: 'rgba(245, 242, 237, 0.85)',
-        backdropFilter: 'blur(40px)',
-        WebkitBackdropFilter: 'blur(40px)',
-        borderTop: '1px solid rgba(255, 255, 255, 0.5)',
-        marginBottom: '80px',
+        padding: '16px 24px 32px',
+        backgroundColor: '#F5F2ED',
       }}>
         <div style={{
           display: 'flex',
           alignItems: 'center',
-          gap: '8px',
-          backgroundColor: 'white',
-          padding: '6px 6px 6px 16px',
-          borderRadius: '32px',
-          border: '1px solid rgba(219, 203, 184, 0.5)',
-          boxShadow: '0 2px 8px rgba(0, 0, 0, 0.04)',
+          gap: '12px',
+          background: 'rgba(255, 255, 255, 0.8)',
+          backdropFilter: 'blur(16px)',
+          WebkitBackdropFilter: 'blur(16px)',
+          borderRadius: '28px',
+          padding: '8px 8px 8px 20px',
+          border: '1px solid rgba(255, 255, 255, 0.8)',
+          boxShadow: '0 4px 20px rgba(0, 0, 0, 0.04)',
         }}>
           <input
             type="text"
-            placeholder="Share your thoughts..."
+            value={message}
+            onChange={(e) => setMessage(e.target.value)}
+            onKeyDown={(e) => e.key === 'Enter' && handleSend()}
+            placeholder="Share what's on your mind..."
             style={{
               flex: 1,
-              backgroundColor: 'transparent',
+              background: 'transparent',
               border: 'none',
               outline: 'none',
-              padding: '12px 0',
+              fontSize: '15px',
               color: '#2D2A26',
-              fontSize: '14px',
-              fontWeight: 500,
-              fontFamily: "'DM Sans', sans-serif",
+              fontFamily: 'var(--font-dm-sans), DM Sans, sans-serif',
             }}
           />
+
+          {/* Send Button */}
           <button
-            onClick={() => setIsListening(!isListening)}
+            onClick={handleSend}
+            disabled={!message.trim()}
             style={{
-              width: '40px',
-              height: '40px',
+              width: '44px',
+              height: '44px',
               borderRadius: '50%',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
+              backgroundColor: message.trim() ? '#9E584D' : 'rgba(158, 88, 77, 0.2)',
               border: 'none',
-              cursor: 'pointer',
-              position: 'relative',
-              backgroundColor: isListening ? '#7E8D85' : 'transparent',
-              color: isListening ? 'white' : 'rgba(60, 56, 54, 0.55)',
-              transition: 'all 0.3s',
+              cursor: message.trim() ? 'pointer' : 'not-allowed',
+              transition: 'all 0.2s',
+              color: message.trim() ? 'white' : 'rgba(158, 88, 77, 0.4)',
             }}
           >
-            {isListening && (
-              <div style={{
-                position: 'absolute',
-                inset: 0,
-                borderRadius: '50%',
-                border: '1px solid #7E8D85',
-                animation: 'ping 1s cubic-bezier(0, 0, 0.2, 1) infinite',
-              }} />
-            )}
-            <Mic size={20} />
+            <Send size={18} strokeWidth={2} />
+          </button>
+
+          {/* Mic Button */}
+          <button
+            style={{
+              width: '44px',
+              height: '44px',
+              borderRadius: '50%',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              backgroundColor: 'rgba(214, 143, 84, 0.1)',
+              border: 'none',
+              cursor: 'pointer',
+              color: '#D68F54',
+            }}
+          >
+            <Mic size={20} strokeWidth={2} />
           </button>
         </div>
       </div>
-
-      <style jsx global>{`
-        @keyframes pulse {
-          0%, 100% { opacity: 1; }
-          50% { opacity: 0.5; }
-        }
-        @keyframes ping {
-          75%, 100% { transform: scale(2); opacity: 0; }
-        }
-      `}</style>
     </div>
   );
 }

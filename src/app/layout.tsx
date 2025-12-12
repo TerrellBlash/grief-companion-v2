@@ -1,16 +1,36 @@
-import type { Metadata, Viewport } from "next";
-import "./globals.css";
+import type { Metadata, Viewport } from 'next';
+import { DM_Sans, Playfair_Display, Caveat } from 'next/font/google';
+import './globals.css';
 
-export const metadata: Metadata = {
-  title: "Solace - Grief Companion",
-  description: "A compassionate space for grief support",
-};
+const dmSans = DM_Sans({
+  subsets: ['latin'],
+  variable: '--font-dm-sans',
+  weight: ['400', '500', '600', '700'],
+});
+
+const playfair = Playfair_Display({
+  subsets: ['latin'],
+  variable: '--font-playfair',
+  weight: ['400', '500', '600', '700'],
+});
+
+const caveat = Caveat({
+  subsets: ['latin'],
+  variable: '--font-caveat',
+  weight: ['400', '500', '600', '700'],
+});
 
 export const viewport: Viewport = {
-  width: "device-width",
+  width: 'device-width',
   initialScale: 1,
   maximumScale: 1,
   userScalable: false,
+  themeColor: '#F5F2ED',
+};
+
+export const metadata: Metadata = {
+  title: 'Solace - Grief Companion',
+  description: 'A compassionate companion for your grief journey',
 };
 
 export default function RootLayout({
@@ -20,22 +40,16 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <head>
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link
-          href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;500;600;700&family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap"
-          rel="stylesheet"
-        />
-      </head>
       <body
+        className={`${dmSans.variable} ${playfair.variable} ${caveat.variable}`}
         style={{
+          fontFamily: 'var(--font-dm-sans), DM Sans, sans-serif',
+          backgroundColor: '#F5F2ED',
+          color: '#2D2A26',
+          WebkitFontSmoothing: 'antialiased',
           margin: 0,
           padding: 0,
           minHeight: '100dvh',
-          backgroundColor: '#F5F2ED',
-          fontFamily: "'DM Sans', sans-serif",
-          WebkitFontSmoothing: 'antialiased',
           overscrollBehavior: 'none',
         }}
       >

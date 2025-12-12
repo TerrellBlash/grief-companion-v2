@@ -174,7 +174,7 @@ export default function JourneyPage() {
           minHeight: '600px',
           position: 'relative',
           width: '100%',
-          paddingBottom: '128px',
+          paddingBottom: '180px',
         }}>
           {/* SVG Winding Path */}
           <svg
